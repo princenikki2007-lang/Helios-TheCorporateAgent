@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — HELIOS</title>
+  <meta name="description" content="HELIOS Executive Dashboard — your corporate intelligence overview.">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+<body data-page-title="Executive Dashboard" data-breadcrumb="Dashboard">
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Main Sidebar"></aside>
+
+    <!-- Main Area -->
+    <div class="app-main">
+      <!-- Header -->
+      <header class="app-header" id="app-header"></header>
+
+      <!-- Content -->
+      <main class="app-content">
+
+        <!-- Page Hero -->
+        <div class="page-hero" id="dashboard-greeting">
+          <h2 class="page-hero-title" id="greeting-text">Good morning 👋</h2>
+          <p class="page-hero-subtitle">What can Helios help you with today? Ask anything about company policies, benefits, work rules, and approved corporate information.</p>
+        </div>
+
+        <!-- Stats Summary Cards -->
+        <div class="stats-cards-grid" style="margin-bottom: var(--space-6);">
+          <div class="card stat-card">
+            <div class="stat-icon-wrapper stat-icon-brand">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            </div>
+            <div>
+              <div class="stat-value">24</div>
+              <div class="stat-label">Active Policies</div>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-icon-wrapper stat-icon-blue">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div>
+              <div class="stat-value" id="stat-conversations">3</div>
+              <div class="stat-label">My Conversations</div>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-icon-wrapper stat-icon-green">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            </div>
+            <div>
+              <div class="stat-value" style="color: var(--color-success);">Online</div>
+              <div class="stat-label">Helios Status</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ask Helios Hero Banner -->
+        <div class="dashboard-grid" style="margin-bottom: var(--space-6);">
+          <div class="dashboard-main-col">
+
+            <div class="ask-helios-hero">
+              <div class="ask-helios-hero-content">
+                <h3 class="ask-helios-hero-title">Ask Helios a Policy Question</h3>
+                <p class="ask-helios-hero-desc">Get instant, accurate answers from your company's approved policy documents.</p>
+
+                <form id="dashboard-ask-form" onsubmit="handleDashboardAsk(event)" style="display: flex; gap: var(--space-3);">
+                  <input
+                    type="text"
+                    id="dashboard-question-input"
+                    class="form-input"
+                    placeholder="Ask Helios anything about leave, benefits, work policies, or company rules..."
+                    style="flex: 1; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); color: #fff;"
+                    autocomplete="off"
+                  />
+                  <button type="submit" class="btn btn-primary" id="btn-dashboard-ask">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    Ask
+                  </button>
+                </form>
+
+                <!-- Popular Question Chips -->
+                <div class="prompt-chips" id="prompt-chips-container">
+                  <button type="button" class="prompt-chip" onclick="askQuestion('How many leaves can I carry forward?')">How many leaves can I carry forward?</button>
+                  <button type="button" class="prompt-chip" onclick="askQuestion('What is the work-from-home policy?')">What is the WFH policy?</button>
+                  <button type="button" class="prompt-chip" onclick="askQuestion('What benefits am I eligible for?')">What benefits am I eligible for?</button>
+                  <button type="button" class="prompt-chip" onclick="askQuestion('What are the probation rules?')">What are the probation rules?</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Recent Conversations -->
+          <div class="dashboard-side-col">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Recent Conversations</div>
+                  <div class="card-subtitle">Your latest Helios sessions</div>
+                </div>
+                <a href="conversations.html" class="btn btn-ghost btn-sm">View all</a>
+              </div>
+              <div id="recent-conversations-list" style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../mock/users.js"></script>
+  <script src="../mock/conversations.js"></script>
+  <script src="../mock/documents.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/ui.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    // Dashboard page logic
+
+    function getGreeting() {
+      const hour = new Date().getHours();
+      if (hour < 12) return 'Good morning';
+      if (hour < 17) return 'Good afternoon';
+      return 'Good evening';
+    }
+
+    function askQuestion(text) {
+      const input = document.getElementById('dashboard-question-input');
+      if (input) { input.value = text; }
+      const q = encodeURIComponent(text);
+      window.location.href = `policy-chat.html?q=${q}`;
+    }
+
+    function handleDashboardAsk(e) {
+      e.preventDefault();
+      const val = document.getElementById('dashboard-question-input').value.trim();
+      if (val) askQuestion(val);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Personalize greeting
+      const user = HeliosAuth.getCurrentUser();
+      const greetEl = document.getElementById('greeting-text');
+      if (greetEl && user) {
+        const firstName = user.name.split(' ')[0];
+        greetEl.textContent = `${getGreeting()}, ${firstName} 👋`;
+      }
+
+      // Render recent conversations
+      const convList = document.getElementById('recent-conversations-list');
+      const convos = window.HELIOS_MOCK_CONVERSATIONS || [];
+      if (convList && convos.length > 0) {
+        convList.innerHTML = convos.map(c => `
+          <a href="conversations.html" style="display: block; padding: var(--space-3); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); text-decoration: none; transition: background-color 150ms;">
+            <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.title}</div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.last_message}</div>
+            <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 4px;">${c.timestamp}</div>
+          </a>
+        `).join('');
+      }
+
+      // Stat: conversation count
+      const statEl = document.getElementById('stat-conversations');
+      if (statEl) statEl.textContent = convos.length;
+    });
+  </script>
+</body>
+</html>
