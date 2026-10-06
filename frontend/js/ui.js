@@ -37,6 +37,15 @@ const HeliosUI = (function() {
       section: 'Administration'
     },
     {
+      id: 'audit-logs',
+      label: 'Audit & Governance',
+      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>`,
+      href: 'audit-logs.html',
+      roles: ['hr_manager', 'company_admin'], // Visible to both HR Manager & Company Admin
+      section: 'Administration',
+      badge: 'Admin'
+    },
+    {
       id: 'profile',
       label: 'Profile & Settings',
       icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`,
@@ -67,6 +76,7 @@ const HeliosUI = (function() {
     if (filename.includes('policy-chat')) return 'policy-chat';
     if (filename.includes('conversations')) return 'conversations';
     if (filename.includes('upload-document') || filename.includes('documents')) return 'documents';
+    if (filename.includes('audit-logs')) return 'audit-logs';
     if (filename.includes('profile')) return 'profile';
     return 'dashboard';
   }
@@ -174,6 +184,7 @@ const HeliosUI = (function() {
       'policy-chat': 'Ask Helios',
       'conversations': 'My Conversations',
       'documents': 'Document Repository',
+      'audit-logs': 'Enterprise Governance & Audit Logs',
       'profile': 'Profile & Account Settings'
     };
 
