@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HELIOS — Page-Specific Styles
+   HELIOS — Page-Specific Styles (Friendly & Modern SaaS)
    Landing, Onboarding, Dashboard, Vault, Compare, Regs, Tax, Risk, Chat
    ========================================================================== */
 
@@ -7,8 +7,8 @@
    1. LANDING PAGE
    ========================================== */
 .landing-body {
-  background-color: #08090C;
-  color: #F8FAFC;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
   overflow-x: hidden;
 }
 
@@ -21,9 +21,10 @@
   border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
-  background-color: rgba(8, 9, 12, 0.85);
+  background-color: var(--bg-surface-glass);
   backdrop-filter: blur(16px);
   z-index: 1000;
+  transition: background-color var(--transition-smooth);
 }
 
 .landing-hero {
@@ -39,31 +40,28 @@
   align-items: center;
   gap: var(--space-2);
   padding: 0.35rem 0.85rem;
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: var(--color-brand-subtle);
+  border: 1px solid rgba(79, 70, 229, 0.25);
   border-radius: var(--radius-full);
-  color: #FBBF24;
+  color: var(--color-brand);
   font-size: var(--font-size-xs);
   font-weight: 600;
   margin-bottom: var(--space-6);
-  letter-spacing: 0.04em;
 }
 
 .landing-hero-title {
   font-size: 3.25rem;
   font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
   margin-bottom: var(--space-6);
-  background: linear-gradient(180deg, #FFFFFF 40%, #94A3B8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-primary);
 }
 
 .landing-hero-subtitle {
   font-size: var(--font-size-md);
   color: var(--text-secondary);
-  max-width: 720px;
+  max-width: 680px;
   margin: 0 auto var(--space-8);
   line-height: 1.6;
 }
@@ -81,11 +79,11 @@
 .pipeline-visual-wrapper {
   max-width: 980px;
   margin: var(--space-8) auto var(--space-16);
-  background: linear-gradient(180deg, rgba(19, 24, 33, 0.9) 0%, rgba(14, 18, 23, 0.9) 100%);
-  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   padding: var(--space-8);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .pipeline-steps {
@@ -99,7 +97,7 @@
 .pipeline-step-box {
   flex: 1;
   min-width: 120px;
-  background-color: var(--bg-surface);
+  background-color: var(--bg-surface-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: var(--space-4) var(--space-3);
@@ -111,7 +109,7 @@
 .pipeline-step-box:hover {
   border-color: var(--color-brand);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+  box-shadow: var(--shadow-sm);
 }
 
 .step-icon {
@@ -150,14 +148,14 @@
   font-weight: 700;
   color: var(--color-brand);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   margin-bottom: var(--space-2);
 }
 
 .section-title {
   font-size: 2.25rem;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
   margin-bottom: var(--space-4);
   color: var(--text-primary);
 }
@@ -214,7 +212,7 @@
 
 .stepper-item.active .stepper-num {
   background-color: var(--color-brand);
-  color: #000;
+  color: #FFFFFF;
   border-color: var(--color-brand);
 }
 
@@ -230,7 +228,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: 0.65rem 0.85rem;
-  background-color: var(--bg-surface-secondary);
+  background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -247,7 +245,8 @@
 .checkbox-chip.selected {
   background-color: var(--color-brand-subtle);
   border-color: var(--color-brand);
-  color: #FBBF24;
+  color: var(--color-brand);
+  font-weight: 600;
 }
 
 /* ==========================================
@@ -311,22 +310,24 @@
   max-width: 85%;
   line-height: var(--line-height-relaxed);
   font-size: var(--font-size-xs);
+  box-shadow: var(--shadow-xs);
 }
 
 .chat-bubble-user {
   align-self: flex-end;
-  background-color: var(--bg-surface-tertiary);
-  border: 1px solid var(--border-light);
-  color: var(--text-primary);
+  background-color: var(--color-brand);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-xs) var(--radius-lg);
 }
 
 .chat-bubble-ai {
   align-self: flex-start;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  color: #E2E8F0;
+  color: var(--text-primary);
   width: 100%;
   max-width: 92%;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-xs);
 }
 
 .citation-pill-row {
@@ -344,8 +345,8 @@
   gap: var(--space-1);
   padding: 0.2rem 0.55rem;
   background-color: var(--bg-surface-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
   font-size: 0.6875rem;
   font-family: var(--font-family-mono);
   color: var(--color-brand);
@@ -360,11 +361,11 @@
 }
 
 /* ==========================================
-   5. DASHBOARD GRID
+   5. DASHBOARD GRID & FRIENDLY HEALTH
    ========================================== */
 .dashboard-grid-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }

@@ -76,12 +76,12 @@
         if (wsData.success && wsData.workspace) {
           const ws = wsData.workspace;
           document.getElementById('impact-profile-strip').innerHTML = `
-            <div>🏢 Entity: <strong style="color: #FFF;">${ws.legalEntityType}</strong></div>
-            <div>📍 State: <strong style="color: #FFF;">${ws.registeredState}</strong></div>
-            <div>💻 Industry: <strong style="color: #FFF;">${ws.industry}</strong></div>
-            <div>👥 Headcount: <strong style="color: #FFF;">${ws.numberOfEmployees}</strong></div>
-            <div>💰 Turnover: <strong style="color: #FFF;">${ws.annualTurnoverRange}</strong></div>
-            <div>📝 GSTIN: <strong style="color: #FFF;">${ws.gstin || 'Registered'}</strong></div>
+            <div>🏢 Entity: <strong style="color: var(--text-primary);">${ws.legalEntityType}</strong></div>
+            <div>📍 State: <strong style="color: var(--text-primary);">${ws.registeredState}</strong></div>
+            <div>💻 Industry: <strong style="color: var(--text-primary);">${ws.industry}</strong></div>
+            <div>👥 Headcount: <strong style="color: var(--text-primary);">${ws.numberOfEmployees}</strong></div>
+            <div>💰 Turnover: <strong style="color: var(--text-primary);">${ws.annualTurnoverRange}</strong></div>
+            <div>📝 GSTIN: <strong style="color: var(--text-primary);">${ws.gstin || 'Registered'}</strong></div>
           `;
         }
 
@@ -97,7 +97,7 @@
                     </span>
                     <span class="badge badge-brand">Relevance Match: ${imp.relevanceScore}%</span>
                   </div>
-                  <h3 style="font-size: var(--font-size-md); font-weight: 700; color: #FFF; margin-top: var(--space-2);">
+                  <h3 style="font-size: var(--font-size-md); font-weight: 700; color: var(--text-primary); margin-top: var(--space-2);">
                     ${imp.regulationTitle}
                   </h3>
                   <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-family-mono); margin-top: 2px;">

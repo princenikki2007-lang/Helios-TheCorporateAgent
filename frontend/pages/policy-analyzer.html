@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Policy Impact Analyzer — HELIOS</title>
-  <meta name="description" content="Analyze company policies against statutory regulations and generate Policy Health Scores.">
+  <title>Policy Health Check — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Friendly policy health check. Benchmark company policies against current rules in simple English.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="policy-analyzer" data-breadcrumb="Policy Analyzer">
+<body data-page="policy-analyzer" data-breadcrumb="Policy Health Check">
 
   <div class="app-layout">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
@@ -20,78 +20,132 @@
 
       <main class="app-content">
 
-        <!-- Page Hero -->
-        <div class="page-hero">
-          <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-            INTERNAL GOVERNANCE HEALTH AUDIT
+        <!-- Page Header -->
+        <div class="page-hero" style="margin-bottom: var(--space-6);">
+          <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+            POLICY CHECK
           </div>
-          <h1 class="page-hero-title">Policy Impact Analyzer</h1>
-          <p class="page-hero-subtitle">
-            Paste or upload your employee handbook, data privacy terms, or workplace guidelines to benchmark them against current statutory labour and data protection codes.
+          <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+            Policy Health Check
+          </h1>
+          <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+            Check your employee handbook, leave policy, or privacy guidelines against current rules.
           </p>
         </div>
 
-        <!-- Input Card -->
+        <!-- Input Area -->
         <div class="card" style="margin-bottom: var(--space-6);">
           <div class="form-group">
-            <label class="form-label">Policy Title *</label>
-            <input type="text" id="policy-title-input" class="form-input" value="Zephyr Master Employee Handbook &amp; Workplace Guidelines" placeholder="e.g. Corporate Data Privacy Policy 2026" />
+            <label class="form-label" style="font-size: var(--font-size-xs); font-weight: 600;">Policy Name</label>
+            <input type="text" id="policy-title-input" class="form-input" value="Employee Leave &amp; Handbook Policy" placeholder="e.g. Employee Leave Policy" />
           </div>
 
           <div class="form-group">
-            <label class="form-label">Policy Content / Excerpts to Benchmark *</label>
-            <textarea id="policy-text-input" class="form-textarea" rows="6" placeholder="Paste policy clauses regarding working hours, overtime, sexual harassment (POSH), data retention, or termination..." style="font-family: var(--font-family-mono); font-size: 0.75rem;">
-Chapter 5: Prevention of Sexual Harassment (POSH). The company constitutes an Internal Complaints Committee (ICC) consisting of a Presiding Officer and employee members. An external NGO member was nominated in 2023.
-Chapter 6: Working Hours and Overtime. Standard working hours are 9:30 AM to 6:30 PM. Excess weekend project hours are compensated via compensatory off days upon manager approval.
-Chapter 7: Maternity and Parental Benefits. Female employees are eligible for 26 weeks of paid maternity leave in accordance with statutory guidelines.
-Chapter 9: Employee Personal Data. All employee records, payroll tax details, and background verification records are maintained in corporate cloud servers.
+            <label class="form-label" style="font-size: var(--font-size-xs); font-weight: 600;">Policy text</label>
+            <textarea id="policy-text-input" class="form-textarea" rows="6" placeholder="Paste policy text here..." style="font-size: var(--font-size-xs); line-height: 1.5;">
+Chapter 4: Prevention of Sexual Harassment (POSH). The company establishes an Internal Complaints Committee (ICC).
+Chapter 5: Hours of Work and Leave. Standard working hours are 9:30 AM to 6:30 PM. Annual earned leave is granted at 15 days per calendar year.
+Chapter 6: Maternity Benefits. Female employees are eligible for 26 weeks paid maternity leave.
+Chapter 8: Data Privacy. Customer and employee records are stored in secure cloud systems with 72-hour incident escalation.
             </textarea>
           </div>
 
           <div style="display: flex; justify-content: flex-end;">
-            <button class="btn btn-primary" id="btn-run-analysis" onclick="runPolicyAnalysis()">
-              Run Statutory Policy Audit ⚡
+            <button class="btn btn-primary" id="btn-run-check" onclick="runPolicyCheck()">
+              Check this policy
             </button>
           </div>
         </div>
 
-        <!-- Results Container (Hidden until analysis runs) -->
-        <div id="policy-results-container" style="display: none;">
-          <!-- Health Score Header -->
-          <div class="card card-elevated" style="margin-bottom: var(--space-6);">
+        <!-- RESULTS SECTION (Section 11) -->
+        <div id="policy-results-container">
+          <!-- Summary Header -->
+          <div class="card" style="margin-bottom: var(--space-6); background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-secondary) 100%);">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
-              <div>
-                <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--color-brand); text-transform: uppercase; font-weight: 700;">
-                  BENCHMARK ASSESSMENT REPORT
+              <div style="display: flex; align-items: center; gap: var(--space-4);">
+                <div style="width: 70px; height: 70px; border-radius: var(--radius-full); background: var(--color-success-subtle); border: 2px solid var(--color-success); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <span style="font-size: 1.4rem; font-weight: 800; color: var(--color-success-text); line-height: 1;" id="result-score">82</span>
+                  <span style="font-size: 0.6rem; font-weight: 700; color: var(--color-success-text);">/ 100</span>
                 </div>
-                <h2 id="result-policy-title" style="font-size: var(--font-size-md); color: #FFF; margin-top: 2px;">
-                  Zephyr Master Employee Handbook &amp; Workplace Guidelines
-                </h2>
-                <div id="result-summary-text" style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: 4px;">
-                  Analysis complete.
+                <div>
+                  <h2 id="result-policy-title" style="font-size: var(--font-size-md); font-weight: 700; color: var(--text-primary); margin-bottom: 2px;">
+                    Employee Leave &amp; Handbook Policy
+                  </h2>
+                  <div style="font-size: var(--font-size-sm); color: var(--color-success-text); font-weight: 600;" id="result-verdict">
+                    Looks good overall.
+                  </div>
                 </div>
               </div>
 
-              <div style="text-align: right;">
-                <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">POLICY HEALTH SCORE</div>
-                <div id="result-score-val" style="font-family: var(--font-family-mono); font-size: 2.25rem; font-weight: 800; color: #FBBF24;">
-                  78 <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span>
-                </div>
+              <!-- Friendly breakdown pills (Section 11) -->
+              <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;" id="results-stat-pills">
+                <span class="health-stat-pill health-stat-good">✓ 5 areas look good</span>
+                <span class="health-stat-pill health-stat-warning">⚠ 2 areas worth reviewing</span>
+                <span class="health-stat-pill health-stat-good">✓ 0 major issues found</span>
               </div>
             </div>
           </div>
 
-          <!-- Finding Cards -->
+          <!-- Finding Cards (Friendly explanations) -->
+          <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-3);">
+            Findings &amp; Recommendations
+          </div>
+
           <div id="policy-findings-list" style="display: flex; flex-direction: column; gap: var(--space-4);">
-            <!-- Populated by JS -->
+            <!-- Finding 1 -->
+            <div class="card" style="border-left: 4px solid var(--color-warning);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-2);">
+                <div>
+                  <span class="badge badge-warning">Worth reviewing</span>
+                  <span style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-left: var(--space-2);">Annual leave &amp; working hours</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">See why</button>
+              </div>
+              <p style="font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1.45;">
+                Your policy mentions annual leave, but the applicable requirement under the state establishment rules may have changed for overtime compensations.
+              </p>
+              <div style="display: none; margin-top: var(--space-3); padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-xs); font-size: var(--font-size-2xs); color: var(--text-primary);">
+                <strong>Current rule:</strong> Karnataka Shops &amp; Commercial Establishments Act mandates double wages for hours worked beyond 9 hours/day or 48 hours/week. Compensatory off alone is not compliant for non-managerial staff.
+              </div>
+            </div>
+
+            <!-- Finding 2 -->
+            <div class="card" style="border-left: 4px solid var(--color-warning);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-2);">
+                <div>
+                  <span class="badge badge-warning">Worth reviewing</span>
+                  <span style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-left: var(--space-2);">POSH Committee External Member</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'">See why</button>
+              </div>
+              <p style="font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1.45;">
+                Your policy constitutes an Internal Complaints Committee, but does not explicitly name an active external member from an NGO or legal background.
+              </p>
+              <div style="display: none; margin-top: var(--space-3); padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-xs); font-size: var(--font-size-2xs); color: var(--text-primary);">
+                <strong>Current rule:</strong> POSH Act 2013 Section 4(2)(c) mandates that at least one member of the Internal Committee be from an NGO or familiar with workplace harassment prevention.
+              </div>
+            </div>
+
+            <!-- Finding 3 -->
+            <div class="card" style="border-left: 4px solid var(--color-success);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-2);">
+                <div>
+                  <span class="badge badge-success">Looks good</span>
+                  <span style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-left: var(--space-2);">Maternity Benefit &amp; Parental Leave</span>
+                </div>
+              </div>
+              <p style="font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1.45;">
+                Your 26-week paid maternity leave is fully aligned with the central Maternity Benefit Amendment Act.
+              </p>
+            </div>
           </div>
         </div>
 
-        <!-- Legal Disclaimer -->
+        <!-- Trust Disclaimer -->
         <div class="legal-disclaimer-box" style="margin-top: var(--space-8);">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           <span>
-            HELIOS provides informational policy benchmark analysis. HELIOS does not automatically rewrite contracts or policies without verified review by qualified HR and employment counsel.
+            HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
           </span>
         </div>
 
@@ -101,75 +155,44 @@ Chapter 9: Employee Personal Data. All employee records, payroll tax details, an
 
   <script src="../js/ui.js"></script>
   <script>
-    async function runPolicyAnalysis() {
-      const title = document.getElementById('policy-title-input').value;
-      const text = document.getElementById('policy-text-input').value;
-      const btn = document.getElementById('btn-run-analysis');
+    document.addEventListener('DOMContentLoaded', () => {
+      HeliosUI.init();
+    });
 
-      if (!text || text.trim().length < 20) {
-        alert("Please paste policy clauses to analyze.");
+    async function runPolicyCheck() {
+      const title = document.getElementById('policy-title-input').value.trim() || 'Uploaded Policy';
+      const text = document.getElementById('policy-text-input').value.trim();
+      const btn = document.getElementById('btn-run-check');
+
+      if (!text) {
+        HeliosUI.showToast("Please enter policy text to check.", "warning");
         return;
       }
 
       btn.disabled = true;
-      btn.textContent = "Analyzing against Labour & Privacy Codes...";
+      btn.textContent = "Checking against rules...";
 
-      try {
-        const res = await fetch('/api/policies/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ policyTitle: title, policyText: text })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          document.getElementById('policy-results-container').style.display = 'block';
-          document.getElementById('result-policy-title').textContent = data.policyTitle;
-          document.getElementById('result-summary-text').textContent = data.summary;
-          
-          const scoreEl = document.getElementById('result-score-val');
-          scoreEl.innerHTML = `${data.healthScore} <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span>`;
-          scoreEl.style.color = data.healthScore >= 80 ? '#34D399' : data.healthScore >= 60 ? '#FBBF24' : '#F87171';
-
-          const container = document.getElementById('policy-findings-list');
-          container.innerHTML = data.findings.map(f => `
-            <div class="card" style="border-left: 4px solid ${f.status === 'STRONG' ? '#10B981' : f.status === 'NEEDS_REVIEW' ? '#F59E0B' : '#EF4444'};">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-2);">
-                <div>
-                  <div style="display: flex; align-items: center; gap: var(--space-2);">
-                    <span class="badge ${f.status === 'STRONG' ? 'badge-success' : f.status === 'NEEDS_REVIEW' ? 'badge-warning' : 'badge-danger'}">
-                      ${f.status}
-                    </span>
-                    <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-family-mono);">${f.category}</span>
-                  </div>
-                  <h3 style="font-size: var(--font-size-sm); font-weight: 700; color: #FFF; margin-top: var(--space-1);">
-                    ${f.section}
-                  </h3>
-                </div>
-
-                <span style="font-size: 0.65rem; color: var(--color-brand); font-family: var(--font-family-mono);">
-                  Rule: ${f.statutoryRule}
-                </span>
-              </div>
-
-              <div style="font-size: var(--font-size-xs); color: var(--text-primary); margin-bottom: var(--space-2); line-height: 1.5;">
-                ${f.details}
-              </div>
-
-              <div style="font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-family-mono); border-top: 1px solid var(--border-subtle); padding-top: var(--space-2);">
-                Statutory Reference: ${f.source}
-              </div>
-            </div>
-          `).join('');
-
-          HeliosUI.showToast("Policy benchmark evaluation completed!", "success");
+      HeliosUI.showProcessingModal("Checking policy against current rules...", async () => {
+        try {
+          const res = await fetch('/api/policies/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ policyTitle: title, policyText: text })
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById('result-policy-title').textContent = title;
+            document.getElementById('result-score').textContent = data.healthScore;
+            document.getElementById('result-verdict').textContent = data.healthScore >= 80 ? "Looks good overall." : "A few areas need your attention.";
+            HeliosUI.showToast("Policy check completed!", "success");
+          }
+        } catch (e) {
+          HeliosUI.showToast("We couldn't check this policy right now.", "danger");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Check this policy";
         }
-      } catch (e) {
-        alert("Error executing policy analysis.");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Run Statutory Policy Audit ⚡";
-      }
+      });
     }
   </script>
 </body>

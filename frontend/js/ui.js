@@ -1,22 +1,26 @@
 /**
- * HELIOS — Global UI Controller
- * Renders unified Dark-First Navigation Shell, Topbar, Command Palette (Ctrl+K),
- * Multi-Tenant Switcher, Role-Based Access Control (RBAC) Selector,
- * Demo Mode Banner, and Responsible AI Disclaimers.
+ * HELIOS — Friendly Global UI Controller
+ * Approachable, simple, Notion/Stripe-inspired navigation shell,
+ * 8-item simplified sidebar, theme switcher (Light by default / Dark),
+ * mobile navigation, and friendly non-jargon modals.
  */
 
 const HeliosUI = (function() {
   let activeWorkspace = null;
   let activeRole = localStorage.getItem('helios_active_role') || 'Founder';
+  let activeTheme = localStorage.getItem('helios_theme') || 'light';
+
+  // Apply saved theme immediately
+  document.documentElement.setAttribute('data-theme', activeTheme);
 
   const ROLES = [
-    { id: 'Founder', name: 'Founder / CEO', desc: 'Full unrestricted governance & executive authority' },
-    { id: 'Admin', name: 'Company Admin', desc: 'Workspace settings, team management, vault admin' },
-    { id: 'Finance', name: 'Finance / CFO', desc: 'GST, TDS, direct tax, e-invoicing & audits' },
-    { id: 'HR', name: 'HR / People Team', desc: 'HR policies, employee handbook, POSH, labour laws' },
-    { id: 'Legal', name: 'Legal Counsel', desc: 'Contracts, statutory gazettes, parliamentary bills' },
-    { id: 'Compliance', name: 'Compliance Officer', desc: 'Licensing, permits, approval calendar & risk' },
-    { id: 'Viewer', name: 'Read-Only Auditor', desc: 'Audit inspection without editing rights' }
+    { id: 'Founder', name: 'Founder / CEO', desc: 'Full company governance' },
+    { id: 'Admin', name: 'Company Admin', desc: 'Manage team and documents' },
+    { id: 'Finance', name: 'Finance / Accounting', desc: 'Tax, GST & filings' },
+    { id: 'HR', name: 'People / HR', desc: 'Team policies & handbooks' },
+    { id: 'Legal', name: 'Legal Counsel', desc: 'Contracts & regulations' },
+    { id: 'Compliance', name: 'Compliance Officer', desc: 'Tasks & licenses' },
+    { id: 'Viewer', name: 'Read-Only Member', desc: 'View-only access' }
   ];
 
   /**
@@ -44,7 +48,7 @@ const HeliosUI = (function() {
       activeWorkspace = {
         id: "org_default",
         isDemo: true,
-        name: "Zephyr Technologies Private Limited",
+        name: "Zephyr Technologies",
         legalEntityType: "Private Limited Company",
         cin: "U72900KA2022PTC158941",
         pan: "AABCZ9821K",
@@ -78,7 +82,7 @@ const HeliosUI = (function() {
   }
 
   /**
-   * Render Sidebar
+   * Render Simplified 8-Item Friendly Sidebar
    */
   function renderSidebar(activePage) {
     const sidebarEl = document.getElementById('app-sidebar');
@@ -89,9 +93,9 @@ const HeliosUI = (function() {
 
     sidebarEl.innerHTML = `
       <div class="sidebar-header">
-        <a href="../index.html" class="brand-logo" title="HELIOS — Legal & Compliance Intelligence">
+        <a href="../index.html" class="brand-logo" title="HELIOS — Compliance Intelligence">
           <div class="brand-mark">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
               <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -99,96 +103,73 @@ const HeliosUI = (function() {
               <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
               <line x1="1" y1="12" x2="3" y2="12"></line>
               <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
           </div>
           <div class="brand-text">
             <span class="brand-title">HELIOS</span>
-            <span class="brand-subtitle">Compliance Layer</span>
+            <span class="brand-subtitle">Compliance Assistant</span>
           </div>
         </a>
       </div>
 
       <nav class="sidebar-nav" aria-label="Main Navigation">
-        <div class="nav-section-title">COMMAND CENTER</div>
-        <a href="dashboard.html" class="nav-link ${page === 'dashboard' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          Overview Dashboard
+        <!-- 1. Home -->
+        <a href="dashboard.html" class="nav-link ${page === 'dashboard' ? 'active' : ''}" title="Home Overview">
+          <span class="nav-icon">🏠</span>
+          <span>Home</span>
         </a>
 
-        <a href="risk.html" class="nav-link ${page === 'risk' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          Company Risk Engine
-          <span class="nav-badge">Score: 28</span>
+        <!-- 2. Tasks -->
+        <a href="approvals.html" class="nav-link ${page === 'approvals' ? 'active' : ''}" title="Your next steps">
+          <span class="nav-icon">✓</span>
+          <span>Tasks</span>
+          <span class="nav-badge">2 due</span>
         </a>
 
-        <a href="calendar.html" class="nav-link ${page === 'calendar' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          Compliance Calendar
+        <!-- 3. Documents -->
+        <a href="documents.html" class="nav-link ${page === 'documents' ? 'active' : ''}" title="Company documents">
+          <span class="nav-icon">📄</span>
+          <span>Documents</span>
         </a>
 
-        <div class="nav-section-title">DOCUMENT INTELLIGENCE</div>
-        <a href="documents.html" class="nav-link ${page === 'documents' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-          Document Vault
+        <!-- 4. Calendar -->
+        <a href="calendar.html" class="nav-link ${page === 'calendar' ? 'active' : ''}" title="Important dates & deadlines">
+          <span class="nav-icon">📅</span>
+          <span>Calendar</span>
         </a>
 
-        <a href="compare.html" class="nav-link ${page === 'compare' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-          Compare vs Rules
+        <!-- 5. What's New -->
+        <a href="regulations.html" class="nav-link ${page === 'regulations' ? 'active' : ''}" title="What's changed in the rules">
+          <span class="nav-icon">🔎</span>
+          <span>What's New</span>
+          <span class="nav-badge" style="background: var(--color-brand-subtle); color: var(--color-brand);">New</span>
         </a>
 
-        <a href="policy-analyzer.html" class="nav-link ${page === 'policy-analyzer' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-          Policy Analyzer
+        <!-- 6. Company Health -->
+        <a href="risk.html" class="nav-link ${page === 'risk' ? 'active' : ''}" title="Company Health & Checks">
+          <span class="nav-icon">🛡</span>
+          <span>Company Health</span>
+          <span class="nav-badge" style="background: var(--color-success-subtle); color: var(--color-success-text);">82%</span>
         </a>
 
-        <div class="nav-section-title">REGULATORY INTELLIGENCE</div>
-        <a href="regulations.html" class="nav-link ${page === 'regulations' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-          Statutory Circulars
+        <!-- 7. Ask HELIOS -->
+        <a href="policy-chat.html" class="nav-link ${page === 'policy-chat' ? 'active' : ''}" title="Ask your AI assistant">
+          <span class="nav-icon">🤖</span>
+          <span>Ask HELIOS</span>
         </a>
 
-        <a href="impact.html" class="nav-link ${page === 'impact' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-          Company Impact Engine
-          <span class="nav-badge">3 High</span>
-        </a>
-
-        <a href="policy-watch.html" class="nav-link ${page === 'policy-watch' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          Parliament Watch
-        </a>
-
-        <div class="nav-section-title">TAX & STATUTORY</div>
-        <a href="tax-center.html" class="nav-link ${page === 'tax-center' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-          Tax & GST Center
-        </a>
-
-        <a href="approvals.html" class="nav-link ${page === 'approvals' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          Approval Center
-        </a>
-
-        <div class="nav-section-title">ASSISTANCE & AUDIT</div>
-        <a href="policy-chat.html" class="nav-link ${page === 'policy-chat' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          Ask HELIOS (Legal AI)
-        </a>
-
-        <a href="audit-logs.html" class="nav-link ${page === 'audit-logs' ? 'active' : ''}">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          Audit & Governance
+        <!-- 8. Settings -->
+        <a href="onboarding.html" class="nav-link ${page === 'onboarding' ? 'active' : ''}" title="Company workspace settings">
+          <span class="nav-icon">⚙</span>
+          <span>Settings</span>
         </a>
       </nav>
 
       <div class="sidebar-footer">
-        <a href="onboarding.html" class="workspace-chip" title="Switch or configure Company Workspace">
+        <a href="onboarding.html" class="workspace-chip" title="Manage Company Profile">
           <div>
             <div class="ws-name">${ws.name}</div>
-            <div class="ws-type">${ws.isDemo ? 'DEMO WORKSPACE' : 'LIVE TENANT'} · ${ws.registeredState || 'Karnataka'}</div>
+            <div class="ws-type">${ws.isDemo ? 'Demo Workspace' : 'Your Company'} · ${ws.registeredState || 'Karnataka'}</div>
           </div>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </a>
@@ -197,7 +178,7 @@ const HeliosUI = (function() {
   }
 
   /**
-   * Render Topbar with Role Switcher & Command Search
+   * Render Clean Friendly Header Topbar
    */
   function renderHeader(breadcrumbText) {
     const headerEl = document.getElementById('app-header');
@@ -207,37 +188,42 @@ const HeliosUI = (function() {
 
     headerEl.innerHTML = `
       <div class="header-left">
-        <button class="btn btn-ghost btn-sm mobile-menu-btn" onclick="HeliosUI.toggleSidebar()">
+        <button class="btn btn-ghost btn-sm mobile-menu-btn" style="display: none;" onclick="HeliosUI.toggleSidebar()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
 
-        <div style="display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap;">
-          <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">${breadcrumbText || 'Command Center'}</span>
-          <span style="font-size: var(--font-size-2xs); color: var(--text-muted); font-family: var(--font-family-mono);">· CIN: ${ws.cin || 'U72900KA2022PTC158941'}</span>
+        <div style="display: flex; align-items: center; gap: var(--space-2);">
+          <span style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary);">${breadcrumbText || 'Dashboard'}</span>
+          <span style="font-size: var(--font-size-2xs); color: var(--text-muted);">· ${ws.name}</span>
         </div>
       </div>
 
       <div class="header-right">
         <!-- Command Search Trigger -->
-        <button class="cmd-trigger-btn" onclick="HeliosUI.openCommandPalette()" title="Global Command Search (Ctrl+K)">
+        <button class="cmd-trigger-btn" onclick="HeliosUI.openCommandPalette()" title="Search documents, questions, rules (Ctrl+K)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <span>Search documents, rules, tax...</span>
+          <span>Search anything...</span>
           <kbd class="cmd-shortcut">⌘K</kbd>
         </button>
 
-        <!-- Demo Mode Indicator / Toggle -->
-        <button class="btn btn-sm ${ws.isDemo ? 'btn-secondary' : 'btn-primary'}" onclick="HeliosUI.toggleDemoMode()" title="Toggle Demo Data Mode">
-          <span style="width: 6px; height: 6px; border-radius: 50%; background-color: ${ws.isDemo ? '#F59E0B' : '#10B981'}; display: inline-block;"></span>
-          ${ws.isDemo ? 'DEMO MODE' : 'LIVE TENANT'}
+        <!-- Theme Switcher (Light / Dark) -->
+        <button class="btn btn-secondary btn-sm" onclick="HeliosUI.toggleTheme()" title="Switch Light / Dark Theme" style="padding: 0.35rem 0.55rem; font-size: 0.8rem;">
+          ${activeTheme === 'dark' ? '☀️' : '🌙'}
         </button>
 
-        <!-- Role Switcher Trigger -->
+        <!-- Demo Mode Indicator / Toggle -->
+        <button class="btn btn-sm ${ws.isDemo ? 'btn-secondary' : 'btn-primary'}" onclick="HeliosUI.toggleDemoMode()" title="Toggle Demo Workspace">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background-color: ${ws.isDemo ? '#F59E0B' : '#10B981'}; display: inline-block;"></span>
+          ${ws.isDemo ? 'Demo Mode' : 'Live Space'}
+        </button>
+
+        <!-- Role Badge & Switcher -->
         <div style="position: relative;">
-          <button class="badge badge-brand" id="user-role-badge" onclick="HeliosUI.toggleRoleMenu()" title="Click to Switch User Role (RBAC)" style="cursor: pointer; border: 1px solid var(--border-light); font-size: 0.7rem; padding: 0.25rem 0.6rem;">
+          <button class="badge badge-brand" id="user-role-badge" onclick="HeliosUI.toggleRoleMenu()" title="Switch Team Role" style="cursor: pointer; padding: 0.25rem 0.65rem;">
             Role: <strong>${activeRole}</strong> ▾
           </button>
-          <div id="role-dropdown-menu" style="display: none; position: absolute; right: 0; top: 110%; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 240px; z-index: 1000; padding: var(--space-2);">
-            <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; padding: var(--space-2);">SWITCH ACTIVE RBAC ROLE</div>
+          <div id="role-dropdown-menu" style="display: none; position: absolute; right: 0; top: 120%; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); width: 240px; z-index: 1000; padding: var(--space-2);">
+            <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; padding: var(--space-2);">SWITCH ROLE</div>
             ${ROLES.map(r => `
               <div onclick="HeliosUI.switchRole('${r.id}')" style="padding: var(--space-2); border-radius: var(--radius-xs); cursor: pointer; display: flex; flex-direction: column; background: ${activeRole === r.id ? 'var(--bg-surface-secondary)' : 'transparent'};">
                 <span style="font-size: 0.75rem; font-weight: ${activeRole === r.id ? '700' : '500'}; color: ${activeRole === r.id ? 'var(--color-brand)' : 'var(--text-primary)'};">${r.name}</span>
@@ -247,14 +233,13 @@ const HeliosUI = (function() {
           </div>
         </div>
 
-        <!-- Help & Disclaimers -->
-        <button class="btn btn-ghost btn-sm" onclick="HeliosUI.showLegalNotice()" title="Statutory AI Disclaimer">
+        <!-- Trust & Information Button -->
+        <button class="btn btn-ghost btn-sm" onclick="HeliosUI.showLegalNotice()" title="About HELIOS Compliance Intelligence">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
         </button>
       </div>
     `;
 
-    // Close role dropdown on click outside
     document.addEventListener('click', (e) => {
       const menu = document.getElementById('role-dropdown-menu');
       const badge = document.getElementById('user-role-badge');
@@ -265,7 +250,7 @@ const HeliosUI = (function() {
   }
 
   /**
-   * Render Mobile Navigation Bar
+   * Render Mobile Navigation Bar (Home, Tasks, Documents, Ask HELIOS, More)
    */
   function renderMobileNav(activePage) {
     let mobileBar = document.getElementById('mobile-nav-bar');
@@ -280,24 +265,24 @@ const HeliosUI = (function() {
 
     mobileBar.innerHTML = `
       <a href="dashboard.html" class="mobile-nav-item ${page === 'dashboard' ? 'active' : ''}">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span style="font-size: 1.1rem;">🏠</span>
         <span>Home</span>
       </a>
-      <a href="calendar.html" class="mobile-nav-item ${page === 'calendar' ? 'active' : ''}">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      <a href="approvals.html" class="mobile-nav-item ${page === 'approvals' ? 'active' : ''}">
+        <span style="font-size: 1.1rem;">✓</span>
         <span>Tasks</span>
       </a>
       <a href="documents.html" class="mobile-nav-item ${page === 'documents' ? 'active' : ''}">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-        <span>Vault</span>
-      </a>
-      <a href="impact.html" class="mobile-nav-item ${page === 'impact' ? 'active' : ''}">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-        <span>Alerts</span>
+        <span style="font-size: 1.1rem;">📄</span>
+        <span>Documents</span>
       </a>
       <a href="policy-chat.html" class="mobile-nav-item ${page === 'policy-chat' ? 'active' : ''}">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        <span>AI Legal</span>
+        <span style="font-size: 1.1rem;">🤖</span>
+        <span>Ask HELIOS</span>
+      </a>
+      <a href="risk.html" class="mobile-nav-item ${page === 'risk' || page === 'calendar' || page === 'regulations' ? 'active' : ''}">
+        <span style="font-size: 1.1rem;">🛡</span>
+        <span>Health</span>
       </a>
     `;
   }
@@ -315,12 +300,12 @@ const HeliosUI = (function() {
         <div class="cmd-palette-modal">
           <div class="cmd-input-wrapper">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="cmd-search-input" class="cmd-input" placeholder="Search documents, regulations, policies, approvals (e.g. GST, DPDP, Shops)..." autocomplete="off" />
+            <input type="text" id="cmd-search-input" class="cmd-input" placeholder="Search documents, questions, rules, deadlines..." autocomplete="off" />
             <kbd class="cmd-shortcut">ESC</kbd>
           </div>
           <div id="cmd-results-container" class="cmd-results">
             <div style="padding: var(--space-4); text-align: center; color: var(--text-muted); font-size: var(--font-size-xs);">
-              Type to search across corporate documents, statutory regulations, and filings...
+              Type to search documents, tasks, and what's changed...
             </div>
           </div>
         </div>
@@ -339,7 +324,6 @@ const HeliosUI = (function() {
       });
     }
 
-    // Keyboard shortcut listeners
     window.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -365,8 +349,10 @@ const HeliosUI = (function() {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.innerHTML = `
-      <span style="color: ${type === 'danger' ? '#EF4444' : type === 'success' ? '#10B981' : '#F59E0B'};">●</span>
-      <span style="flex: 1;">${message}</span>
+      <span style="color: ${type === 'danger' ? '#EF4444' : type === 'success' ? '#10B981' : '#F59E0B'}; font-size: 1rem;">
+        ${type === 'success' ? '✓' : type === 'danger' ? '⚠' : 'ℹ'}
+      </span>
+      <span style="flex: 1; font-size: var(--font-size-xs); color: var(--text-primary);">${message}</span>
     `;
     container.appendChild(toast);
 
@@ -374,19 +360,19 @@ const HeliosUI = (function() {
       toast.style.opacity = '0';
       toast.style.transition = 'opacity 200ms ease';
       setTimeout(() => toast.remove(), 250);
-    }, 3500);
+    }, 3200);
   }
 
   /**
-   * Animated 5-step processing modal for OCR & AI analysis
+   * Friendly, Non-Jargon Stepped Document Processing Modal
    */
   function showProcessingModal(title, onStepCallback) {
     const steps = [
-      "Uploading file stream to encrypted vault...",
-      "Extracting OCR text & character coordinates...",
-      "Analyzing statutory entities (CIN, PAN, GSTIN)...",
-      "Comparing clauses against Central Gazettes...",
-      "Generating explainable compliance findings..."
+      "Uploading your document...",
+      "Reading and scanning contents...",
+      "Finding important details...",
+      "Checking requirements against current rules...",
+      "Finishing up..."
     ];
 
     const modal = document.createElement('div');
@@ -394,22 +380,22 @@ const HeliosUI = (function() {
     modal.style.display = 'flex';
     modal.id = 'helios-processing-modal';
     modal.innerHTML = `
-      <div class="cmd-palette-modal" style="max-width: 480px; padding: var(--space-6); text-align: center;">
-        <div style="font-size: 2rem; margin-bottom: var(--space-3); animation: spin 2s linear infinite;">⚙️</div>
-        <h3 style="font-size: var(--font-size-sm); color: #FFF; margin-bottom: var(--space-1);">${title || 'Processing Document'}</h3>
-        <p style="font-size: var(--font-size-2xs); color: var(--text-muted); margin-bottom: var(--space-4);">Continuous Compliance Pipeline Ingestion</p>
+      <div class="cmd-palette-modal" style="max-width: 440px; padding: var(--space-6); text-align: center;">
+        <div style="font-size: 2.25rem; margin-bottom: var(--space-3);">📄</div>
+        <h3 style="font-size: var(--font-size-sm); color: var(--text-primary); margin-bottom: var(--space-1);">${title || "Checking your document"}</h3>
+        <p style="font-size: var(--font-size-2xs); color: var(--text-secondary); margin-bottom: var(--space-4);">We'll organize everything and let you know what matters.</p>
         
-        <div style="background: var(--bg-surface-secondary); border-radius: var(--radius-sm); padding: var(--space-3); text-align: left; margin-bottom: var(--space-4);">
+        <div style="background: var(--bg-surface-secondary); border-radius: var(--radius-md); padding: var(--space-4); text-align: left; margin-bottom: var(--space-4); border: 1px solid var(--border-subtle);">
           <div id="processing-step-label" style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: var(--space-2);">
             ${steps[0]}
           </div>
-          <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
-            <div id="processing-step-bar" style="height: 100%; width: 20%; background: linear-gradient(90deg, #F59E0B, #10B981); transition: width 400ms ease;"></div>
+          <div style="height: 6px; background: var(--bg-surface-tertiary); border-radius: var(--radius-full); overflow: hidden;">
+            <div id="processing-step-bar" style="height: 100%; width: 20%; background: var(--color-brand); transition: width 400ms ease;"></div>
           </div>
         </div>
 
-        <div style="font-size: 0.65rem; color: var(--text-muted);">
-          Grounded with Level 1 Official Government Gazettes
+        <div style="font-size: 0.7rem; color: var(--text-muted);">
+          Grounded with verified official government information.
         </div>
       </div>
     `;
@@ -431,7 +417,7 @@ const HeliosUI = (function() {
           if (typeof onStepCallback === 'function') onStepCallback();
         }, 300);
       }
-    }, 450);
+    }, 400);
   }
 
   return {
@@ -444,6 +430,14 @@ const HeliosUI = (function() {
       renderHeader(breadcrumb);
       renderMobileNav(activePage);
       initCommandPalette();
+    },
+
+    toggleTheme() {
+      activeTheme = activeTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('helios_theme', activeTheme);
+      document.documentElement.setAttribute('data-theme', activeTheme);
+      this.init();
+      showToast(`Switched to ${activeTheme === 'dark' ? 'Dark' : 'Light'} Mode`, 'info');
     },
 
     toggleSidebar() {
@@ -465,7 +459,7 @@ const HeliosUI = (function() {
       if (badge) badge.innerHTML = `Role: <strong>${roleId}</strong> ▾`;
       const menu = document.getElementById('role-dropdown-menu');
       if (menu) menu.style.display = 'none';
-      showToast(`Active role switched to: ${roleId}`, 'success');
+      showToast(`Role updated to ${roleId}`, 'success');
     },
 
     getActiveRole() {
@@ -496,13 +490,13 @@ const HeliosUI = (function() {
 
       if (!query || query.trim().length === 0) {
         container.innerHTML = `
-          <div style="padding: var(--space-3); font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Quick Actions</div>
-          <a href="onboarding.html" class="cmd-item"><span>🏢 Configure Company Workspace</span><span class="badge badge-brand">Settings</span></a>
-          <a href="documents.html" class="cmd-item"><span>📂 Upload New Document to Vault</span><span class="badge badge-info">Vault</span></a>
-          <a href="policy-chat.html" class="cmd-item"><span>💬 Ask HELIOS Legal Assistant</span><span class="badge badge-success">AI</span></a>
-          <a href="compare.html" class="cmd-item"><span>⚖️ Compare Document Against Rules</span><span class="badge badge-warning">Rules</span></a>
-          <a href="tax-center.html" class="cmd-item"><span>📊 Check Upcoming GST Deadlines</span><span class="badge badge-danger">Tax</span></a>
-          <a href="approvals.html" class="cmd-item"><span>📜 Track Statutory Licenses & Approvals</span><span class="badge badge-brand">Permits</span></a>
+          <div style="padding: var(--space-2) var(--space-3); font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Quick Actions</div>
+          <a href="dashboard.html" class="cmd-item"><span>🏠 Home Overview</span><span class="badge badge-brand">Home</span></a>
+          <a href="approvals.html" class="cmd-item"><span>✓ Check Next Tasks</span><span class="badge badge-warning">Tasks</span></a>
+          <a href="documents.html" class="cmd-item"><span>📄 Add Company Document</span><span class="badge badge-info">Vault</span></a>
+          <a href="policy-chat.html" class="cmd-item"><span>🤖 Ask HELIOS Assistant</span><span class="badge badge-success">AI</span></a>
+          <a href="regulations.html" class="cmd-item"><span>🔎 See What's New</span><span class="badge badge-brand">Rules</span></a>
+          <a href="risk.html" class="cmd-item"><span>🛡 View Company Health</span><span class="badge badge-success">Health</span></a>
         `;
         return;
       }
@@ -515,16 +509,16 @@ const HeliosUI = (function() {
             <a href="${r.url}" class="cmd-item">
               <div>
                 <div style="font-weight: 600; color: var(--text-primary);">${r.title}</div>
-                <div style="font-size: 0.7rem; color: var(--text-muted);">${r.subtitle}</div>
+                <div style="font-size: 0.7rem; color: var(--text-secondary);">${r.subtitle}</div>
               </div>
               <span class="badge badge-info">${r.badge}</span>
             </a>
           `).join('');
         } else {
-          container.innerHTML = `<div style="padding: var(--space-4); text-align: center; color: var(--text-muted); font-size: var(--font-size-xs);">No matching documents, regulations, or approvals found for "${query}".</div>`;
+          container.innerHTML = `<div style="padding: var(--space-4); text-align: center; color: var(--text-muted); font-size: var(--font-size-xs);">No matching items found for "${query}".</div>`;
         }
       } catch (e) {
-        container.innerHTML = `<div style="padding: var(--space-4); text-align: center; color: var(--color-danger); font-size: var(--font-size-xs);">Error searching index.</div>`;
+        container.innerHTML = `<div style="padding: var(--space-4); text-align: center; color: var(--color-danger); font-size: var(--font-size-xs);">Error searching.</div>`;
       }
     },
 
@@ -539,7 +533,7 @@ const HeliosUI = (function() {
         const data = await res.json();
         if (data.success) {
           activeWorkspace = data.workspace;
-          showToast(nextState ? 'Switched to Demo Workspace (Zephyr Tech)' : 'Switched to Live Company Workspace', 'success');
+          showToast(nextState ? 'Switched to Demo Workspace' : 'Switched to Live Workspace', 'success');
           setTimeout(() => window.location.reload(), 400);
         }
       } catch (e) {
@@ -548,7 +542,7 @@ const HeliosUI = (function() {
     },
 
     showLegalNotice() {
-      alert("HELIOS STATUTORY NOTICE & AI DISCLAIMER:\n\n1. HELIOS provides compliance intelligence and informational legal analysis based on public gazette notifications and company records.\n2. HELIOS IS NOT A LAWYER AND DOES NOT PROVIDE BINDING LEGAL ADVICE.\n3. All official filings, statutory disputes, and high-risk actions must be verified by a licensed advocate, chartered accountant, or company secretary.\n4. Grounding: Output prioritizes Level 1 Official Government Gazettes.");
+      alert("HELIOS — Trust & Responsible Intelligence Notice\n\n1. HELIOS helps you understand company compliance, organize documents, and track deadlines.\n2. HELIOS IS NOT A LAWYER AND DOES NOT PROVIDE FORMAL LEGAL ADVICE.\n3. For critical legal filings, tax disputes, or corporate contracts, verify details with a qualified legal or tax professional.");
     },
 
     showToast,

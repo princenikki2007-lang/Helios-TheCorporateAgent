@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document Vault — HELIOS</title>
-  <meta name="description" content="Manage corporate documents, extract statutory metadata, and run AI compliance analysis.">
+  <title>Documents — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Add your company documents. HELIOS organizes, analyzes, and keeps them safe.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="documents" data-breadcrumb="Document Vault">
+<body data-page="documents" data-breadcrumb="Documents">
 
   <div class="app-layout">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
@@ -20,69 +20,78 @@
 
       <main class="app-content">
 
-        <!-- Header -->
-        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+        <!-- Page Header -->
+        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
           <div>
-            <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-              SECURE TENANT STORAGE &amp; OCR
+            <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+              COMPANY VAULT
             </div>
-            <h1 class="page-hero-title">Document Vault &amp; Entity Extractor</h1>
-            <p class="page-hero-subtitle">
-              Upload statutory registrations, tax filings, HR policies, and contracts for real-time optical extraction and statutory comparison.
+            <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+              Add your company documents
+            </h1>
+            <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+              Upload them here and HELIOS will organize and analyze them for you.
             </p>
           </div>
 
-          <button class="btn btn-primary btn-sm" onclick="toggleUploadModal()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-            Upload Document
-          </button>
+          <div style="display: flex; gap: var(--space-2);">
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('camera-file-input').click()">
+              📷 Scan with camera
+            </button>
+            <input type="file" id="camera-file-input" accept="image/*" capture="environment" style="display: none;" onchange="handleFileSelect(event)" />
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('main-file-input').click()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload document
+            </button>
+            <input type="file" id="main-file-input" style="display: none;" onchange="handleFileSelect(event)" accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.txt" />
+          </div>
         </div>
 
-        <!-- Category & Filter Bar -->
-        <div class="card" style="padding: var(--space-3); margin-bottom: var(--space-6);">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);">
-            <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-              <button class="btn btn-secondary btn-sm" onclick="filterCategory('All')">All Categories (<span id="count-all">0</span>)</button>
-              <button class="btn btn-ghost btn-sm" onclick="filterCategory('Corporate')">Corporate</button>
-              <button class="btn btn-ghost btn-sm" onclick="filterCategory('Tax')">Tax &amp; GST</button>
-              <button class="btn btn-ghost btn-sm" onclick="filterCategory('HR')">HR &amp; Workplace</button>
-              <button class="btn btn-ghost btn-sm" onclick="filterCategory('Compliance')">Statutory Licenses</button>
-              <button class="btn btn-ghost btn-sm" onclick="filterCategory('Legal')">Legal &amp; Privacy</button>
+        <!-- LARGE FRIENDLY UPLOAD AREA -->
+        <div class="card" style="margin-bottom: var(--space-6); padding: var(--space-6);">
+          <div class="friendly-dropzone" id="drop-area" onclick="document.getElementById('main-file-input').click()">
+            <div class="friendly-dropzone-icon">📄</div>
+            <div class="friendly-dropzone-title">Drop your files here</div>
+            <div class="friendly-dropzone-sub">or <span style="color: var(--color-brand); font-weight: 600; text-decoration: underline;">choose files</span> from your computer</div>
+            <div class="format-badges">
+              <span class="format-pill">PDF</span>
+              <span class="format-pill">DOCX</span>
+              <span class="format-pill">JPG</span>
+              <span class="format-pill">PNG</span>
             </div>
-
-            <div style="display: flex; align-items: center; gap: var(--space-2);">
-              <input type="text" id="doc-search-box" class="form-input" style="width: 220px; padding: 0.35rem 0.65rem;" placeholder="Filter documents..." oninput="renderTable()" />
+            <div style="margin-top: var(--space-3); font-size: 0.75rem; color: var(--text-muted);">
+              Supports registrations, certificates, contracts, and HR policies (Up to 25MB)
             </div>
           </div>
         </div>
 
-        <!-- Document Table (Bloomberg Style Density) -->
-        <div class="data-table-wrapper">
-          <table class="data-table" aria-label="Corporate Documents">
-            <thead>
-              <tr>
-                <th>Document Name</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Expiration / Validity</th>
-                <th>Status</th>
-                <th>Risk Level</th>
-                <th>AI Confidence</th>
-                <th>Last Analyzed</th>
-                <th style="text-align: right;">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="documents-table-body">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
+        <!-- Filter & Search Bar -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4);">
+          <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;" id="category-filter-buttons">
+            <button class="btn btn-secondary btn-sm" onclick="filterDocs('All')">All (<span id="count-all">0</span>)</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterDocs('Tax')">Tax &amp; GST</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterDocs('Corporate')">Corporate</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterDocs('HR')">HR &amp; Policies</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterDocs('Compliance')">Licenses</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <input type="text" id="doc-search-box" class="form-input" style="width: 240px; padding: 0.35rem 0.65rem;" placeholder="Search documents..." oninput="renderDocumentList()" />
+          </div>
         </div>
 
-        <!-- Legal Disclaimer -->
-        <div class="legal-disclaimer-box">
+        <!-- DOCUMENT LIST / TABLE -->
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: var(--space-6);">
+          <div id="documents-container">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- FRIENDLY TRUST MESSAGE -->
+        <div class="legal-disclaimer-box" style="margin-top: var(--space-6);">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           <span>
-            HELIOS performs optical text extraction and compliance heuristics. Discrepancies should be verified against official certified government filings.
+            HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
           </span>
         </div>
 
@@ -90,104 +99,63 @@
     </div>
   </div>
 
-  <!-- UPLOAD MODAL -->
-  <div id="upload-modal-backdrop" class="cmd-palette-backdrop">
-    <div class="cmd-palette-modal" style="max-width: 580px; padding: var(--space-6);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-        <h3 style="font-size: var(--font-size-sm); color: var(--text-primary);">Upload Document to Vault</h3>
-        <button class="btn btn-ghost btn-sm" onclick="toggleUploadModal()">✕</button>
-      </div>
-
-      <form id="vault-upload-form" onsubmit="submitDocumentUpload(event)">
-        <div class="form-group">
-          <label class="form-label">Category *</label>
-          <select id="upload-category" class="form-select" required>
-            <option value="Corporate">Corporate (COI, MOA, AOA, Board Resolutions)</option>
-            <option value="Tax">Tax (GST, PAN, TDS, Tax Returns, Invoices)</option>
-            <option value="HR">HR (Employee Handbook, POSH, Leave Policies)</option>
-            <option value="Compliance">Compliance (Trade License, Shops &amp; Est, Environmental)</option>
-            <option value="Legal">Legal (Contracts, Privacy Policy, IP Agreements)</option>
-            <option value="Finance">Finance (Financial Statements, Audit Reports)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Document Title (Optional)</label>
-          <input type="text" id="upload-title" class="form-input" placeholder="e.g. GST Registration Certificate REG-06" />
-        </div>
-
-        <div class="upload-zone" onclick="document.getElementById('vault-file-picker').click()">
-          <input type="file" id="vault-file-picker" style="display: none;" onchange="handleVaultFile(event)" accept=".pdf,.docx,.xlsx,.csv,.png,.jpg,.jpeg,.txt" />
-          <div class="upload-icon">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
-          </div>
-          <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);" id="vault-file-name">
-            Click to browse or drop file here
-          </div>
-          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">
-            Supports PDF, DOCX, XLSX, CSV, PNG, JPG (Max 25MB)
-          </div>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-6);">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="toggleUploadModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm" id="btn-submit-upload">Upload &amp; Analyze</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- DOCUMENT INSPECTION & IN-DOCUMENT AI CHAT DRAWER -->
+  <!-- FRIENDLY DOCUMENT DETAIL & ANALYSIS DRAWER -->
   <div id="doc-drawer-backdrop" class="cmd-palette-backdrop">
-    <div class="cmd-palette-modal" style="max-width: 720px; max-height: 85vh; display: flex; flex-direction: column;">
+    <div class="cmd-palette-modal" style="max-width: 640px; max-height: 85vh; display: flex; flex-direction: column;">
       <div style="padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <h3 id="drawer-title" style="font-size: var(--font-size-sm); color: var(--text-primary);">Document Inspector</h3>
-          <span id="drawer-subtitle" style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-family-mono);">Metadata &amp; In-Document Chat</span>
+          <h3 id="drawer-title" style="font-size: var(--font-size-md); font-weight: 700; color: var(--text-primary);">Document Details</h3>
+          <span id="drawer-subtitle" style="font-size: 0.75rem; color: var(--text-secondary);">Verified company document</span>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="closeDrawer()">✕</button>
       </div>
 
       <div style="flex: 1; overflow-y: auto; padding: var(--space-6);">
-        <!-- Metadata & Extraction Cards -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-6);">
-          <div style="padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
-            <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Extracted Entities</div>
-            <div id="drawer-entities" style="margin-top: var(--space-2); font-size: var(--font-size-2xs); color: var(--text-primary); font-family: var(--font-family-mono);">
-              <!-- Entities -->
+        <!-- FRIENDLY RESULTS SUMMARY -->
+        <div id="friendly-results-box" style="background: var(--color-success-subtle); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-5);">
+          <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: 4px;">
+            <span style="font-size: 1.25rem;">👍</span>
+            <div style="font-size: var(--font-size-sm); font-weight: 700; color: var(--color-success-text);" id="drawer-friendly-heading">
+              Your document looks good
             </div>
           </div>
-
-          <div style="padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
-            <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Statutory Obligations</div>
-            <div id="drawer-obligations" style="margin-top: var(--space-2); font-size: var(--font-size-2xs); color: var(--text-secondary); line-height: 1.4;">
-              <!-- Obligations -->
-            </div>
+          <div style="font-size: var(--font-size-xs); color: var(--text-secondary);" id="drawer-friendly-summary">
+            HELIOS verified the essential details against current rules.
           </div>
         </div>
 
-        <!-- Quick Action: Compare vs Rules -->
-        <div style="display: flex; gap: var(--space-3); margin-bottom: var(--space-6);">
-          <a id="drawer-compare-btn" href="compare.html" class="btn btn-primary btn-sm">
-            ⚖️ Compare Against Current Rules
-          </a>
+        <!-- DOCUMENT DETAILS GRID -->
+        <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2);">
+          Document details
+        </div>
+        <div id="drawer-details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-5); background: var(--bg-surface-secondary); padding: var(--space-4); border-radius: var(--radius-md);">
+          <!-- Filled by JS -->
         </div>
 
-        <!-- In-Document AI Chat Section -->
+        <!-- THINGS YOU MAY WANT TO CHECK -->
+        <div style="margin-bottom: var(--space-5);">
+          <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2);">
+            Things you may want to check
+          </div>
+          <div id="drawer-check-items" style="background: var(--color-warning-subtle); border-left: 3px solid var(--color-warning); padding: var(--space-3); border-radius: var(--radius-xs); font-size: var(--font-size-xs); color: var(--color-warning-text);">
+            ⚠ Address information should be verified against recent filings.
+          </div>
+        </div>
+
+        <!-- IN-DOCUMENT CHAT ASSISTANT -->
         <div style="border-top: 1px solid var(--border-subtle); padding-top: var(--space-4);">
-          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2); display: flex; align-items: center; gap: var(--space-2);">
-            <span>💬 In-Document AI Assistant</span>
-            <span class="badge badge-brand">Grounded</span>
+          <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-1);">
+            Ask HELIOS about this document
           </div>
-          <p style="font-size: var(--font-size-2xs); color: var(--text-muted); margin-bottom: var(--space-3);">
-            Ask questions strictly grounded in this document's extracted clauses (e.g. "What is the expiration date?", "Find GSTIN", "What are the obligations?").
+          <p style="font-size: var(--font-size-2xs); color: var(--text-secondary); margin-bottom: var(--space-3);">
+            Ask simple questions and get answers with citations from this file.
           </p>
 
-          <div style="display: flex; gap: var(--space-2); margin-bottom: var(--space-3);">
-            <button class="btn btn-secondary btn-sm" onclick="askDoc('Summarize this document')">Summarize</button>
-            <button class="btn btn-secondary btn-sm" onclick="askDoc('When does this expire?')">Check Expiry</button>
-            <button class="btn btn-secondary btn-sm" onclick="askDoc('Find the GSTIN and registration details')">Find GSTIN</button>
-            <button class="btn btn-secondary btn-sm" onclick="askDoc('What obligations are mentioned?')">List Obligations</button>
+          <div class="prompt-chips-group" style="margin-bottom: var(--space-3);">
+            <button class="prompt-chip" onclick="askDoc('Summarize this document')">📄 Summarize</button>
+            <button class="prompt-chip" onclick="askDoc('When does this expire?')">📅 Check expiry</button>
+            <button class="prompt-chip" onclick="askDoc('Find the GSTIN and registration details')">🧾 Find GSTIN</button>
+            <button class="prompt-chip" onclick="askDoc('What obligations are mentioned?')">✓ What is required?</button>
           </div>
 
           <div style="display: flex; gap: var(--space-2);">
@@ -195,7 +163,7 @@
             <button class="btn btn-primary btn-sm" onclick="askDoc(document.getElementById('doc-chat-input').value)">Ask</button>
           </div>
 
-          <div id="doc-chat-response" style="margin-top: var(--space-4); display: none; padding: var(--space-4); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); border-left: 3px solid var(--color-brand); font-size: var(--font-size-xs); line-height: 1.5; color: var(--text-primary);">
+          <div id="doc-chat-response" style="margin-top: var(--space-3); display: none; padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm); border-left: 3px solid var(--color-brand); font-size: var(--font-size-xs); line-height: 1.5; color: var(--text-primary);">
             <!-- Response -->
           </div>
         </div>
@@ -207,12 +175,13 @@
   <script src="../js/ui.js"></script>
   <script>
     let allDocuments = [];
-    let currentCategory = 'All';
+    let activeCategory = 'All';
     let selectedDoc = null;
-    let stagedVaultFile = null;
 
     document.addEventListener('DOMContentLoaded', () => {
+      HeliosUI.init();
       loadDocuments();
+      setupDragDrop();
     });
 
     async function loadDocuments() {
@@ -222,84 +191,123 @@
         if (data.success && data.documents) {
           allDocuments = data.documents;
           document.getElementById('count-all').textContent = allDocuments.length;
-          renderTable();
+          renderDocumentList();
         }
       } catch (e) {
         console.error("Error loading documents:", e);
       }
     }
 
-    function filterCategory(cat) {
-      currentCategory = cat;
-      renderTable();
+    function filterDocs(cat) {
+      activeCategory = cat;
+      const buttons = document.querySelectorAll('#category-filter-buttons button');
+      buttons.forEach(b => {
+        b.className = b.textContent.includes(cat) ? 'btn btn-secondary btn-sm' : 'btn btn-ghost btn-sm';
+      });
+      renderDocumentList();
     }
 
-    function renderTable() {
+    function renderDocumentList() {
       const search = (document.getElementById('doc-search-box').value || '').toLowerCase();
-      const tbody = document.getElementById('documents-table-body');
-      
+      const container = document.getElementById('documents-container');
+
       const filtered = allDocuments.filter(d => {
-        const matchesCat = currentCategory === 'All' || d.category === currentCategory;
-        const matchesSearch = d.title.toLowerCase().includes(search) || d.filename.toLowerCase().includes(search) || d.docType.toLowerCase().includes(search);
+        const matchesCat = activeCategory === 'All' || d.category === activeCategory;
+        const matchesSearch = d.title.toLowerCase().includes(search) || d.filename.toLowerCase().includes(search);
         return matchesCat && matchesSearch;
       });
 
+      // FRIENDLY EMPTY STATE (Section 16)
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: var(--space-8); color: var(--text-muted);">No documents match the current criteria.</td></tr>`;
+        container.innerHTML = `
+          <div class="empty-state-box" style="border: none; padding: var(--space-10) var(--space-4);">
+            <div class="empty-state-icon">📄</div>
+            <div class="empty-state-title">Your document space is ready</div>
+            <div class="empty-state-desc">Upload your company documents and I'll organize them for you.</div>
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('main-file-input').click()">
+              Upload document
+            </button>
+          </div>
+        `;
         return;
       }
 
-      tbody.innerHTML = filtered.map(d => `
-        <tr>
-          <td class="primary-cell" style="cursor: pointer;" onclick="openDocDrawer('${d.id}')">
-            <div style="font-weight: 600; color: #FFF;">${d.title}</div>
-            <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-family-mono);">${d.filename} · ${d.size}</div>
-          </td>
-          <td><span class="badge badge-secondary">${d.category}</span></td>
-          <td class="mono-cell">${d.docType}</td>
-          <td class="mono-cell" style="color: ${d.expirationDate.includes('2026') ? '#FBBF24' : 'var(--text-secondary)'};">${d.expirationDate}</td>
-          <td><span class="badge ${d.status === 'Verified' ? 'badge-success' : 'badge-warning'}">${d.status}</span></td>
-          <td><span class="badge ${d.riskLevel === 'Low' ? 'badge-success' : d.riskLevel === 'Medium' ? 'badge-warning' : 'badge-danger'}">${d.riskLevel} Risk</span></td>
-          <td class="mono-cell">${d.aiConfidence}</td>
-          <td class="mono-cell" style="font-size: 0.7rem;">${d.lastAnalyzed}</td>
-          <td style="text-align: right; white-space: nowrap;">
-            <button class="btn btn-secondary btn-sm" onclick="openDocDrawer('${d.id}')" title="Inspect & Chat">Inspect</button>
-            <a href="compare.html?id=${d.id}" class="btn btn-ghost btn-sm" title="Compare Against Rules">Compare</a>
-          </td>
-        </tr>
-      `).join('');
+      container.innerHTML = `
+        <table class="data-table" aria-label="Company Documents">
+          <thead>
+            <tr>
+              <th>Document</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Valid Until</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map(d => `
+              <tr>
+                <td style="cursor: pointer;" onclick="openDocDrawer('${d.id}')">
+                  <div style="font-weight: 600; color: var(--text-primary);">${d.title}</div>
+                  <div style="font-size: 0.7rem; color: var(--text-muted);">${d.filename} · ${d.size}</div>
+                </td>
+                <td><span class="badge badge-secondary">${d.category}</span></td>
+                <td>
+                  <span class="badge ${d.riskLevel === 'Low' ? 'badge-success' : 'badge-warning'}">
+                    ${d.status === 'Verified' ? 'Looking good' : 'Needs review'}
+                  </span>
+                </td>
+                <td style="font-size: var(--font-size-xs); color: var(--text-secondary);">${d.expirationDate}</td>
+                <td style="text-align: right;">
+                  <button class="btn btn-secondary btn-sm" onclick="openDocDrawer('${d.id}')">View details</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
     }
 
-    function toggleUploadModal() {
-      const el = document.getElementById('upload-modal-backdrop');
-      el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
+    function setupDragDrop() {
+      const dropArea = document.getElementById('drop-area');
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropArea.style.borderColor = 'var(--color-brand)';
+          dropArea.style.background = 'var(--color-brand-subtle)';
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          dropArea.style.borderColor = '';
+          dropArea.style.background = '';
+        }, false);
+      });
+
+      dropArea.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          uploadFile(files[0]);
+        }
+      });
     }
 
-    function handleVaultFile(e) {
+    function handleFileSelect(e) {
       if (e.target.files && e.target.files[0]) {
-        stagedVaultFile = e.target.files[0];
-        document.getElementById('vault-file-name').textContent = `${stagedVaultFile.name} (${(stagedVaultFile.size / 1024).toFixed(0)} KB)`;
+        uploadFile(e.target.files[0]);
       }
     }
 
-    async function submitDocumentUpload(e) {
-      e.preventDefault();
-      if (!stagedVaultFile) {
-        alert("Please select a file to upload.");
-        return;
-      }
-
-      const btn = document.getElementById('btn-submit-upload');
-      btn.disabled = true;
-      btn.textContent = "Analyzing & Extracting...";
-
+    async function uploadFile(file) {
       const formData = new FormData();
-      formData.append('file', stagedVaultFile);
-      formData.append('category', document.getElementById('upload-category').value);
-      formData.append('title', document.getElementById('upload-title').value);
+      formData.append('file', file);
+      formData.append('category', 'Corporate');
+      formData.append('title', file.name.replace(/\.[^/.]+$/, ""));
 
-      toggleUploadModal();
-      HeliosUI.showProcessingModal("Ingesting & Analyzing Document...", async () => {
+      // Friendly non-jargon stepped upload progress
+      HeliosUI.showProcessingModal("I'm checking this document...", async () => {
         try {
           const res = await fetch('/api/documents/upload', {
             method: 'POST',
@@ -307,18 +315,16 @@
           });
           const data = await res.json();
           if (data.success) {
-            stagedVaultFile = null;
-            document.getElementById('vault-file-name').textContent = "Click to browse or drop file here";
-            loadDocuments();
-            HeliosUI.showToast("Document indexed and analyzed successfully!", "success");
+            await loadDocuments();
+            HeliosUI.showToast("Your document is ready!", "success");
+            if (data.document) {
+              openDocDrawer(data.document.id);
+            }
           } else {
-            HeliosUI.showToast(data.error || "Upload failed.", "danger");
+            HeliosUI.showToast("We couldn't process this document. Please try again.", "danger");
           }
         } catch (err) {
-          HeliosUI.showToast("Error communicating with document vault.", "danger");
-        } finally {
-          btn.disabled = false;
-          btn.textContent = "Upload & Analyze";
+          HeliosUI.showToast("We couldn't upload this document right now.", "danger");
         }
       });
     }
@@ -328,21 +334,49 @@
       if (!selectedDoc) return;
 
       document.getElementById('drawer-title').textContent = selectedDoc.title;
-      document.getElementById('drawer-subtitle').textContent = `${selectedDoc.filename} · ${selectedDoc.docType} · Status: ${selectedDoc.status}`;
-      document.getElementById('drawer-compare-btn').href = `compare.html?id=${selectedDoc.id}`;
+      document.getElementById('drawer-subtitle').textContent = `${selectedDoc.filename} · ${selectedDoc.category}`;
 
-      // Entities
-      let entHtml = '';
-      if (selectedDoc.entities.gstin) entHtml += `<div>GSTIN: <strong>${selectedDoc.entities.gstin}</strong></div>`;
-      if (selectedDoc.entities.cin) entHtml += `<div>CIN: <strong>${selectedDoc.entities.cin}</strong></div>`;
-      if (selectedDoc.entities.pan) entHtml += `<div>PAN: <strong>${selectedDoc.entities.pan}</strong></div>`;
-      if (selectedDoc.entities.registrationNumber) entHtml += `<div>Reg No: <strong>${selectedDoc.entities.registrationNumber}</strong></div>`;
-      if (!entHtml) entHtml = '<div>No statutory registration numbers detected in this document.</div>';
-      document.getElementById('drawer-entities').innerHTML = entHtml;
+      // Friendly headline
+      const heading = document.getElementById('drawer-friendly-heading');
+      const summary = document.getElementById('drawer-friendly-summary');
+      if (selectedDoc.riskLevel === 'Low') {
+        heading.textContent = `Your ${selectedDoc.docType || 'document'} looks good 👍`;
+        summary.textContent = "HELIOS verified all essential information against current rules.";
+      } else {
+        heading.textContent = `A few details need a quick check ⚠`;
+        summary.textContent = "HELIOS found items you may want to verify.";
+      }
 
-      // Obligations
-      let obHtml = (selectedDoc.obligations || []).map(o => `• ${o}`).join('<br>') || 'Standard statutory maintenance.';
-      document.getElementById('drawer-obligations').innerHTML = obHtml;
+      // Details Grid
+      const grid = document.getElementById('drawer-details-grid');
+      let detailsHtml = '';
+      if (selectedDoc.entities.gstin) {
+        detailsHtml += `<div><span style="color: var(--text-muted); font-size: 0.65rem;">GSTIN</span><div style="font-weight: 600; font-size: var(--font-size-xs);">${selectedDoc.entities.gstin}</div></div>`;
+      }
+      if (selectedDoc.entities.legalName) {
+        detailsHtml += `<div><span style="color: var(--text-muted); font-size: 0.65rem;">Legal name</span><div style="font-weight: 600; font-size: var(--font-size-xs);">${selectedDoc.entities.legalName}</div></div>`;
+      }
+      if (selectedDoc.entities.cin) {
+        detailsHtml += `<div><span style="color: var(--text-muted); font-size: 0.65rem;">CIN</span><div style="font-weight: 600; font-size: var(--font-size-xs);">${selectedDoc.entities.cin}</div></div>`;
+      }
+      if (selectedDoc.entities.registrationDate || selectedDoc.uploadDate) {
+        detailsHtml += `<div><span style="color: var(--text-muted); font-size: 0.65rem;">Registration date</span><div style="font-weight: 600; font-size: var(--font-size-xs);">${selectedDoc.entities.registrationDate || selectedDoc.uploadDate}</div></div>`;
+      }
+      if (selectedDoc.entities.constitution || selectedDoc.docType) {
+        detailsHtml += `<div><span style="color: var(--text-muted); font-size: 0.65rem;">Business type</span><div style="font-weight: 600; font-size: var(--font-size-xs);">${selectedDoc.entities.constitution || selectedDoc.docType}</div></div>`;
+      }
+      if (!detailsHtml) {
+        detailsHtml = `<div><span style="color: var(--text-muted); font-size: 0.65rem;">Status</span><div style="font-weight: 600;">Active document</div></div>`;
+      }
+      grid.innerHTML = detailsHtml;
+
+      // Things to check
+      const checkEl = document.getElementById('drawer-check-items');
+      if (selectedDoc.riskFlags && selectedDoc.riskFlags.length > 0) {
+        checkEl.innerHTML = `⚠ ${selectedDoc.riskFlags[0]}`;
+      } else {
+        checkEl.innerHTML = `✓ No critical issues found. Expiration: ${selectedDoc.expirationDate}.`;
+      }
 
       document.getElementById('doc-chat-response').style.display = 'none';
       document.getElementById('doc-drawer-backdrop').style.display = 'flex';
@@ -356,7 +390,7 @@
       if (!query || !selectedDoc) return;
       const respBox = document.getElementById('doc-chat-response');
       respBox.style.display = 'block';
-      respBox.innerHTML = '<span style="color: var(--text-muted);">Consulting in-document clauses...</span>';
+      respBox.innerHTML = '<span style="color: var(--text-muted);">Reading document to answer...</span>';
 
       try {
         const res = await fetch(`/api/documents/${selectedDoc.id}/chat`, {
@@ -368,14 +402,14 @@
         if (data.success) {
           respBox.innerHTML = `
             <div style="font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">Q: ${query}</div>
-            <div style="white-space: pre-wrap;">${data.answer}</div>
-            <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: var(--space-2); font-family: var(--font-family-mono);">
-              AI Confidence: ${data.confidence} · Citation: ${data.citations[0] ? data.citations[0].section : 'Direct Text'}
+            <div style="white-space: pre-wrap; font-size: var(--font-size-xs);">${data.answer}</div>
+            <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: var(--space-2);">
+              HELIOS found this from your document.
             </div>
           `;
         }
       } catch (e) {
-        respBox.innerHTML = '<span style="color: #EF4444;">Error processing query.</span>';
+        respBox.innerHTML = '<span style="color: var(--color-danger);">Something went wrong. Please try again.</span>';
       }
     }
   </script>

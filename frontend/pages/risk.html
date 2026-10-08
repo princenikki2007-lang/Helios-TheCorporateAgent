@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Company Risk Engine — HELIOS</title>
-  <meta name="description" content="Explainable compliance risk score across Tax, Corporate, HR, Data Privacy, and Statutory Licenses.">
+  <title>Company Health — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Friendly company health check. Understand your compliance health across tax, documents, HR, and privacy without legal jargon.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="risk" data-breadcrumb="Company Risk Engine">
+<body data-page="risk" data-breadcrumb="Company Health">
 
   <div class="app-layout">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
@@ -20,76 +20,180 @@
 
       <main class="app-content">
 
-        <!-- Page Hero -->
-        <div class="page-hero">
-          <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-            EXPLAINABLE STATUTORY AUDIT HEURISTICS
+        <!-- Page Header -->
+        <div class="page-hero" style="margin-bottom: var(--space-6);">
+          <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+            COMPANY HEALTH
           </div>
-          <h1 class="page-hero-title">Company Compliance Risk Engine</h1>
-          <p class="page-hero-subtitle">
-            HELIOS evaluates 8 risk dimensions using verified company filings, expiration dates, and active gazette rules. Every point is explainable.
+          <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+            Company Health
+          </h1>
+          <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+            A clear overview of how your company is doing across registrations, tax, HR, and privacy.
           </p>
         </div>
 
-        <!-- Overall Score Card -->
-        <div class="card card-elevated" style="margin-bottom: var(--space-6);">
+        <!-- MAIN HEALTH CARD (Section 12) -->
+        <div class="card" style="margin-bottom: var(--space-6); background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-secondary) 100%); padding: var(--space-6);">
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-6);">
-            <div>
-              <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--color-brand); text-transform: uppercase; font-weight: 700;">
-                OVERALL COMPOSITE COMPLIANCE RISK
+            <div style="display: flex; align-items: center; gap: var(--space-5);">
+              <!-- Circular Health Badge -->
+              <div style="width: 80px; height: 80px; border-radius: var(--radius-full); background: var(--color-success-subtle); border: 3px solid var(--color-success); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                <span style="font-size: 1.75rem; font-weight: 800; color: var(--color-success-text); line-height: 1;">82%</span>
+                <span style="font-size: 0.65rem; font-weight: 700; color: var(--color-success-text); text-transform: uppercase;">Health</span>
               </div>
-              <div style="display: flex; align-items: baseline; gap: var(--space-3); margin-top: var(--space-2);">
-                <span id="risk-overall-score" style="font-family: var(--font-family-mono); font-size: 3.5rem; font-weight: 800; color: #10B981; line-height: 1;">
-                  28
-                </span>
-                <span style="font-size: var(--font-size-lg); color: var(--text-muted); font-family: var(--font-family-mono);">/ 100</span>
-                <span id="risk-tier-badge" class="badge badge-success" style="font-size: var(--font-size-xs); padding: 0.25rem 0.65rem;">
-                  Low Risk Tier
-                </span>
+
+              <div>
+                <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: 2px;">
+                  <span class="badge badge-success">Looking good</span>
+                  <span style="font-size: var(--font-size-xs); color: var(--text-muted);">Updated today</span>
+                </div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+                  You're in good shape.
+                </div>
+                <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: 2px; max-width: 520px; line-height: 1.45;">
+                  Your essential registrations are active and up to date. A few things need your attention before upcoming deadlines.
+                </p>
               </div>
-              <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: var(--space-3); max-width: 540px;">
-                Your overall statutory compliance health is strong. Active risks stem primarily from the approaching Karnataka Commercial Establishments license renewal and pending DPDP privacy consent updates.
-              </p>
             </div>
 
-            <div style="background-color: var(--bg-surface); padding: var(--space-4); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); min-width: 260px;">
-              <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: var(--space-2);">
-                RISK TIER THRESHOLDS
-              </div>
-              <div style="display: flex; flex-direction: column; gap: var(--space-2); font-size: 0.75rem;">
-                <div style="display: flex; justify-content: space-between;"><span style="color: #10B981;">● 0 - 35</span><span>Low (Compliant)</span></div>
-                <div style="display: flex; justify-content: space-between;"><span style="color: #F59E0B;">● 36 - 59</span><span>Moderate (Review Recommended)</span></div>
-                <div style="display: flex; justify-content: space-between;"><span style="color: #EF4444;">● 60 - 100</span><span>Critical (Immediate Action Required)</span></div>
-              </div>
+            <!-- Health Quick Stats -->
+            <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+              <span class="health-stat-pill health-stat-good">✓ 5 areas look good</span>
+              <span class="health-stat-pill health-stat-warning">⚠ 2 areas worth reviewing</span>
+              <span class="health-stat-pill health-stat-good">✓ 0 major issues found</span>
             </div>
           </div>
         </div>
 
-        <!-- 8-Category Dimension Breakdown -->
+        <!-- HEALTH ACROSS COMPANY AREAS -->
         <div class="card" style="margin-bottom: var(--space-6);">
           <div class="card-header">
-            <div class="card-title">Categorized Risk Vector Breakdown</div>
-            <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-family-mono);">Scale: 0 (Safest) — 100 (Highest Risk)</span>
+            <div class="card-title">Health by area</div>
+            <span style="font-size: var(--font-size-2xs); color: var(--text-muted);">All verified against current rules</span>
           </div>
 
-          <div id="risk-dimensions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4);">
-            <!-- Populated by JS -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4);" id="health-areas-grid">
+            <!-- Corporate -->
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">Corporate Status</span>
+                <span class="badge badge-success">95%</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">COI, CIN &amp; PAN verified and active.</div>
+            </div>
+
+            <!-- Tax -->
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">Tax &amp; GST</span>
+                <span class="badge badge-success">82%</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">GSTIN active. Filing due in 3 days.</div>
+            </div>
+
+            <!-- HR -->
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">HR &amp; Team Policies</span>
+                <span class="badge badge-warning">76%</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Handbook active; POSH review recommended.</div>
+            </div>
+
+            <!-- Privacy -->
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">Data &amp; Privacy</span>
+                <span class="badge badge-warning">78%</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">DPDP rules take effect 01 Nov.</div>
+            </div>
+
+            <!-- Licenses -->
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">Commercial Licenses</span>
+                <span class="badge badge-warning">74%</span>
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Karnataka license expires in 43 days.</div>
+            </div>
           </div>
         </div>
 
-        <!-- Explainable Drivers -->
+        <!-- THINGS THAT MAY NEED ATTENTION (Simple Language) -->
+        <div class="card" style="margin-bottom: var(--space-6);">
+          <div class="card-header">
+            <div class="card-title">
+              <span>⚠️</span>
+              <span>Things that may need attention</span>
+            </div>
+            <span style="font-size: var(--font-size-xs); color: var(--text-muted);">2 recommended actions</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-3);" id="health-attention-list">
+            <!-- Item 1 -->
+            <div class="task-card">
+              <div class="task-left">
+                <span style="font-size: 1.25rem;">📄</span>
+                <div>
+                  <div class="task-title">Karnataka Shops &amp; Commercial Establishments License Renewal</div>
+                  <div class="task-reason">
+                    Your license (KN-BLR-SE-2022-84912) expires in 43 days. Submitting your renewal 30 days ahead is recommended.
+                  </div>
+                </div>
+              </div>
+              <a href="approvals.html" class="btn btn-primary btn-sm">Start renewal →</a>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="task-card">
+              <div class="task-left">
+                <span style="font-size: 1.25rem;">🔒</span>
+                <div>
+                  <div class="task-title">Customer Privacy Policy Update for New Rules</div>
+                  <div class="task-reason">
+                    New rules require a 72-hour notice process for security incidents. A quick update to your customer policy will keep you fully covered.
+                  </div>
+                </div>
+              </div>
+              <a href="policy-analyzer.html" class="btn btn-secondary btn-sm">Review policy →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- YOUR RESPONSIBILITIES (Simple Language) -->
         <div class="card">
           <div class="card-header">
             <div class="card-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-brand);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>Explainable Risk Drivers &amp; Specific Causes</span>
+              <span>📋</span>
+              <span>Your responsibilities</span>
             </div>
-            <span class="badge badge-brand">Audit Explainability Guaranteed</span>
+            <span style="font-size: var(--font-size-xs); color: var(--text-muted);">Regular routine for your company</span>
           </div>
 
-          <div id="risk-drivers-full-list" style="display: flex; flex-direction: column; gap: var(--space-3);">
-            <!-- Populated by JS -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-3);">
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Monthly GST Filing</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">GSTR-1 by 11th and GSTR-3B by 20th of every month.</div>
+            </div>
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Professional Tax</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Monthly Form 5A return and remittance by 20th for Karnataka team.</div>
+            </div>
+            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm);">
+              <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">Board Meetings &amp; MCA</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);">Minimum 4 board meetings per year and annual financial statements.</div>
+            </div>
           </div>
+        </div>
+
+        <!-- Trust Disclaimer -->
+        <div class="legal-disclaimer-box" style="margin-top: var(--space-8);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>
+            HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
+          </span>
         </div>
 
       </main>
@@ -99,61 +203,8 @@
   <script src="../js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      loadRiskEngine();
+      HeliosUI.init();
     });
-
-    async function loadRiskEngine() {
-      try {
-        const res = await fetch('/api/risk');
-        const data = await res.json();
-        if (data.success && data.risk) {
-          const r = data.risk;
-          document.getElementById('risk-overall-score').textContent = r.overallScore;
-          document.getElementById('risk-tier-badge').textContent = `${r.riskTier} Risk Tier`;
-
-          // Dimensions Grid
-          const dimGrid = document.getElementById('risk-dimensions-grid');
-          const dimLabels = {
-            tax: "Indirect & Direct Tax",
-            corporate: "Companies Act & MCA",
-            legal: "Legal Contracts & IP",
-            hr: "HR & Labour Codes",
-            documents: "Document Vault Expiry",
-            regulatory: "Gazette Rule Alignment",
-            dataPrivacy: "DPDP & Data Privacy",
-            licenses: "Municipal & Trade Permits"
-          };
-
-          dimGrid.innerHTML = Object.entries(r.breakdown).map(([k, val]) => `
-            <div style="padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
-                <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-primary);">${dimLabels[k] || k}</span>
-                <span style="font-family: var(--font-family-mono); font-size: 0.85rem; font-weight: 700; color: ${val > 40 ? '#FBBF24' : '#34D399'};">${val} / 100</span>
-              </div>
-              <div style="width: 100%; height: 4px; background: rgba(255, 255, 255, 0.08); border-radius: var(--radius-full); overflow: hidden;">
-                <div style="width: ${val}%; height: 100%; background: ${val > 40 ? '#F59E0B' : '#10B981'};"></div>
-              </div>
-            </div>
-          `).join('');
-
-          // Drivers
-          const driversCont = document.getElementById('risk-drivers-full-list');
-          driversCont.innerHTML = r.drivers.map(drv => `
-            <div style="padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-xs); border-left: 3px solid ${drv.severity === 'High' ? '#EF4444' : '#F59E0B'};">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                <span style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF;">${drv.category}</span>
-                <span style="font-family: var(--font-family-mono); font-size: 0.75rem; color: #F87171; font-weight: 700;">${drv.scoreWeight} Risk Points</span>
-              </div>
-              <p style="font-size: var(--font-size-2xs); color: var(--text-secondary); line-height: 1.5; margin-top: 2px;">
-                ${drv.explanation}
-              </p>
-            </div>
-          `).join('');
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
   </script>
 </body>
 </html>

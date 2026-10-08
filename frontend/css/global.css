@@ -1,92 +1,93 @@
 /* ==========================================================================
    HELIOS — Legal & Compliance Intelligence for Companies
-   Dark-First Modern Enterprise Design Tokens & Global Styles
-   Inspired by: Linear, Vercel, Stripe, Bloomberg Terminal & Apple Smoothness
+   Friendly, Approachable, Modern SaaS Design System
+   Inspired by: Notion Simplicity, Linear Cleanliness, Stripe Clarity & Apple UX
+   DEFAULT: Clean Friendly Light Mode with Dark Mode Support
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
   /* ==========================================
-     Dark-First Background Surfaces
+     Friendly Light Theme (DEFAULT)
      ========================================== */
-  --bg-page: #08090C;                /* Deep Charcoal / Onyx Base */
-  --bg-surface: #0E1217;             /* Elevated Command Card Surface */
-  --bg-surface-secondary: #131821;   /* Secondary Panel Surface */
-  --bg-surface-tertiary: #19202C;    /* Hover / Active Surface */
-  --bg-surface-elevated: #1F2736;    /* Floating Modals & Tooltips */
-  --bg-surface-glass: rgba(14, 18, 23, 0.75);
+  --bg-page: #F8FAFC;                 /* Soft Off-White / Light Slate Canvas */
+  --bg-surface: #FFFFFF;              /* Crisp White Card Surface */
+  --bg-surface-secondary: #F1F5F9;    /* Soft Neutral Sub-panel / Chip */
+  --bg-surface-tertiary: #E2E8F0;     /* Hover / Active Chip Surface */
+  --bg-surface-elevated: #FFFFFF;     /* Floating Modals & Menus */
+  --bg-surface-glass: rgba(255, 255, 255, 0.85);
 
-  --bg-sidebar: #0A0D12;             /* Nav Sidebar */
-  --bg-sidebar-hover: rgba(255, 255, 255, 0.04);
-  --bg-sidebar-active: rgba(245, 158, 11, 0.12);
+  --bg-sidebar: #FFFFFF;              /* Clean White Sidebar */
+  --bg-sidebar-hover: #F1F5F9;
+  --bg-sidebar-active: #EEF2FF;       /* Soft Indigo Active State */
 
-  /* ==========================================
-     Borders & Separators
-     ========================================== */
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-light: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.22);
-  --border-accent: rgba(245, 158, 11, 0.35);
-  --border-sidebar: rgba(255, 255, 255, 0.06);
+  /* Borders & Dividers */
+  --border-subtle: #E2E8F0;           /* Soft 1px divider */
+  --border-light: #CBD5E1;            /* Standard input border */
+  --border-strong: #94A3B8;           /* Emphasized border */
+  --border-accent: rgba(79, 70, 229, 0.3);
+  --border-sidebar: #E2E8F0;
 
-  /* ==========================================
-     Typography Colors
-     ========================================== */
-  --text-primary: #F8FAFC;           /* Crisp Pure White */
-  --text-secondary: #94A3B8;         /* High-contrast Neutral Slate */
-  --text-muted: #64748B;             /* Subdued Metadata & Captions */
-  --text-inverse: #090B0E;           /* Dark text for bright badges */
-  --text-brand: #F59E0B;             /* Helios Amber Gold */
+  /* Typography Colors */
+  --text-primary: #0F172A;            /* Dark Charcoal / Deep Navy Slate */
+  --text-secondary: #475569;          /* Approachable, legible Slate */
+  --text-muted: #64748B;              /* Helpful captions & metadata */
+  --text-inverse: #FFFFFF;            /* White text for dark buttons */
+  --text-brand: #4F46E5;              /* Warm Indigo Brand */
 
-  /* ==========================================
-     Helios Brand Solar Palette
-     ========================================== */
-  --color-brand: #F59E0B;            /* Solar Amber Gold */
-  --color-brand-light: #FBBF24;      /* High-visibility Gold */
-  --color-brand-dark: #D97706;       /* Deep Gold */
-  --color-brand-subtle: rgba(245, 158, 11, 0.12);
-  --color-brand-glow: rgba(245, 158, 11, 0.25);
+  /* Friendly Accent System */
+  --color-brand: #4F46E5;             /* Warm Indigo / Modern SaaS Primary */
+  --color-brand-light: #6366F1;       /* Friendly Violet-Indigo */
+  --color-brand-dark: #3730A3;        /* Deep Indigo */
+  --color-brand-subtle: #EEF2FF;      /* Very soft indigo tint */
+  --color-brand-glow: rgba(79, 70, 229, 0.15);
+
+  /* Helios Warm Sun Accent */
+  --color-solar: #F59E0B;             /* Golden Amber Mark */
+  --color-solar-dark: #D97706;
+  --color-solar-subtle: #FEF3C7;
 
   /* Secondary Accents */
-  --color-accent-cyan: #06B6D4;      /* Electric Cyan (Tech / Verification) */
-  --color-accent-cyan-subtle: rgba(6, 182, 212, 0.12);
-  --color-accent-blue: #3B82F6;      /* Enterprise Trust Blue */
-  --color-accent-blue-subtle: rgba(59, 130, 246, 0.12);
-  --color-accent-purple: #8B5CF6;    /* Intelligence / AI Purple */
-  --color-accent-purple-subtle: rgba(139, 92, 246, 0.12);
+  --color-accent-cyan: #0284C7;       /* Soft Sky Blue */
+  --color-accent-cyan-subtle: #E0F2FE;
+  --color-accent-blue: #2563EB;
+  --color-accent-blue-subtle: #EFF6FF;
+  --color-accent-purple: #7C3AED;
+  --color-accent-purple-subtle: #F5F3FF;
 
-  /* ==========================================
-     Compliance Severity & Status Colors
-     ========================================== */
-  --color-success: #10B981;          /* Emerald Green (Compliant / Approved) */
-  --color-success-subtle: rgba(16, 185, 129, 0.12);
-  --color-warning: #F59E0B;          /* Amber (Needs Review / Attention) */
-  --color-warning-subtle: rgba(245, 158, 11, 0.12);
-  --color-danger: #EF4444;           /* Crimson Red (Non-Compliance / Critical) */
-  --color-danger-subtle: rgba(239, 68, 68, 0.14);
-  --color-info: #0284C7;             /* Informational / Reference */
-  --color-info-subtle: rgba(2, 132, 199, 0.12);
+  /* Friendly Semantic Status (Soft, Non-Intimidating) */
+  --color-success: #10B981;           /* Soft Emerald Green */
+  --color-success-subtle: #ECFDF5;
+  --color-success-text: #065F46;
+
+  --color-warning: #F59E0B;           /* Soft Amber ("Needs attention") */
+  --color-warning-subtle: #FFFBEB;
+  --color-warning-text: #92400E;
+
+  --color-danger: #EF4444;            /* Soft Rose / Red ("Potential issue") */
+  --color-danger-subtle: #FEF2F2;
+  --color-danger-text: #991B1B;
+
+  --color-info: #0284C7;              /* Friendly Sky Blue */
+  --color-info-subtle: #F0F9FF;
+  --color-info-text: #075985;
 
   /* Source Trust Levels */
-  --trust-level-1: #10B981;          /* Level 1: Official Govt Gazette */
-  --trust-level-2: #06B6D4;          /* Level 2: Regulatory Authority */
-  --trust-level-3: #8B5CF6;          /* Level 3: Institutional */
-  --trust-level-4: #64748B;          /* Level 4: Secondary */
+  --trust-level-1: #059669;           /* Level 1: Official Govt Gazette */
+  --trust-level-2: #0284C7;           /* Level 2: Regulatory Authority */
+  --trust-level-3: #7C3AED;           /* Level 3: Institutional */
+  --trust-level-4: #64748B;           /* Level 4: Secondary */
 
-  /* ==========================================
-     Shadows & Elevations
-     ========================================== */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.7), 0 4px 8px -4px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 24px 36px -6px rgba(0, 0, 0, 0.8), 0 8px 16px -6px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 24px -4px rgba(245, 158, 11, 0.2);
+  /* Gentle, Friendly Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px -2px rgba(79, 70, 229, 0.2);
 
-  /* ==========================================
-     Typography Spec
-     ========================================== */
+  /* Typography Spec */
   --font-family-base: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-family-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
@@ -107,13 +108,11 @@
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
 
-  --line-height-tight: 1.2;
+  --line-height-tight: 1.25;
   --line-height-normal: 1.5;
-  --line-height-relaxed: 1.625;
+  --line-height-relaxed: 1.65;
 
-  /* ==========================================
-     Spacing Scale
-     ========================================== */
+  /* Spacing */
   --space-1: 0.25rem;   /* 4px */
   --space-2: 0.5rem;    /* 8px */
   --space-3: 0.75rem;   /* 12px */
@@ -125,20 +124,70 @@
   --space-12: 3rem;     /* 48px */
   --space-16: 4rem;     /* 64px */
 
-  /* ==========================================
-     Border Radii
-     ========================================== */
-  --radius-xs: 3px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* Border Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
   /* Transitions */
   --transition-fast: 120ms cubic-bezier(0.16, 1, 0.3, 1);
   --transition-normal: 200ms cubic-bezier(0.16, 1, 0.3, 1);
   --transition-smooth: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================
+   Dark Theme (Optional Toggle)
+   ========================================== */
+[data-theme="dark"] {
+  --bg-page: #0B0F17;
+  --bg-surface: #111827;
+  --bg-surface-secondary: #1F2937;
+  --bg-surface-tertiary: #374151;
+  --bg-surface-elevated: #1F2937;
+  --bg-surface-glass: rgba(17, 24, 39, 0.85);
+
+  --bg-sidebar: #0F172A;
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.05);
+  --bg-sidebar-active: rgba(99, 102, 241, 0.15);
+
+  --border-subtle: #1F2937;
+  --border-light: #374151;
+  --border-strong: #4B5563;
+  --border-accent: rgba(99, 102, 241, 0.4);
+  --border-sidebar: #1F2937;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-inverse: #0F172A;
+  --text-brand: #818CF8;
+
+  --color-brand: #6366F1;
+  --color-brand-light: #818CF8;
+  --color-brand-dark: #4F46E5;
+  --color-brand-subtle: rgba(99, 102, 241, 0.15);
+  --color-brand-glow: rgba(99, 102, 241, 0.25);
+
+  --color-success-subtle: rgba(16, 185, 129, 0.15);
+  --color-success-text: #34D399;
+
+  --color-warning-subtle: rgba(245, 158, 11, 0.15);
+  --color-warning-text: #FBBF24;
+
+  --color-danger-subtle: rgba(239, 68, 68, 0.15);
+  --color-danger-text: #F87171;
+
+  --color-info-subtle: rgba(2, 132, 199, 0.15);
+  --color-info-text: #38BDF8;
+
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 24px 36px -6px rgba(0, 0, 0, 0.7);
 }
 
 /* Base Reset & Box Sizing */
@@ -153,6 +202,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
 
 body {
@@ -163,6 +213,7 @@ body {
   line-height: var(--line-height-normal);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
 
 /* Typography styles */
@@ -170,7 +221,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
 h1 { font-size: var(--font-size-3xl); }
@@ -198,24 +249,39 @@ code, kbd, pre, samp {
   font-size: 0.85em;
 }
 
-/* Custom Scrollbars */
+/* Clean, friendly scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-page);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-light);
+  background: var(--border-subtle);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--border-light);
 }
 
 /* Focus States */
 :focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
+}
+
+/* Micro-animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.02); }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-normal) forwards;
 }

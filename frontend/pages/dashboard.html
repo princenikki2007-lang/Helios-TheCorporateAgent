@@ -3,43 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Command Center Dashboard — HELIOS</title>
-  <meta name="description" content="HELIOS Legal & Compliance Command Center Dashboard.">
+  <title>Home — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Friendly, simple company compliance dashboard. Monitor company health, tasks, documents, and rule changes.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="dashboard" data-breadcrumb="Compliance Command Center">
+<body data-page="dashboard" data-breadcrumb="Home">
 
   <div class="app-layout">
-    <!-- Sidebar -->
+    <!-- Friendly 8-Item Sidebar -->
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
 
     <!-- Main Content Area -->
     <div class="app-main">
-      <!-- Header -->
       <header class="app-header" id="app-header"></header>
 
-      <!-- App Content -->
       <main class="app-content">
 
-        <!-- Page Hero -->
-        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+        <!-- Friendly Greeting Banner -->
+        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
           <div>
-            <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-              LEGAL &amp; COMPLIANCE COMMAND CENTER
+            <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+              YOUR COMPANY OVERVIEW
             </div>
-            <h1 class="page-hero-title" id="dash-company-name">Zephyr Technologies Private Limited</h1>
-            <p class="page-hero-subtitle" id="dash-company-sub">
-              CIN: U72900KA2022PTC158941 · State: Karnataka · Industry: Software &amp; SaaS · Turnover: ₹5 Cr - ₹25 Cr
+            <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+              Good morning, <span id="dash-greeting-company">Zephyr Technologies</span> 👋
+            </h1>
+            <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+              Let's keep your company compliant. Here is what matters today.
             </p>
           </div>
 
-          <div style="display: flex; gap: var(--space-2);">
+          <div style="display: flex; gap: var(--space-2); align-items: center;">
             <a href="documents.html" class="btn btn-secondary btn-sm">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              Upload Document
+              Add Document
             </a>
             <a href="policy-chat.html" class="btn btn-primary btn-sm">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
@@ -48,206 +48,261 @@
           </div>
         </div>
 
-        <!-- Bloomberg-Style High Density Metric Tiles -->
-        <div class="dashboard-grid-stats">
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Compliance Health</span>
-              <span class="badge badge-success">Good</span>
+        <!-- COMPANY HEALTH SUMMARY CARD (Friendly, Never Shameful) -->
+        <div class="card" style="margin-bottom: var(--space-6); background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-surface-secondary) 100%);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+            <div style="display: flex; align-items: center; gap: var(--space-4);">
+              <div style="width: 64px; height: 64px; border-radius: var(--radius-full); background: var(--color-success-subtle); border: 2px solid var(--color-success); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
+                <span style="font-size: 1.25rem; font-weight: 800; color: var(--color-success-text); line-height: 1;">82%</span>
+                <span style="font-size: 0.6rem; font-weight: 700; color: var(--color-success-text); text-transform: uppercase;">Health</span>
+              </div>
+              <div>
+                <div style="font-size: var(--font-size-2xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">
+                  YOUR COMPANY HEALTH
+                </div>
+                <div style="font-size: var(--font-size-md); font-weight: 700; color: var(--text-primary); margin-top: 2px;">
+                  You're doing great.
+                </div>
+                <div style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: 2px;">
+                  Compliance Health: <strong>82%</strong> · <span style="color: var(--color-warning-text); font-weight: 600;">2 things need your attention</span>
+                </div>
+              </div>
             </div>
-            <div class="metric-value" style="color: #34D399;">76 <span style="font-size: 0.9rem; color: var(--text-muted);">/ 100</span></div>
-            <div class="metric-sub">
-              <span>Risk: 28/100 (Low Tier)</span>
-            </div>
-          </div>
 
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Upcoming Deadlines</span>
-              <span class="badge badge-danger">3 Days</span>
-            </div>
-            <div class="metric-value">4</div>
-            <div class="metric-sub">
-              <span style="color: #F87171;">GSTR-1 Due Oct 11</span>
-            </div>
-          </div>
-
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Document Vault</span>
-              <span class="badge badge-info">Active</span>
-            </div>
-            <div class="metric-value" id="stat-doc-count">5</div>
-            <div class="metric-sub">
-              <span style="color: #FBBF24;">1 Expiring Soon</span>
-            </div>
-          </div>
-
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Open Risk Items</span>
-              <span class="badge badge-warning">Review</span>
-            </div>
-            <div class="metric-value" style="color: #FBBF24;">4</div>
-            <div class="metric-sub">
-              <span>1 License · 1 DPDP · 1 POSH</span>
-            </div>
-          </div>
-
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Relevant Rule Changes</span>
-              <span class="badge badge-brand">Gazettes</span>
-            </div>
-            <div class="metric-value">3</div>
-            <div class="metric-sub">
-              <span>2 High Impact Matched</span>
-            </div>
-          </div>
-
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Pending Approvals</span>
-              <span class="badge badge-info">Statutory</span>
-            </div>
-            <div class="metric-value">2</div>
-            <div class="metric-sub">
-              <span>1 Action Due · 1 Review</span>
+            <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: var(--space-2); background: var(--bg-surface); padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <span>📄</span>
+                <span style="font-size: var(--font-size-xs); color: var(--text-secondary);">Documents: <strong id="dash-docs-count">5 active</strong></span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-2); background: var(--bg-surface); padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <span>📅</span>
+                <span style="font-size: var(--font-size-xs); color: var(--text-secondary);">Deadlines: <strong>4 upcoming</strong></span>
+              </div>
+              <a href="risk.html" class="btn btn-secondary btn-sm">View Health Details →</a>
             </div>
           </div>
         </div>
 
-        <!-- Main Dashboard Split Layout -->
-        <div class="dashboard-split-layout">
+        <!-- TWO ATTENTION CARDS (As Requested) -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-8);">
+          <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); letter-spacing: 0.02em;">
+            THINGS THAT NEED YOUR ATTENTION
+          </div>
 
-          <!-- Left Column (Actions, Impact & Regulatory Intel) -->
+          <!-- Attention Card 1 -->
+          <div class="attention-card attention-card-warning">
+            <div style="display: flex; align-items: center;">
+              <div class="attention-card-icon">⚠️</div>
+              <div class="attention-card-content">
+                <div class="attention-card-title">GST document needs review</div>
+                <div class="attention-card-subtitle">Review required before 15 Oct · Verification of outward supply reconciliation</div>
+              </div>
+            </div>
+            <a href="tax-center.html" class="btn btn-primary btn-sm">Review</a>
+          </div>
+
+          <!-- Attention Card 2 -->
+          <div class="attention-card attention-card-info">
+            <div style="display: flex; align-items: center;">
+              <div class="attention-card-icon">📄</div>
+              <div class="attention-card-content">
+                <div class="attention-card-title">Insurance certificate expires soon</div>
+                <div class="attention-card-subtitle">Expires in 21 days · Commercial liability renewal notice</div>
+              </div>
+            </div>
+            <a href="documents.html" class="btn btn-secondary btn-sm">View document</a>
+          </div>
+        </div>
+
+        <!-- MAIN TWO-COLUMN DASHBOARD -->
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: var(--space-6); align-items: start;">
+
+          <!-- LEFT COLUMN: Your Next Steps + What's New -->
           <div style="display: flex; flex-direction: column; gap: var(--space-6);">
 
-            <!-- SECTION: TODAY'S CRITICAL ACTIONS -->
+            <!-- 1. YOUR NEXT STEPS (Friendly Tasks) -->
             <div class="card">
               <div class="card-header">
                 <div class="card-title">
-                  <span style="color: #EF4444;">●</span>
-                  <span>TODAY — Prioritized Statutory Actions</span>
+                  <span>✓</span>
+                  <span>Your next steps</span>
                 </div>
-                <span class="badge badge-danger">Action Required</span>
+                <a href="approvals.html" style="font-size: var(--font-size-xs); color: var(--color-brand); font-weight: 600;">View all tasks →</a>
               </div>
 
-              <div style="display: flex; flex-direction: column; gap: var(--space-3);" id="today-actions-list">
-                <div style="display: flex; align-items: flex-start; justify-content: space-between; padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); border-left: 3px solid #EF4444;">
-                  <div>
-                    <div style="font-weight: 600; font-size: var(--font-size-xs); color: var(--text-primary);">
-                      Monthly GSTR-1 Outward Supplies Filing Due (September 2026)
-                    </div>
-                    <div style="font-size: var(--font-size-2xs); color: var(--text-muted); margin-top: 2px;">
-                      Authority: CBIC / GSTN · Due: 11-Oct-2026 (in 3 days) · Turnover > ₹2 Cr requires valid IRN E-invoice data
+              <div style="display: flex; flex-direction: column; gap: var(--space-3);" id="tasks-checklist-container">
+                <!-- Task 1 -->
+                <div class="task-card">
+                  <div class="task-left">
+                    <input type="checkbox" id="task-1" style="margin-top: 3px; cursor: pointer;" />
+                    <div>
+                      <label for="task-1" class="task-title" style="cursor: pointer;">Review GST document</label>
+                      <div class="task-reason">HELIOS noticed that some information may need verification before the upcoming 11 Oct filing.</div>
                     </div>
                   </div>
-                  <a href="tax-center.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Prepare →</a>
+                  <a href="tax-center.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Review</a>
                 </div>
 
-                <div style="display: flex; align-items: flex-start; justify-content: space-between; padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); border-left: 3px solid #F59E0B;">
-                  <div>
-                    <div style="font-weight: 600; font-size: var(--font-size-xs); color: var(--text-primary);">
-                      Karnataka Shops &amp; Commercial Establishments Renewal Window Open
-                    </div>
-                    <div style="font-size: var(--font-size-2xs); color: var(--text-muted); margin-top: 2px;">
-                      License KN-BLR-SE-2022-84912 expires 20-Nov-2026 (43 days left). Mandatory Form F headcount update (25 → 48) required.
+                <!-- Task 2 -->
+                <div class="task-card">
+                  <div class="task-left">
+                    <input type="checkbox" id="task-2" style="margin-top: 3px; cursor: pointer;" />
+                    <div>
+                      <label for="task-2" class="task-title" style="cursor: pointer;">Upload renewed license</label>
+                      <div class="task-reason">Karnataka Shops &amp; Commercial Establishments renewal window is open (expires in 43 days).</div>
                     </div>
                   </div>
-                  <a href="approvals.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Renew →</a>
+                  <a href="approvals.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Renew</a>
                 </div>
 
-                <div style="display: flex; align-items: flex-start; justify-content: space-between; padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); border-left: 3px solid #3B82F6;">
-                  <div>
-                    <div style="font-weight: 600; font-size: var(--font-size-xs); color: var(--text-primary);">
-                      Digital Personal Data Protection (DPDP) Privacy Policy Update
-                    </div>
-                    <div style="font-size: var(--font-size-2xs); color: var(--text-muted); margin-top: 2px;">
-                      MeitY operational rules take effect 01-Nov-2026. Customer privacy policy requires statutory 72h breach escalation clause.
+                <!-- Task 3 -->
+                <div class="task-card">
+                  <div class="task-left">
+                    <input type="checkbox" id="task-3" style="margin-top: 3px; cursor: pointer;" />
+                    <div>
+                      <label for="task-3" class="task-title" style="cursor: pointer;">Check employee policy</label>
+                      <div class="task-reason">New data protection operational rules take effect 01 Nov. A quick check ensures your team policy is ready.</div>
                     </div>
                   </div>
-                  <a href="policy-analyzer.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Analyze →</a>
+                  <a href="policy-analyzer.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Check policy</a>
+                </div>
+
+                <!-- Task 4 -->
+                <div class="task-card">
+                  <div class="task-left">
+                    <input type="checkbox" id="task-4" style="margin-top: 3px; cursor: pointer;" />
+                    <div>
+                      <label for="task-4" class="task-title" style="cursor: pointer;">Review new regulation</label>
+                      <div class="task-reason">Mandatory E-invoicing threshold updated to ₹2 Crores. Relevant for your business turnover.</div>
+                    </div>
+                  </div>
+                  <a href="regulations.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Understand change</a>
                 </div>
               </div>
             </div>
 
-            <!-- SECTION: COMPANY IMPACT ENGINE -->
+            <!-- 2. WHAT'S NEW? (3-Question Rule Hierarchy) -->
             <div class="card">
               <div class="card-header">
                 <div class="card-title">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-brand);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                  <span>Company-Specific Regulatory Impact</span>
+                  <span>🔎</span>
+                  <span>What's new?</span>
                 </div>
-                <a href="impact.html" style="font-size: var(--font-size-2xs); color: var(--color-brand); font-weight: 600;">View Full Impact Matrix →</a>
+                <a href="regulations.html" style="font-size: var(--font-size-xs); color: var(--color-brand); font-weight: 600;">Browse all updates →</a>
               </div>
+              <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-bottom: var(--space-4);">
+                Recent legal and tax changes, explained so any founder can understand them.
+              </p>
 
-              <div id="company-impact-container" style="display: flex; flex-direction: column; gap: var(--space-4);">
-                <!-- Loaded dynamically -->
-              </div>
-            </div>
+              <div style="display: flex; flex-direction: column; gap: var(--space-4);" id="dash-whats-new-list">
+                <!-- Rule 3Q Card 1 -->
+                <div class="rule-3q-card">
+                  <div class="rule-3q-header">
+                    <div>
+                      <div class="rule-3q-title">🔵 GST rule update: E-Invoicing Threshold</div>
+                      <div class="rule-3q-meta">Published: 08 Oct 2026 · Status: <span class="badge badge-success">Effective</span></div>
+                    </div>
+                  </div>
 
-            <!-- SECTION: REGULATORY INTELLIGENCE (LATEST CIRCULARS) -->
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-accent-cyan);"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                  <span>Official Regulatory Intelligence Feed (Level 1 &amp; 2)</span>
+                  <div class="rule-3q-block">
+                    <div class="rule-3q-label">Why should you care?</div>
+                    <div class="rule-3q-text">Because your company is registered for GST with annual turnover between ₹5 Cr – ₹25 Cr, this rule directly applies to you.</div>
+                  </div>
+
+                  <div class="rule-3q-block" style="background: var(--color-brand-subtle); border-left: 3px solid var(--color-brand);">
+                    <div class="rule-3q-label" style="color: var(--color-brand);">What should you do?</div>
+                    <div class="rule-3q-text">Review your GST filing process to ensure all B2B invoices include an official Invoice Reference Number (IRN).</div>
+                  </div>
+
+                  <div style="margin-top: var(--space-3); text-align: right;">
+                    <a href="regulations.html" class="btn btn-secondary btn-sm">Understand this change →</a>
+                  </div>
                 </div>
-                <a href="regulations.html" style="font-size: var(--font-size-2xs); color: var(--color-brand); font-weight: 600;">Browse Circulars →</a>
-              </div>
 
-              <div id="regulations-feed-container" style="display: flex; flex-direction: column; gap: var(--space-3);">
-                <!-- Loaded dynamically -->
+                <!-- Rule 3Q Card 2 -->
+                <div class="rule-3q-card">
+                  <div class="rule-3q-header">
+                    <div>
+                      <div class="rule-3q-title">🟡 Privacy rule update: 72-Hour Incident Notice</div>
+                      <div class="rule-3q-meta">Published: 01 Oct 2026 · Status: <span class="badge badge-warning">Effective 01 Nov</span></div>
+                    </div>
+                  </div>
+
+                  <div class="rule-3q-block">
+                    <div class="rule-3q-label">Why should you care?</div>
+                    <div class="rule-3q-text">As a digital platform handling customer and employee data, you must follow the new 72-hour notification requirement.</div>
+                  </div>
+
+                  <div class="rule-3q-block" style="background: var(--color-brand-subtle); border-left: 3px solid var(--color-brand);">
+                    <div class="rule-3q-label" style="color: var(--color-brand);">What should you do?</div>
+                    <div class="rule-3q-text">Review your Customer Data Privacy Policy and verify that a 72-hour escalation process is specified.</div>
+                  </div>
+
+                  <div style="margin-top: var(--space-3); text-align: right;">
+                    <a href="policy-analyzer.html" class="btn btn-secondary btn-sm">Check my policy →</a>
+                  </div>
+                </div>
               </div>
             </div>
 
           </div>
 
-          <!-- Right Column (Document Health, Risk Breakdown & Timeline) -->
+          <!-- RIGHT COLUMN: Assistant Teaser + Document Vault + Deadlines -->
           <div style="display: flex; flex-direction: column; gap: var(--space-6);">
 
-            <!-- DOCUMENT HEALTH -->
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">Document Vault Status</div>
-                <a href="documents.html" class="btn btn-ghost btn-sm">Vault →</a>
+            <!-- ASK HELIOS HELPER CARD -->
+            <div class="card" style="border: 1px solid var(--border-accent); background: linear-gradient(to bottom, var(--color-brand-subtle), var(--bg-surface));">
+              <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                <span style="font-size: 1.5rem;">🤖</span>
+                <div>
+                  <div style="font-size: var(--font-size-sm); font-weight: 700; color: var(--text-primary);">Ask HELIOS</div>
+                  <div style="font-size: var(--font-size-2xs); color: var(--text-secondary);">Your company compliance assistant</div>
+                </div>
               </div>
-
-              <div style="display: flex; flex-direction: column; gap: var(--space-3);" id="doc-health-list">
-                <!-- Dynamically loaded -->
-              </div>
-            </div>
-
-            <!-- COMPANY RISK DRIVERS -->
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">Explainable Risk Drivers</div>
-                <a href="risk.html" class="btn btn-ghost btn-sm">Details →</a>
-              </div>
-
-              <div style="display: flex; flex-direction: column; gap: var(--space-3);" id="risk-drivers-list">
-                <!-- Dynamically loaded -->
+              <p style="font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1.45; margin-bottom: var(--space-3);">
+                "You're mostly clear today 👍 There are 2 things I'd recommend checking: your GST document and an employee policy update. Want me to walk you through them?"
+              </p>
+              <div style="display: flex; gap: var(--space-2);">
+                <a href="policy-chat.html" class="btn btn-primary btn-sm">Show me</a>
+                <button class="btn btn-secondary btn-sm" onclick="this.parentElement.parentElement.style.display='none'">I'll do it later</button>
               </div>
             </div>
 
-            <!-- COMPLIANCE CALENDAR TIMELINE -->
+            <!-- DOCUMENTS SUMMARY -->
             <div class="card">
               <div class="card-header">
-                <div class="card-title">30-Day Compliance Timeline</div>
-                <a href="calendar.html" class="btn btn-ghost btn-sm">Calendar →</a>
+                <div class="card-title">
+                  <span>📄</span>
+                  <span>Company documents</span>
+                </div>
+                <a href="documents.html" style="font-size: var(--font-size-xs); color: var(--color-brand); font-weight: 600;">Add document →</a>
               </div>
 
-              <div style="display: flex; flex-direction: column; gap: var(--space-3);" id="timeline-list">
-                <!-- Dynamically loaded -->
+              <div id="dash-docs-list" style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <!-- Populated by JS -->
               </div>
             </div>
 
-            <!-- LEGAL RESPONSIBILITY NOTICE -->
-            <div class="legal-disclaimer-box">
+            <!-- UPCOMING DATES -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <span>📅</span>
+                  <span>Upcoming dates</span>
+                </div>
+                <a href="calendar.html" style="font-size: var(--font-size-xs); color: var(--color-brand); font-weight: 600;">Calendar →</a>
+              </div>
+
+              <div id="dash-calendar-list" style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- FRIENDLY TRUST MESSAGE (Mandatory) -->
+            <div class="legal-disclaimer-box" style="margin-top: 0;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
               <span>
-                HELIOS provides compliance intelligence and decision support. Discrepancies should be verified against official gazette publications with licensed professional advisors.
+                HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
               </span>
             </div>
 
@@ -262,107 +317,49 @@
   <script src="../js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      loadDashboardData();
+      HeliosUI.init();
+      loadDashboard();
     });
 
-    async function loadDashboardData() {
+    async function loadDashboard() {
       try {
         // Workspace
         const wsRes = await fetch('/api/workspace');
         const wsData = await wsRes.json();
         if (wsData.success && wsData.workspace) {
           const ws = wsData.workspace;
-          document.getElementById('dash-company-name').textContent = ws.name;
-          document.getElementById('dash-company-sub').textContent = 
-            `CIN: ${ws.cin || 'N/A'} · State: ${ws.registeredState} · Industry: ${ws.industry} · Turnover: ${ws.annualTurnoverRange}`;
+          const greetingEl = document.getElementById('dash-greeting-company');
+          if (greetingEl) greetingEl.textContent = ws.name;
         }
 
-        // Impacts
-        const impRes = await fetch('/api/impact');
-        const impData = await impRes.json();
-        const impContainer = document.getElementById('company-impact-container');
-        if (impData.success && impData.impacts) {
-          impContainer.innerHTML = impData.impacts.slice(0, 2).map(imp => `
-            <div style="padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2);">
-                <span class="badge ${imp.impactLevel === 'HIGH' ? 'badge-danger' : 'badge-warning'}">${imp.relevance} · ${imp.impactLevel} IMPACT</span>
-                <span style="font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-family-mono);">${imp.authority}</span>
-              </div>
-              <div style="font-weight: 700; font-size: var(--font-size-xs); color: var(--text-primary); margin-bottom: var(--space-2);">
-                ${imp.regulationTitle}
-              </div>
-              <ul style="padding-left: var(--space-4); font-size: var(--font-size-2xs); color: var(--text-secondary); margin-bottom: var(--space-2);">
-                ${imp.reasons.map(r => `<li>${r}</li>`).join('')}
-              </ul>
-              <div style="font-size: var(--font-size-2xs); color: var(--color-brand); font-weight: 600;">
-                Action: ${imp.recommendedActions[0].action}
-              </div>
-            </div>
-          `).join('');
-        }
-
-        // Regulations Feed
-        const regRes = await fetch('/api/regulations');
-        const regData = await regRes.json();
-        const regContainer = document.getElementById('regulations-feed-container');
-        if (regData.success && regData.regulations) {
-          regContainer.innerHTML = regData.regulations.slice(0, 3).map(r => `
-            <div style="padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); border-left: 2px solid ${r.sourceTrustRank === 1 ? '#10B981' : '#06B6D4'};">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
-                <span class="pill-trust-${r.sourceTrustRank}">${r.sourceLevel}</span>
-                <span style="font-size: 0.65rem; font-family: var(--font-family-mono); color: var(--text-muted);">Effective: ${r.effectiveDate}</span>
-              </div>
-              <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary); margin-top: var(--space-1);">
-                ${r.title}
-              </div>
-              <div style="font-size: var(--font-size-2xs); color: var(--text-secondary); margin-top: 2px; line-height: 1.4;">
-                ${r.summary.substring(0, 160)}...
-              </div>
-            </div>
-          `).join('');
-        }
-
-        // Documents Health
+        // Documents
         const docRes = await fetch('/api/documents');
         const docData = await docRes.json();
-        const docContainer = document.getElementById('doc-health-list');
+        const docList = document.getElementById('dash-docs-list');
+        const docsCount = document.getElementById('dash-docs-count');
         if (docData.success && docData.documents) {
-          document.getElementById('stat-doc-count').textContent = docData.documents.length;
-          docContainer.innerHTML = docData.documents.slice(0, 4).map(d => `
-            <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-2) 0; border-bottom: 1px solid var(--border-subtle);">
-              <div>
-                <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">${d.title}</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-family-mono);">${d.category} · Valid: ${d.expirationDate}</div>
+          if (docsCount) docsCount.textContent = `${docData.documents.length} active`;
+          if (docList) {
+            docList.innerHTML = docData.documents.slice(0, 3).map(d => `
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-2) 0; border-bottom: 1px solid var(--border-subtle);">
+                <div>
+                  <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">${d.title}</div>
+                  <div style="font-size: 0.7rem; color: var(--text-muted);">${d.category} · Valid: ${d.expirationDate}</div>
+                </div>
+                <span class="badge ${d.riskLevel === 'Low' ? 'badge-success' : 'badge-warning'}">${d.status}</span>
               </div>
-              <span class="badge ${d.riskLevel === 'Low' ? 'badge-success' : d.riskLevel === 'Medium' ? 'badge-warning' : 'badge-danger'}">${d.status}</span>
-            </div>
-          `).join('');
+            `).join('');
+          }
         }
 
-        // Risk Drivers
-        const riskRes = await fetch('/api/risk');
-        const riskData = await riskRes.json();
-        const riskContainer = document.getElementById('risk-drivers-list');
-        if (riskData.success && riskData.risk && riskData.risk.drivers) {
-          riskContainer.innerHTML = riskData.risk.drivers.slice(0, 3).map(drv => `
-            <div style="padding: var(--space-2); background-color: var(--bg-surface-secondary); border-radius: var(--radius-xs);">
-              <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2px;">
-                <span>${drv.category}</span>
-                <span style="color: #F87171; font-family: var(--font-family-mono);">${drv.scoreWeight} pts</span>
-              </div>
-              <div style="font-size: var(--font-size-2xs); color: var(--text-secondary); line-height: 1.4;">${drv.explanation}</div>
-            </div>
-          `).join('');
-        }
-
-        // Timeline
+        // Calendar Dates
         const calRes = await fetch('/api/calendar');
         const calData = await calRes.json();
-        const timelineContainer = document.getElementById('timeline-list');
-        if (calData.success && calData.events) {
-          timelineContainer.innerHTML = calData.events.slice(0, 4).map(ev => `
-            <div style="display: flex; gap: var(--space-3); align-items: flex-start;">
-              <span style="font-family: var(--font-family-mono); font-size: 0.7rem; color: var(--color-brand); font-weight: 700; width: 75px; flex-shrink: 0;">${ev.date}</span>
+        const calList = document.getElementById('dash-calendar-list');
+        if (calData.success && calData.events && calList) {
+          calList.innerHTML = calData.events.slice(0, 3).map(ev => `
+            <div style="display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-1) 0;">
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--color-brand); width: 75px; flex-shrink: 0;">${ev.date}</span>
               <div>
                 <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--text-primary);">${ev.title}</div>
                 <div style="font-size: 0.65rem; color: var(--text-muted);">${ev.action}</div>
@@ -370,9 +367,8 @@
             </div>
           `).join('');
         }
-
       } catch (e) {
-        console.error("Dashboard error:", e);
+        console.error("Dashboard loading error:", e);
       }
     }
   </script>

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Approval Center — HELIOS</title>
-  <meta name="description" content="Track government approvals, statutory licenses, trademark registrations, and renewal workflows.">
+  <title>Tasks &amp; Next Steps — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Friendly task checklist and next steps for your company's compliance.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="approvals" data-breadcrumb="Approval Center">
+<body data-page="approvals" data-breadcrumb="Tasks">
 
   <div class="app-layout">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
@@ -20,36 +20,105 @@
 
       <main class="app-content">
 
-        <!-- Page Hero -->
-        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+        <!-- Page Header -->
+        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
           <div>
-            <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-              STATUTORY PERMITS &amp; LICENSES
+            <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+              TASKS
             </div>
-            <h1 class="page-hero-title">Approval &amp; License Center</h1>
-            <p class="page-hero-subtitle">
-              Monitor active licenses, government filings, intellectual property examinations, and pending renewal deadlines across jurisdictions.
+            <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+              Your next steps
+            </h1>
+            <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+              Clear, simple actions to keep your company fully compliant.
             </p>
           </div>
 
-          <button class="btn btn-primary btn-sm" onclick="toggleNewApprovalModal()">
-            + Add License / Approval
-          </button>
+          <!-- View Mode Toggle -->
+          <div style="display: flex; gap: var(--space-2); background: var(--bg-surface); padding: 4px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+            <button class="btn btn-primary btn-sm" id="tab-btn-tasks" onclick="switchTaskTab('tasks')">Action list</button>
+            <button class="btn btn-ghost btn-sm" id="tab-btn-licenses" onclick="switchTaskTab('licenses')">Licenses &amp; Permits</button>
+          </div>
         </div>
 
-        <!-- Approvals Table -->
-        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: var(--space-6);">
-          <div class="data-table-wrapper" style="border: none;">
-            <table class="data-table" aria-label="Statutory Approvals and Licenses">
+        <!-- TAB 1: YOUR NEXT STEPS (Section 13) -->
+        <div id="tab-tasks-content">
+          <div style="display: flex; flex-direction: column; gap: var(--space-3);" id="tasks-list">
+            <!-- Task 1 -->
+            <div class="task-card">
+              <div class="task-left">
+                <input type="checkbox" id="task-chk-1" style="margin-top: 3px; cursor: pointer;" />
+                <div>
+                  <label for="task-chk-1" class="task-title" style="cursor: pointer;">Review GST document</label>
+                  <div class="task-reason">
+                    HELIOS noticed that some information may need verification before the upcoming 11 Oct filing.
+                  </div>
+                </div>
+              </div>
+              <a href="tax-center.html" class="btn btn-primary btn-sm" style="flex-shrink: 0;">Review</a>
+            </div>
+
+            <!-- Task 2 -->
+            <div class="task-card">
+              <div class="task-left">
+                <input type="checkbox" id="task-chk-2" style="margin-top: 3px; cursor: pointer;" />
+                <div>
+                  <label for="task-chk-2" class="task-title" style="cursor: pointer;">Upload renewed license</label>
+                  <div class="task-reason">
+                    Karnataka Shops &amp; Commercial Establishments renewal window is open (expires in 43 days).
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" style="flex-shrink: 0;" onclick="toggleNewApprovalModal()">Renew</button>
+            </div>
+
+            <!-- Task 3 -->
+            <div class="task-card">
+              <div class="task-left">
+                <input type="checkbox" id="task-chk-3" style="margin-top: 3px; cursor: pointer;" />
+                <div>
+                  <label for="task-chk-3" class="task-title" style="cursor: pointer;">Check employee policy</label>
+                  <div class="task-reason">
+                    New data protection operational rules take effect 01 Nov. A quick check ensures your team handbook is covered.
+                  </div>
+                </div>
+              </div>
+              <a href="policy-analyzer.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Check policy</a>
+            </div>
+
+            <!-- Task 4 -->
+            <div class="task-card">
+              <div class="task-left">
+                <input type="checkbox" id="task-chk-4" style="margin-top: 3px; cursor: pointer;" />
+                <div>
+                  <label for="task-chk-4" class="task-title" style="cursor: pointer;">Review new regulation</label>
+                  <div class="task-reason">
+                    Mandatory E-invoicing threshold updated to ₹2 Crores. Relevant for your business turnover.
+                  </div>
+                </div>
+              </div>
+              <a href="regulations.html" class="btn btn-secondary btn-sm" style="flex-shrink: 0;">Understand change</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: LICENSES & APPROVALS -->
+        <div id="tab-licenses-content" style="display: none;">
+          <div style="display: flex; justify-content: flex-end; margin-bottom: var(--space-4);">
+            <button class="btn btn-primary btn-sm" onclick="toggleNewApprovalModal()">
+              + Add License / Permit
+            </button>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <table class="data-table" aria-label="Licenses & Approvals">
               <thead>
                 <tr>
-                  <th>Application / License Title</th>
-                  <th>Issuing Authority</th>
-                  <th>License / Filing #</th>
-                  <th>Category</th>
-                  <th>Validity Period</th>
+                  <th>License / Permit</th>
+                  <th>Authority</th>
                   <th>Status</th>
-                  <th>Next Action Required</th>
+                  <th>Valid Until</th>
+                  <th>Next Step</th>
                 </tr>
               </thead>
               <tbody id="approvals-tbody">
@@ -59,55 +128,62 @@
           </div>
         </div>
 
+        <!-- Trust Disclaimer -->
+        <div class="legal-disclaimer-box" style="margin-top: var(--space-8);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>
+            HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
+          </span>
+        </div>
+
       </main>
     </div>
   </div>
 
   <!-- Modal: Add New Approval -->
   <div id="new-approval-modal" class="cmd-palette-backdrop">
-    <div class="cmd-palette-modal" style="max-width: 540px; padding: var(--space-6);">
+    <div class="cmd-palette-modal" style="max-width: 520px; padding: var(--space-6);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
-        <h3 style="font-size: var(--font-size-sm); color: #FFF;">Track New Statutory License / Application</h3>
+        <h3 style="font-size: var(--font-size-sm); font-weight: 700; color: var(--text-primary);">Add Company License or Permit</h3>
         <button class="btn btn-ghost btn-sm" onclick="toggleNewApprovalModal()">✕</button>
       </div>
 
       <form id="new-app-form" onsubmit="submitNewApproval(event)">
         <div class="form-group">
-          <label class="form-label">Application Title *</label>
-          <input type="text" id="app-title" class="form-input" required placeholder="e.g. FSSAI Food License / Trade License" />
+          <label class="form-label" style="font-size: var(--font-size-xs);">License or Application Name *</label>
+          <input type="text" id="app-title" class="form-input" required placeholder="e.g. Karnataka Shops & Establishment License" />
         </div>
 
         <div class="form-group">
-          <label class="form-label">Issuing Government Authority *</label>
-          <input type="text" id="app-authority" class="form-input" required placeholder="e.g. Municipal Corporation / Labour Department" />
+          <label class="form-label" style="font-size: var(--font-size-xs);">Issuing Authority *</label>
+          <input type="text" id="app-authority" class="form-input" required placeholder="e.g. Department of Labour" />
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);">
           <div class="form-group">
-            <label class="form-label">Registration / License #</label>
+            <label class="form-label" style="font-size: var(--font-size-xs);">Registration / License #</label>
             <input type="text" id="app-number" class="form-input" placeholder="e.g. KN-BLR-2026-9812" />
           </div>
 
           <div class="form-group">
-            <label class="form-label">Current Status</label>
+            <label class="form-label" style="font-size: var(--font-size-xs);">Status</label>
             <select id="app-status" class="form-select">
-              <option value="Submitted">Submitted</option>
+              <option value="Approved">Approved / Active</option>
               <option value="Under Review">Under Review</option>
               <option value="Action Required">Action Required</option>
-              <option value="Approved">Approved</option>
-              <option value="Draft">Draft</option>
+              <option value="Submitted">Submitted</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Next Action / Due Date</label>
-          <input type="text" id="app-next-action" class="form-input" placeholder="e.g. Submit Form F online before 20-Nov-2026" />
+          <label class="form-label" style="font-size: var(--font-size-xs);">Valid Until</label>
+          <input type="text" id="app-validity" class="form-input" placeholder="e.g. 2026-11-20 or Indefinite" />
         </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-6);">
+        <div style="display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-4);">
           <button type="button" class="btn btn-secondary btn-sm" onclick="toggleNewApprovalModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary btn-sm">Save Entry</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save License</button>
         </div>
       </form>
     </div>
@@ -116,8 +192,28 @@
   <script src="../js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      HeliosUI.init();
       loadApprovals();
     });
+
+    function switchTaskTab(tab) {
+      if (tab === 'tasks') {
+        document.getElementById('tab-tasks-content').style.display = 'block';
+        document.getElementById('tab-licenses-content').style.display = 'none';
+        document.getElementById('tab-btn-tasks').className = 'btn btn-primary btn-sm';
+        document.getElementById('tab-btn-licenses').className = 'btn btn-ghost btn-sm';
+      } else {
+        document.getElementById('tab-tasks-content').style.display = 'none';
+        document.getElementById('tab-licenses-content').style.display = 'block';
+        document.getElementById('tab-btn-tasks').className = 'btn btn-ghost btn-sm';
+        document.getElementById('tab-btn-licenses').className = 'btn btn-primary btn-sm';
+      }
+    }
+
+    function toggleNewApprovalModal() {
+      const modal = document.getElementById('new-approval-modal');
+      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
 
     async function loadApprovals() {
       try {
@@ -127,58 +223,50 @@
           const tbody = document.getElementById('approvals-tbody');
           tbody.innerHTML = data.approvals.map(a => `
             <tr>
-              <td class="primary-cell">
-                <div style="font-weight: 600; color: #FFF;">${a.application}</div>
+              <td>
+                <div style="font-weight: 600; color: var(--text-primary);">${a.application}</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted);">${a.licenseNumber}</div>
               </td>
               <td>${a.authority}</td>
-              <td class="mono-cell">${a.licenseNumber}</td>
-              <td><span class="badge badge-secondary">${a.category}</span></td>
-              <td class="mono-cell" style="color: ${a.validUntil.includes('2026') ? '#FBBF24' : 'inherit'};">${a.validUntil}</td>
               <td>
-                <span class="badge ${a.status === 'Approved' ? 'badge-success' : a.status === 'Action Required' ? 'badge-danger' : 'badge-warning'}">
+                <span class="badge ${a.status === 'Approved' ? 'badge-success' : 'badge-warning'}">
                   ${a.status}
                 </span>
               </td>
-              <td style="font-size: var(--font-size-2xs); color: var(--text-primary); max-width: 260px;">
-                ${a.nextAction}
-              </td>
+              <td style="font-size: var(--font-size-xs);">${a.validUntil}</td>
+              <td style="font-size: var(--font-size-xs); color: var(--text-secondary);">${a.nextAction}</td>
             </tr>
           `).join('');
         }
       } catch (e) {
-        console.error(e);
+        console.error("Error loading approvals:", e);
       }
-    }
-
-    function toggleNewApprovalModal() {
-      const el = document.getElementById('new-approval-modal');
-      el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
     }
 
     async function submitNewApproval(e) {
       e.preventDefault();
-      const payload = {
+      const body = {
         application: document.getElementById('app-title').value,
         authority: document.getElementById('app-authority').value,
         licenseNumber: document.getElementById('app-number').value,
         status: document.getElementById('app-status').value,
-        nextAction: document.getElementById('app-next-action').value
+        validUntil: document.getElementById('app-validity').value
       };
 
       try {
         const res = await fetch('/api/approvals', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(body)
         });
         const data = await res.json();
         if (data.success) {
           toggleNewApprovalModal();
           loadApprovals();
-          HeliosUI.showToast("Statutory approval entry recorded!", "success");
+          HeliosUI.showToast("License record saved!", "success");
         }
       } catch (err) {
-        alert("Error saving approval entry.");
+        HeliosUI.showToast("Could not save license.", "danger");
       }
     }
   </script>

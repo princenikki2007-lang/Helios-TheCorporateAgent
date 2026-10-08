@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parliament &amp; Policy Watch — HELIOS</title>
-  <meta name="description" content="Track parliamentary bills, legislative drafts, and policy consultations with strict legal status classification.">
+  <title>Policy Watch — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Friendly policy watch tracking proposed rules and legislative bills so you know what is coming.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="policy-watch" data-breadcrumb="Parliament Watch">
+<body data-page="policy-watch" data-breadcrumb="Policy Watch">
 
   <div class="app-layout">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
@@ -20,35 +20,55 @@
 
       <main class="app-content">
 
-        <!-- Page Hero -->
-        <div class="page-hero">
-          <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-            LEGISLATIVE RADAR &amp; DRAFT RULES
+        <!-- Page Header -->
+        <div class="page-hero" style="margin-bottom: var(--space-6);">
+          <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+            POLICY WATCH
           </div>
-          <h1 class="page-hero-title">Parliament &amp; Public Policy Watch</h1>
-          <p class="page-hero-subtitle">
-            Track upcoming legislative bills, standing committee reports, and draft consultative rules before they become binding statutory law.
+          <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+            Policy Watch
+          </h1>
+          <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+            Upcoming bills and draft proposals, explained simply so you know what is being considered.
           </p>
         </div>
 
-        <!-- Strict Legal Status Disclaimer Banner -->
-        <div class="card card-elevated" style="margin-bottom: var(--space-6); border: 1px solid rgba(139, 92, 246, 0.3);">
-          <div style="display: flex; align-items: center; gap: var(--space-3);">
-            <span style="font-size: 1.5rem;">⚖️</span>
-            <div>
-              <div style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF;">
-                MANDATORY STATUTORY STATUS CLASSIFICATION PRINCIPLE
-              </div>
-              <p style="font-size: var(--font-size-2xs); color: var(--text-secondary); margin-top: 2px;">
-                HELIOS strictly distinguishes between <strong>PROPOSED LEGISLATION</strong> (Drafts &amp; Bills not enforceable) and <strong>ENFORCEABLE LAW</strong> (Passed, Notified &amp; Active). Never treat draft proposals or parliamentary reports as binding legal requirements.
-              </p>
+        <!-- Strict Legal Status Legend (Section 10) -->
+        <div class="card" style="margin-bottom: var(--space-6); background: var(--bg-surface-secondary); border: 1px solid var(--border-subtle);">
+          <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2);">
+            UNDERSTANDING RULE STAGES
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-3); font-size: var(--font-size-xs);">
+            <div style="background: var(--bg-surface); padding: var(--space-3); border-radius: var(--radius-sm); border-left: 3px solid var(--color-warning);">
+              <div style="font-weight: 700; color: var(--color-warning-text); margin-bottom: 2px;">🟡 PROPOSED</div>
+              <div style="color: var(--text-secondary); font-size: 0.75rem;">Still being considered. <strong>NOT currently a law.</strong></div>
+            </div>
+            <div style="background: var(--bg-surface); padding: var(--space-3); border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent-blue);">
+              <div style="font-weight: 700; color: var(--color-accent-blue); margin-bottom: 2px;">🔵 PASSED</div>
+              <div style="color: var(--text-secondary); font-size: 0.75rem;">Approved by Parliament. Pending official date.</div>
+            </div>
+            <div style="background: var(--bg-surface); padding: var(--space-3); border-radius: var(--radius-sm); border-left: 3px solid #7C3AED;">
+              <div style="font-weight: 700; color: #7C3AED; margin-bottom: 2px;">🟣 NOTIFIED</div>
+              <div style="color: var(--text-secondary); font-size: 0.75rem;">Officially published. Coming into effect soon.</div>
+            </div>
+            <div style="background: var(--bg-surface); padding: var(--space-3); border-radius: var(--radius-sm); border-left: 3px solid var(--color-success);">
+              <div style="font-weight: 700; color: var(--color-success-text); margin-bottom: 2px;">🟢 EFFECTIVE</div>
+              <div style="color: var(--text-secondary); font-size: 0.75rem;">Active now. Currently enforceable rule.</div>
             </div>
           </div>
         </div>
 
-        <!-- Legislative Items List -->
-        <div id="policy-watch-container" style="display: flex; flex-direction: column; gap: var(--space-6);">
-          <!-- Loaded by JS -->
+        <!-- Policy Watch Items -->
+        <div id="policy-watch-container" style="display: flex; flex-direction: column; gap: var(--space-5);">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Trust Disclaimer -->
+        <div class="legal-disclaimer-box" style="margin-top: var(--space-8);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>
+            HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
+          </span>
         </div>
 
       </main>
@@ -58,6 +78,7 @@
   <script src="../js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      HeliosUI.init();
       loadPolicyWatch();
     });
 
@@ -67,57 +88,48 @@
         const data = await res.json();
         if (data.success && data.policyItems) {
           const container = document.getElementById('policy-watch-container');
-          container.innerHTML = data.policyItems.map(item => `
-            <div class="card" style="border-left: 4px solid ${item.isEnforceable ? '#10B981' : '#8B5CF6'};">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-3); flex-wrap: wrap; gap: var(--space-2);">
-                <div>
-                  <div style="display: flex; align-items: center; gap: var(--space-2);">
-                    <span class="${item.isEnforceable ? 'tag-effective' : 'tag-proposed'}">
-                      ● ${item.legalStatusTag}
-                    </span>
-                    <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-family-mono);">${item.governmentBody}</span>
+          container.innerHTML = data.policyItems.map(item => {
+            const isProposed = !item.isEnforceable && (item.legalStatusTag.includes('PROPOSED') || item.legalStatusTag.includes('BILL'));
+            const statusLabel = isProposed ? '🟡 PROPOSED — NOT LAW YET' : item.isEnforceable ? '🟢 EFFECTIVE — CURRENT LAW' : '🔵 PASSED BY PARLIAMENT';
+            const statusBadgeClass = isProposed ? 'badge badge-warning' : item.isEnforceable ? 'badge badge-success' : 'badge badge-brand';
+
+            return `
+              <div class="rule-3q-card" style="border-left: 4px solid ${isProposed ? 'var(--color-warning)' : 'var(--color-success)'};">
+                <div class="rule-3q-header">
+                  <div>
+                    <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: 4px;">
+                      <span class="${statusBadgeClass}">${statusLabel}</span>
+                      <span style="font-size: 0.75rem; color: var(--text-muted);">${item.governmentBody}</span>
+                    </div>
+                    <div class="rule-3q-title">${item.title}</div>
+                    <div class="rule-3q-meta">Introduced: ${item.introducedDate}</div>
                   </div>
-                  <h3 style="font-size: var(--font-size-md); font-weight: 700; color: #FFF; margin-top: var(--space-2);">
-                    ${item.title}
-                  </h3>
                 </div>
 
-                <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--text-muted);">
-                  Introduced: ${item.introducedDate}
+                <div class="rule-3q-block">
+                  <div class="rule-3q-label">What does this mean?</div>
+                  <div class="rule-3q-text">
+                    ${isProposed ? 'This is still being considered. It is <strong>NOT currently a law</strong>. You do not have to make emergency changes today.' : item.latestUpdate}
+                  </div>
                 </div>
-              </div>
 
-              <!-- Latest Update & Legislative Stage -->
-              <div style="padding: var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-xs); margin-bottom: var(--space-3);">
-                <div style="font-size: 0.65rem; font-weight: 700; color: var(--color-brand); text-transform: uppercase; margin-bottom: 2px;">
-                  CURRENT LEGISLATIVE STAGE &amp; TIMELINE:
+                <div class="rule-3q-block" style="background: var(--color-brand-subtle); border-left: 3px solid var(--color-brand);">
+                  <div class="rule-3q-label" style="color: var(--color-brand);">If it becomes effective:</div>
+                  <div class="rule-3q-text">
+                    ${item.potentialCompanyImpact || 'Companies like yours may need to review their policies and data procedures.'}
+                  </div>
                 </div>
-                <div style="font-size: var(--font-size-xs); color: var(--text-primary); line-height: 1.5;">
-                  ${item.latestUpdate}
-                </div>
-              </div>
 
-              <!-- Potential Company Impact -->
-              <div style="margin-bottom: var(--space-3);">
-                <div style="font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px;">
-                  ANTICIPATED BUSINESS IMPACT:
-                </div>
-                <div style="font-size: var(--font-size-2xs); color: var(--text-secondary); line-height: 1.5;">
-                  ${item.potentialCompanyImpact}
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-3); font-size: 0.75rem; color: var(--text-muted);">
+                  <span>Source: ${item.officialSource}</span>
+                  <a href="policy-chat.html" class="btn btn-secondary btn-sm">Ask HELIOS about this →</a>
                 </div>
               </div>
-
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: var(--space-2); font-size: 0.7rem; font-family: var(--font-family-mono);">
-                <span style="color: var(--text-muted);">${item.officialSource}</span>
-                <span class="badge ${item.isEnforceable ? 'badge-success' : 'badge-brand'}">
-                  ${item.isEnforceable ? 'Legally Enforceable' : 'Non-Binding Proposal'}
-                </span>
-              </div>
-            </div>
-          `).join('');
+            `;
+          }).join('');
         }
       } catch (e) {
-        console.error(e);
+        console.error("Error loading policy watch:", e);
       }
     }
   </script>

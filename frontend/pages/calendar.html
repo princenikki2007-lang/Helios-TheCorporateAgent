@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compliance Calendar — HELIOS</title>
-  <meta name="description" content="Unified corporate compliance calendar tracking tax deadlines, corporate filings, and regulatory effective dates.">
+  <title>Calendar — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Friendly compliance calendar tracking upcoming deadlines, tax dates, and renewal windows.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="calendar" data-breadcrumb="Compliance Calendar">
+<body data-page="calendar" data-breadcrumb="Calendar">
 
   <div class="app-layout">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
@@ -20,60 +20,68 @@
 
       <main class="app-content">
 
-        <!-- Page Hero -->
-        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+        <!-- Page Header -->
+        <div class="page-hero" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
           <div>
-            <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-              STATUTORY DEADLINE INTELLIGENCE
+            <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+              DATES &amp; DEADLINES
             </div>
-            <h1 class="page-hero-title">Unified Compliance Calendar</h1>
-            <p class="page-hero-subtitle">
-              Tax returns, license expiries, labour remittances, and gazette enforcement milestones aggregated across federal and state levels.
+            <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+              Calendar
+            </h1>
+            <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+              Important dates and deadlines for your company, organized simply.
             </p>
           </div>
 
+          <!-- View Mode Toggle -->
           <div style="display: flex; gap: var(--space-2); background: var(--bg-surface); padding: 4px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-            <button class="btn btn-primary btn-sm" id="cal-view-timeline-btn" onclick="setCalView('timeline')">Timeline View</button>
-            <button class="btn btn-ghost btn-sm" id="cal-view-table-btn" onclick="setCalView('table')">Table View</button>
+            <button class="btn btn-primary btn-sm" id="cal-view-timeline-btn" onclick="setCalView('timeline')">Timeline view</button>
+            <button class="btn btn-ghost btn-sm" id="cal-view-table-btn" onclick="setCalView('table')">Table view</button>
           </div>
         </div>
 
-        <!-- Filter Pill Bar -->
+        <!-- Filter Bar -->
         <div class="card" style="padding: var(--space-3); margin-bottom: var(--space-6);">
-          <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
-            <button class="btn btn-secondary btn-sm" onclick="filterCal('All')">All Events</button>
-            <button class="btn btn-ghost btn-sm" onclick="filterCal('GST')">GST &amp; Returns</button>
+          <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;" id="cal-filter-btns">
+            <button class="btn btn-secondary btn-sm" onclick="filterCal('All')">All dates</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterCal('GST')">GST &amp; Tax</button>
             <button class="btn btn-ghost btn-sm" onclick="filterCal('Direct Tax')">Income Tax &amp; TDS</button>
-            <button class="btn btn-ghost btn-sm" onclick="filterCal('Labour')">Labour &amp; PF/ESI</button>
-            <button class="btn btn-ghost btn-sm" onclick="filterCal('License Renewal')">License Renewals</button>
-            <button class="btn btn-ghost btn-sm" onclick="filterCal('Regulatory Effective Date')">Gazette Effective Dates</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterCal('Labour')">Employee rules</button>
+            <button class="btn btn-ghost btn-sm" onclick="filterCal('License Renewal')">License renewals</button>
           </div>
         </div>
 
-        <!-- Timeline View Container -->
+        <!-- Timeline View -->
         <div id="timeline-view-container" style="display: flex; flex-direction: column; gap: var(--space-4);">
           <!-- Populated by JS -->
         </div>
 
-        <!-- Table View Container (Hidden by default) -->
+        <!-- Table View -->
         <div id="table-view-container" class="card" style="display: none; padding: 0; overflow: hidden;">
-          <div class="data-table-wrapper" style="border: none;">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Event Date</th>
-                  <th>Compliance Obligation</th>
-                  <th>Category</th>
-                  <th>Statutory Authority</th>
-                  <th>Severity</th>
-                  <th>Action Checklist</th>
-                </tr>
-              </thead>
-              <tbody id="cal-tbody">
-                <!-- Loaded by JS -->
-              </tbody>
-            </table>
-          </div>
+          <table class="data-table" aria-label="Compliance Deadlines">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Responsibility</th>
+                <th>Category</th>
+                <th>Authority</th>
+                <th>Status</th>
+                <th>What to do</th>
+              </tr>
+            </thead>
+            <tbody id="cal-tbody">
+              <!-- Loaded by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Trust Disclaimer -->
+        <div class="legal-disclaimer-box" style="margin-top: var(--space-8);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>
+            HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
+          </span>
         </div>
 
       </main>
@@ -86,6 +94,7 @@
     let currentFilter = 'All';
 
     document.addEventListener('DOMContentLoaded', () => {
+      HeliosUI.init();
       loadCalendarEvents();
     });
 
@@ -98,7 +107,7 @@
           renderCalendar();
         }
       } catch (e) {
-        console.error(e);
+        console.error("Error loading calendar events:", e);
       }
     }
 
@@ -118,47 +127,54 @@
 
     function filterCal(cat) {
       currentFilter = cat;
+      const btns = document.querySelectorAll('#cal-filter-btns button');
+      btns.forEach(b => {
+        b.className = b.textContent.includes(cat) || (cat === 'All' && b.textContent.includes('All')) ? 'btn btn-secondary btn-sm' : 'btn btn-ghost btn-sm';
+      });
       renderCalendar();
     }
 
     function renderCalendar() {
       const filtered = allEvents.filter(e => currentFilter === 'All' || e.category.toLowerCase().includes(currentFilter.toLowerCase()));
 
-      // Timeline render
       const timelineCont = document.getElementById('timeline-view-container');
-      timelineCont.innerHTML = filtered.map(ev => `
-        <div class="card" style="border-left: 4px solid ${ev.severity === 'Critical' ? '#EF4444' : ev.severity === 'High' ? '#F59E0B' : '#3B82F6'}; display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;">
-          <div style="display: flex; gap: var(--space-4); align-items: flex-start;">
-            <div style="padding: var(--space-2) var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-xs); text-align: center; min-width: 90px;">
-              <div style="font-family: var(--font-family-mono); font-size: var(--font-size-xs); font-weight: 700; color: var(--color-brand);">${ev.date}</div>
-              <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">STATUTORY DUE</div>
+      timelineCont.innerHTML = filtered.map(ev => {
+        const isCritical = ev.severity === 'Critical';
+        return `
+          <div class="card" style="border-left: 4px solid ${isCritical ? 'var(--color-danger)' : 'var(--color-brand)'}; display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap;">
+            <div style="display: flex; gap: var(--space-4); align-items: flex-start;">
+              <div style="padding: var(--space-2) var(--space-3); background-color: var(--bg-surface-secondary); border-radius: var(--radius-sm); text-align: center; min-width: 90px;">
+                <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--color-brand);">${ev.date}</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted);">${isCritical ? 'Due soon' : 'Upcoming'}</div>
+              </div>
+
+              <div>
+                <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: 2px;">
+                  <span class="badge ${isCritical ? 'badge-danger' : 'badge-brand'}">${isCritical ? 'Needs attention' : 'Standard'}</span>
+                  <span class="badge badge-secondary">${ev.category}</span>
+                  <span style="font-size: 0.7rem; color: var(--text-muted);">${ev.authority}</span>
+                </div>
+                <h3 style="font-size: var(--font-size-sm); font-weight: 700; color: var(--text-primary); margin-top: 2px;">${ev.title}</h3>
+                <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: 2px;">${ev.action}</p>
+              </div>
             </div>
 
             <div>
-              <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: 2px;">
-                <span class="badge ${ev.severity === 'Critical' ? 'badge-danger' : ev.severity === 'High' ? 'badge-warning' : 'badge-info'}">
-                  ${ev.severity} Severity
-                </span>
-                <span class="badge badge-secondary">${ev.category}</span>
-                <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-family-mono);">${ev.authority}</span>
-              </div>
-              <h3 style="font-size: var(--font-size-sm); font-weight: 700; color: #FFF; margin-top: 2px;">${ev.title}</h3>
-              <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: 2px;">${ev.action}</p>
+              <a href="policy-chat.html" class="btn btn-secondary btn-sm">Ask HELIOS →</a>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
 
-      // Table render
       const tbody = document.getElementById('cal-tbody');
       tbody.innerHTML = filtered.map(ev => `
         <tr>
-          <td class="mono-cell" style="font-weight: 700; color: #FBBF24;">${ev.date}</td>
-          <td class="primary-cell">${ev.title}</td>
+          <td style="font-weight: 700; color: var(--color-brand);">${ev.date}</td>
+          <td style="font-weight: 600; color: var(--text-primary);">${ev.title}</td>
           <td><span class="badge badge-secondary">${ev.category}</span></td>
-          <td class="mono-cell">${ev.authority}</td>
-          <td><span class="badge ${ev.severity === 'Critical' ? 'badge-danger' : ev.severity === 'High' ? 'badge-warning' : 'badge-info'}">${ev.severity}</span></td>
-          <td style="font-size: 0.75rem;">${ev.action}</td>
+          <td style="font-size: 0.75rem;">${ev.authority}</td>
+          <td><span class="badge ${ev.severity === 'Critical' ? 'badge-danger' : 'badge-brand'}">${ev.severity === 'Critical' ? 'Needs attention' : 'Upcoming'}</span></td>
+          <td style="font-size: 0.75rem; color: var(--text-secondary);">${ev.action}</td>
         </tr>
       `).join('');
     }

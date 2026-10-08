@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tax &amp; GST Center — HELIOS</title>
-  <meta name="description" content="GST filing calendar, GSTR-1 & GSTR-3B deadlines, TDS returns, and statutory tax notifications.">
+  <title>Tax &amp; GST — HELIOS Compliance Assistant</title>
+  <meta name="description" content="Friendly tax and GST filing assistant. Track GSTR-1, GSTR-3B, and TDS dates with ease.">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
 </head>
-<body data-page="tax-center" data-breadcrumb="Tax &amp; GST Center">
+<body data-page="tax-center" data-breadcrumb="Tax &amp; GST">
 
   <div class="app-layout">
     <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
@@ -20,123 +20,122 @@
 
       <main class="app-content">
 
-        <!-- Page Hero -->
-        <div class="page-hero">
-          <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
-            INDIRECT &amp; DIRECT TAX OBLIGATIONS
+        <!-- Page Header -->
+        <div class="page-hero" style="margin-bottom: var(--space-6);">
+          <div style="font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); margin-bottom: 4px;">
+            TAX &amp; GST
           </div>
-          <h1 class="page-hero-title">Tax &amp; GST Compliance Center</h1>
-          <p class="page-hero-subtitle">
-            Statutory filing calendar for GSTR-1, GSTR-3B, Form 26Q TDS, and corporate advance tax payments with e-invoicing threshold monitoring.
+          <h1 class="page-hero-title" style="font-size: 1.75rem; margin-bottom: 4px;">
+            Tax &amp; GST Center
+          </h1>
+          <p class="page-hero-subtitle" style="font-size: var(--font-size-sm); color: var(--text-secondary);">
+            Keep your tax filings on track and understand upcoming dates without the stress.
           </p>
         </div>
 
-        <!-- Transparent Integration Status Banner (Critical Requirement: Never Fake Live Sync) -->
-        <div class="card card-elevated" style="margin-bottom: var(--space-6); border: 1px solid rgba(245, 158, 11, 0.3);">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+        <!-- Connection Status (Honest, Clear) -->
+        <div class="card" style="margin-bottom: var(--space-6); background: var(--bg-surface-secondary); border: 1px solid var(--border-subtle);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3);">
             <div style="display: flex; align-items: center; gap: var(--space-3);">
-              <span style="width: 10px; height: 10px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+              <span style="font-size: 1.25rem;">🧾</span>
               <div>
-                <div style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF;" id="tax-integration-label">
-                  Integration not connected — Manual / Verified Filing Records Active
+                <div style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary);" id="tax-integration-label">
+                  Manual &amp; Verified Filing Records Active
                 </div>
-                <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;" id="tax-integration-desc">
-                  Live GSTN API sync requires GSP enterprise credentials. Statutory deadlines and return status are tracked using verified uploaded filing returns.
+                <div style="font-size: 0.75rem; color: var(--text-secondary);" id="tax-integration-desc">
+                  Statutory deadlines are tracked from official tax calendars and your uploaded certificates.
                 </div>
               </div>
             </div>
-
-            <button class="btn btn-secondary btn-sm" onclick="alert('GST Suvidha Provider (GSP) sandbox connection interface. To configure live API access, enter GSP Client ID and Client Secret in backend environment variables.')">
-              Configure GSP Credentials
-            </button>
+            <a href="documents.html" class="btn btn-secondary btn-sm">Upload tax document</a>
           </div>
         </div>
 
-        <!-- Tax Registration & Threshold Metrics -->
-        <div class="dashboard-grid-stats">
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>GSTIN Entity</span>
-              <span class="badge badge-success">Verified</span>
-            </div>
-            <div class="metric-value" style="font-size: var(--font-size-md);" id="tax-gstin">29AABCZ9821K1ZX</div>
-            <div class="metric-sub">
-              <span>Karnataka Ward 04</span>
-            </div>
+        <!-- Summary Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+          <div class="card">
+            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">GSTIN Registered</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 4px 0;" id="tax-gstin">29AABCZ9821K1ZX</div>
+            <div style="font-size: 0.75rem; color: var(--color-success-text); font-weight: 600;">✓ Active &amp; Verified</div>
           </div>
 
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>E-Invoicing Mandate</span>
-              <span class="badge badge-danger">Mandatory</span>
-            </div>
-            <div class="metric-value" style="font-size: var(--font-size-md); color: #F87171;">Rule 48(4) Active</div>
-            <div class="metric-sub">
-              <span>Turnover > ₹2 Cr threshold</span>
-            </div>
+          <div class="card">
+            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Next Filing Due</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 4px 0;">Form GSTR-1</div>
+            <div style="font-size: 0.75rem; color: var(--color-warning-text); font-weight: 600;">Due 11 Oct (3 days left)</div>
           </div>
 
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Next Immediate Return</span>
-              <span class="badge badge-danger">3 Days</span>
-            </div>
-            <div class="metric-value" style="font-size: var(--font-size-md);">Form GSTR-1</div>
-            <div class="metric-sub">
-              <span>Due: 11 October 2026</span>
-            </div>
+          <div class="card">
+            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">E-Invoicing Rule</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 4px 0;">Applies to company</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary);">Turnover &gt; ₹2 Cr threshold</div>
           </div>
 
-          <div class="metric-tile">
-            <div class="metric-label">
-              <span>Q2 Direct Tax TDS</span>
-              <span class="badge badge-warning">23 Days</span>
-            </div>
-            <div class="metric-value" style="font-size: var(--font-size-md);">Form 26Q &amp; 24Q</div>
-            <div class="metric-sub">
-              <span>Due: 31 October 2026</span>
-            </div>
+          <div class="card">
+            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Q2 TDS Return</div>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 4px 0;">Form 26Q &amp; 24Q</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary);">Due 31 October</div>
           </div>
         </div>
 
-        <!-- Filing Calendar Table -->
-        <div class="card" style="margin-bottom: var(--space-6);">
-          <div class="card-header">
-            <div class="card-title">Statutory Tax Filing Deadlines</div>
+        <!-- Upcoming Tax Deadlines -->
+        <div class="card" style="margin-bottom: var(--space-6); padding: 0; overflow: hidden;">
+          <div style="padding: var(--space-4) var(--space-5); border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 700; font-size: var(--font-size-sm); color: var(--text-primary);">Upcoming Tax Deadlines</div>
             <span class="badge badge-brand">FY 2026-27</span>
           </div>
 
-          <div class="data-table-wrapper" style="border: none;">
-            <table class="data-table" aria-label="Tax Filing Deadlines">
-              <thead>
-                <tr>
-                  <th>Statutory Obligation</th>
-                  <th>Category</th>
-                  <th>Filing Period</th>
-                  <th>Due Date</th>
-                  <th>Days Remaining</th>
-                  <th>Urgency</th>
-                  <th>Official Portal</th>
-                </tr>
-              </thead>
-              <tbody id="tax-deadlines-tbody">
-                <!-- Loaded by JS -->
-              </tbody>
-            </table>
+          <table class="data-table" aria-label="Tax Deadlines">
+            <thead>
+              <tr>
+                <th>Filing</th>
+                <th>Period</th>
+                <th>Due Date</th>
+                <th>Time Left</th>
+                <th>Portal</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="tax-deadlines-tbody">
+              <!-- Loaded by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Rule Update Note -->
+        <div class="rule-3q-card" style="border-left: 4px solid var(--color-brand); margin-bottom: var(--space-6);">
+          <div class="rule-3q-header">
+            <div>
+              <div class="rule-3q-title">🔵 GST rule update: E-Invoicing Threshold</div>
+              <div class="rule-3q-meta">Published: 08 Oct 2026 · Notification 14/2026</div>
+            </div>
+          </div>
+
+          <div class="rule-3q-block">
+            <div class="rule-3q-label">Why should you care?</div>
+            <div class="rule-3q-text">
+              Because your company is registered for GST with turnover between ₹5 Cr – ₹25 Cr, all B2B invoices must include an official Invoice Reference Number (IRN).
+            </div>
+          </div>
+
+          <div class="rule-3q-block" style="background: var(--color-brand-subtle); border-left: 3px solid var(--color-brand);">
+            <div class="rule-3q-label" style="color: var(--color-brand);">What should you do?</div>
+            <div class="rule-3q-text">
+              Review your invoicing tool to ensure IRN generation is active before raising invoices this month.
+            </div>
+          </div>
+
+          <div style="margin-top: var(--space-3); text-align: right;">
+            <a href="regulations.html" class="btn btn-secondary btn-sm">Understand this change →</a>
           </div>
         </div>
 
-        <!-- E-Invoicing & GSTR-1B Compliance Alert -->
-        <div class="card" style="border-left: 4px solid #EF4444; margin-bottom: var(--space-6);">
-          <h3 style="font-size: var(--font-size-sm); color: #FFF; font-weight: 700; margin-bottom: var(--space-1);">
-            ⚠️ High Priority Tax Compliance Advisory: CBIC Notification 14/2026
-          </h3>
-          <p style="font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-3);">
-            Under Notification No. 14/2026-Central Tax, businesses with aggregate turnover exceeding ₹2 Crores must generate Invoice Reference Numbers (IRN) and QR codes for all B2B supplies. Additionally, under Rule 88C, if the tax liability reported in Form GSTR-1 exceeds the liability discharged in Form GSTR-3B by more than 10%, Form GSTR-1B reconciliation notice is generated automatically, requiring immediate response within 7 days.
-          </p>
-          <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--color-brand);">
-            Statutory Citation: Rule 48(4) &amp; Rule 88C of CGST Rules 2017
-          </div>
+        <!-- Trust Disclaimer -->
+        <div class="legal-disclaimer-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>
+            HELIOS helps you understand company compliance. For important legal or tax decisions, verify with a qualified professional.
+          </span>
         </div>
 
       </main>
@@ -146,6 +145,7 @@
   <script src="../js/ui.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      HeliosUI.init();
       loadTaxCenter();
     });
 
@@ -154,28 +154,34 @@
         const res = await fetch('/api/tax');
         const data = await res.json();
         if (data.success) {
-          document.getElementById('tax-gstin').textContent = data.gstin || '29AABCZ9821K1ZX';
-          document.getElementById('tax-integration-label').textContent = data.integrationStatus.statusLabel;
-          document.getElementById('tax-integration-desc').textContent = data.integrationStatus.details;
+          const gstinEl = document.getElementById('tax-gstin');
+          if (gstinEl) gstinEl.textContent = data.gstin || '29AABCZ9821K1ZX';
 
           const tbody = document.getElementById('tax-deadlines-tbody');
-          tbody.innerHTML = data.deadlines.map(d => `
-            <tr>
-              <td class="primary-cell">
-                <div style="font-weight: 600; color: #FFF;">${d.obligation}</div>
-                <div style="font-size: 0.65rem; color: var(--text-muted);">${d.description}</div>
-              </td>
-              <td><span class="badge badge-secondary">${d.category}</span></td>
-              <td class="mono-cell">${d.period}</td>
-              <td class="mono-cell" style="color: ${d.daysRemaining <= 5 ? '#F87171' : '#FBBF24'}; font-weight: 700;">${d.dueDate}</td>
-              <td class="mono-cell" style="font-weight: 700; color: ${d.daysRemaining <= 5 ? '#EF4444' : 'inherit'};">${d.daysRemaining} Days</td>
-              <td><span class="badge ${d.urgency === 'Critical' ? 'badge-danger' : d.urgency === 'High' ? 'badge-warning' : 'badge-info'}">${d.urgency}</span></td>
-              <td class="mono-cell" style="font-size: 0.7rem;">${d.officialPortal}</td>
-            </tr>
-          `).join('');
+          if (tbody && data.deadlines) {
+            tbody.innerHTML = data.deadlines.map(d => `
+              <tr>
+                <td>
+                  <div style="font-weight: 600; color: var(--text-primary);">${d.obligation}</div>
+                  <div style="font-size: 0.7rem; color: var(--text-muted);">${d.description}</div>
+                </td>
+                <td style="font-size: var(--font-size-xs);">${d.period}</td>
+                <td style="font-weight: 600; color: var(--text-primary);">${d.dueDate}</td>
+                <td>
+                  <span class="badge ${d.daysRemaining <= 5 ? 'badge-warning' : 'badge-secondary'}">
+                    ${d.daysRemaining} days left
+                  </span>
+                </td>
+                <td style="font-size: 0.75rem; color: var(--text-secondary);">${d.officialPortal}</td>
+                <td style="text-align: right;">
+                  <a href="policy-chat.html" class="btn btn-secondary btn-sm">Ask HELIOS</a>
+                </td>
+              </tr>
+            `).join('');
+          }
         }
       } catch (e) {
-        console.error(e);
+        console.error("Tax center error:", e);
       }
     }
   </script>

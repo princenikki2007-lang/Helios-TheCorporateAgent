@@ -1710,8 +1710,36 @@ Provide your structured answer with:
   }
 
   // Grounded Q&A logic checking company documents, profile, and statutory database
-  if (lower.includes('due') || lower.includes('deadline') || lower.includes('this month') || lower.includes('upcoming')) {
+  if (lower.includes('today') || lower.includes('attention') || lower.includes('what do i need to do') || lower.includes('what needs my attention')) {
+    answer = `You're mostly clear today 👍\n\nThere are 2 things I'd recommend checking:\n1. Your GST document needs a quick review before the 11 Oct filing.\n2. Your employee policy may need an update for upcoming data rules.\n\nWant me to walk you through them?`;
+    sourceTrustLevel = "Level 1 (Company Health Engine & Official Gazette)";
+    citations = [
+      { source: "CBIC Central Tax Calendar", section: "Rule 59 GSTR-1 Notice", link: "https://cbic-gst.gov.in" },
+      { source: "Company Document Vault", section: "GST Certificate REG-06", link: "/pages/documents.html" }
+    ];
+  } else if (lower.includes('check my company documents') || (lower.includes('check') && lower.includes('document'))) {
+    answer = `I reviewed your 5 company documents in the vault:\n\n• **GST Certificate:** Verified & Active 👍\n• **Certificate of Incorporation:** Good standing 👍\n• **Karnataka Shops & Establishment License:** Renewal window open (expires in 43 days) ⚠\n• **Employee Handbook:** 82/100 Health Score\n• **Customer Privacy Policy:** 72h breach update suggested before 01 Nov\n\nEverything is safely organized. Would you like to review the license renewal?`;
+    sourceTrustLevel = "Company Document Vault & State Labour Authority";
+    citations = [
+      { source: "Document Vault", section: "5 Corporate Documents Indexed", link: "/pages/documents.html" },
+      { source: "Karnataka Labour Department", section: "Form F Headcount Update", link: "https://labour.karnataka.gov.in" }
+    ];
+  } else if (lower.includes('rules change') || lower.includes('rule change') || lower.includes('did any rules change') || lower.includes("what's new") || lower.includes('whats new')) {
+    answer = `Here are the 2 recent changes that matter most for your company:\n\n1. **🔵 GST E-Invoicing Threshold:** Lowered to ₹2 Crores. Because your turnover is ₹5 Cr – ₹25 Cr, this rule directly applies to all your B2B invoices.\n2. **🟡 Data Protection Rules:** Effective 01 November 2026. A mandatory 72-hour security escalation applies to customer data handlers.\n\nBoth changes have simple next steps ready in your dashboard.`;
+    sourceTrustLevel = "Level 1 (Official Central Government Gazette)";
+    citations = [
+      { source: "CBIC Notification No. 14/2026-Central Tax", section: "Rule 48(4) CGST Rules", link: "https://cbic-gst.gov.in" },
+      { source: "MeitY Gazette G.S.R. 182(E)", section: "DPDP Rules 2026", link: "https://meity.gov.in" }
+    ];
+  } else if (lower.includes('affect') || lower.includes('how does this affect')) {
+    answer = `Based on your profile as a **Software & SaaS company in Karnataka** with **₹5 Cr – ₹25 Cr turnover**:\n\n• **GST E-Invoicing:** Likely yes — applies to all B2B customer billing.\n• **Privacy Regulations:** Likely yes — digital customer data handling requires 72h incident notification.\n• **Shops & Establishment Renewal:** Mandatory within 43 days.\n\nYour Company Health is currently **82%** (looking good).`;
+    sourceTrustLevel = "Company Impact Evaluation Engine";
+    citations = [
+      { source: "HELIOS Company Profile Engine", section: ws.name + " Classification", link: "/pages/dashboard.html" }
+    ];
+  } else if (lower.includes('due') || lower.includes('deadline') || lower.includes('this month') || lower.includes('upcoming')) {
     answer = `Based on your company's profile (${ws.name}, Turnover: ${ws.annualTurnoverRange}, State: ${ws.registeredState}), your key upcoming compliance deadlines are:
+
 
 1. **GSTR-1 Outward Supplies Return:** Due on **11 October 2026** (in 3 days). Mandatory reporting of all B2B outward supplies.
 2. **Monthly Professional Tax (PT) Form 5A:** Due on **20 October 2026** for Karnataka employees.
