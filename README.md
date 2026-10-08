@@ -1,230 +1,153 @@
-# ☀️ HELIOS — The Ultimate Corporate Agent
+# ☀️ HELIOS — Legal & Compliance Intelligence for Companies
 
-> **AI-Powered Corporate Intelligence, Internal Policy Assistant & Enterprise Governance Portal**
+> **"Your Company's Legal & Compliance Intelligence Layer"**  
+> An enterprise-grade legal support and corporate compliance platform designed for startups, MSMEs, founders, finance teams, HR heads, and company administrators.
 
-[![Stack](https://img.shields.io/badge/Frontend-Vanilla_HTML5_%2F_CSS3_%2F_ES6+-f7df1e?logo=javascript&logoColor=black)](#-tech-stack)
-[![AI Providers](https://img.shields.io/badge/AI_Engine-Gemini_%7C_OpenAI_%7C_Groq-4285F4?logo=google-gemini&logoColor=white)](#-ai-engine--llm-integration)
-[![Security](https://img.shields.io/badge/Security-SOC2_Audited_%7C_RBAC-2ea44f?logo=shield&logoColor=white)](#-enterprise-governance--security)
+[![Stack](https://img.shields.io/badge/Stack-Node.js_%7C_Express_%7C_Vanilla_ES6+-f7df1e?logo=javascript&logoColor=black)](#-tech-stack)
+[![Vercel Ready](https://img.shields.io/badge/Vercel-Deployment_Ready-000000?logo=vercel&logoColor=white)](#-vercel-deployment)
+[![Compliance](https://img.shields.io/badge/Security-SOC2_Type_II_%7C_Multi--Tenant-2ea44f?logo=shield&logoColor=white)](#-enterprise-security--tenancy)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
-## 📖 Table of Contents
-1. [About the Project](#-about-the-project)
-2. [Key Features](#-key-features)
-3. [Tech Stack](#-tech-stack)
-4. [Project Directory Structure](#-project-directory-structure)
-5. [How to Run Locally](#-how-to-run-locally)
-6. [Demo User Credentials & RBAC](#-demo-user-credentials--rbac)
-7. [AI Engine & Live LLM Setup](#-ai-engine--live-llm-setup)
-8. [Conflict-Free Contribution Workflow (No Merge Conflicts)](#-conflict-free-contribution-workflow-no-merge-conflicts)
-9. [Coding Standards](#-coding-standards)
+## ⚖️ Responsible Legal AI Notice
+
+> **IMPORTANT:** HELIOS is an informational corporate intelligence platform and decision-support system. **HELIOS IS NOT A LAWYER AND DOES NOT PROVIDE BINDING LEGAL ADVICE.**
+>
+> The system strictly distinguishes between:
+> 1. **Level 1 / 2 Verified Government & Gazette Information**
+> 2. **AI-Generated Heuristic Analysis & Document Extractions**
+> 3. **Risk Flags & Discrepancy Warnings**
+> 4. **Actionable Compliance Recommendations**
+> 5. **Matters Mandating Professional Attorney or Chartered Accountant Verification**
+>
+> All proposed legislation is explicitly marked: `PROPOSED — NOT CURRENT LAW`. Active statutory rules are marked: `CURRENT / EFFECTIVE`.
 
 ---
 
-## 🌟 About the Project
+## 🌟 Core Product Capabilities
 
-**HELIOS** is an intelligent corporate policy and compliance intelligence platform designed to eliminate workplace ambiguity. It enables employees and enterprise administrators to securely interact with corporate handbooks, HR policies, benefits guidelines, and legal compliance documentation through grounded, citation-backed AI conversations.
-
-### Why HELIOS?
-- **Zero Hallucination Grounding:** Every answer references exact policy titles, sections, and page numbers.
-- **Multi-Engine Flexibility:** Out-of-the-box support for Google Gemini 1.5 Flash, OpenAI GPT-4o-mini, Groq Llama 3.1, or an embedded offline neural policy engine.
-- **Enterprise Governance:** Real-time SOC-2 access logs, AI query traceability, policy drift detection, and exportable compliance reports.
-- **Framework-Free & High Performance:** Built on ultra-fast, zero-dependency Vanilla Web technologies (HTML5, modern CSS3 design systems, and modular ES6+ JavaScript).
+- **Command Center Dashboard:** High-density Bloomberg-style overview covering composite compliance health, upcoming statutory deadlines, active document vault counts, open risks, and recent gazette notifications.
+- **Company Onboarding:** 3-step setup configuring official corporate identity (CIN, PAN, GSTIN, RoC state jurisdiction, headcount, turnover bracket, and directors), applicable compliance areas, and initial document intake.
+- **Document Vault & OCR Extraction:** Drag-and-drop ingestion of PDF, DOCX, XLSX, CSV, and scanned certificates with automated detection of CIN, PAN, GSTIN, expiration dates, statutory obligations, and risk flags.
+- **Document Comparison Engine ("Compare Against Rules"):** Itemized side-by-side comparison of company documents against current statutory regulations with granular Green (Compliant), Yellow (Needs Review), and Red (Potential Non-Compliance) checklists.
+- **In-Document AI Chat:** Query specific document clauses and validity dates directly within the document viewer with strict zero-hallucination grounding.
+- **Regulatory Intelligence Feed:** Curated official gazette and circular stream from Central Ministries, MCA, CBIC (GST), CBDT, MeitY, and Department of Labour with Level 1-4 source trust ratings.
+- **Rule Change Radar ("What's Changed?"):** Side-by-side rule diff engine comparing previous requirements vs new mandates, effective dates, and company-specific impact assessments.
+- **Company Impact Engine:** Automated matching of active company parameters (turnover, headcount, state, industry) against newly notified regulations, assigning High, Medium, or Low relevance ratings with 1-click compliance tasks.
+- **Parliament & Policy Watch:** Track legislative bills, standing committee reports, and draft consultative rules before they become enforceable law.
+- **Policy Impact Analyzer:** Benchmark employee handbooks, POSH rules, overtime policies, and data privacy terms against statutory codes with explainable Policy Health Scores (0-100).
+- **Tax & GST Center:** Statutory filing calendar for GSTR-1, GSTR-3B, Form 26Q TDS, and corporate advance tax. Features transparent integration indicators (`Integration not connected — Manual / Verified Filing Records Active`) without fabricating live API syncs.
+- **Statutory Approval Center:** Track municipal licenses, Shops & Establishments registrations, trademark applications, and renewal windows.
+- **Unified Compliance Calendar:** Consolidated timeline and tabular views with severity classification (Critical, High, Medium, Low).
+- **Explainable Risk Engine:** Multi-vector compliance risk score (0-100) across 8 dimensions (Tax, Corporate, Legal, HR, Documents, Regulatory, Data Privacy, Licenses) with itemized risk drivers.
+- **Ask HELIOS AI Legal Assistant:** Conversational AI grounded in company filings and official gazette notifications with clickable citations and statutory disclaimers.
+- **Enterprise Governance & Audit Trail:** Write-once, append-only immutable event logs with 1-click CSV export for SOC-2 and statutory auditor verification.
+- **Global Command Palette (`Ctrl + K` / `⌘K`):** Instant keyboard search across documents, regulations, policies, approvals, and tax deadlines from anywhere in the application.
 
 ---
 
-## 🚀 Key Features
-
-* **💬 Ask Helios Policy Chat:** Interactive chat interface with real-time response generation, conversation history grouping (Today, Previous 7 Days), and contextual prompt chips.
-* **🏷️ Clickable Source Pill Citations:** Interactive metadata pills (`[Handbook · Section 4.2 ↗]`) that trigger detailed excerpt inspection modals and jump directly to relevant documents.
-* **🛡️ Role-Based Access Control (RBAC):** Multi-tier authorization distinguishing **Employee**, **HR Manager**, and **Company Admin** roles across all routes.
-* **📂 Document Knowledge Repository:** Document catalog with category filtering (HR Policies, Financial, Code of Conduct, IT Security), version badges, and preview drawers.
-* **📊 Enterprise Governance & Audit Trail:** Dedicated portal for compliance officers and HR managers to review immutable query logs, detect outdated policy references, and export CSV audit reports.
-* **⚙️ Client-Side AI Engine Settings:** Intuitive modal allowing users to enter custom API keys stored securely in browser session storage with instant fail-safe fallback.
-
----
-
-## 💻 Tech Stack
+## 💻 Tech Stack & Architecture
 
 | Layer | Technologies / Specifications |
 | :--- | :--- |
-| **Markup & Structure** | Semantic HTML5, WAI-ARIA accessible components |
-| **Styling & Design System** | Vanilla CSS3, CSS Custom Properties (Tokens), Glassmorphism, Responsive Grid/Flexbox |
-| **Logic & State** | Modular ES6+ JavaScript (Revealing Module Pattern / IIFE), LocalStorage sync |
-| **AI Integration** | REST-based multi-provider connectors (`fetch` to Gemini API, OpenAI API, Groq API) |
-| **Zero Dependencies** | No npm build step, No bundlers required, 100% native browser support |
+| **Backend & REST API** | Node.js (v18+ / v20+ / v24+), Express.js, Multer (Document processing), CORS |
+| **Frontend & Design System** | Pure Vanilla HTML5, Modern CSS3 (Tokens, Bloomberg/Linear dark theme), Modular ES6+ JavaScript |
+| **AI Reasoning & Extraction** | Server-side Gemini API connector / Internal Neural Compliance Engine with citation parsing |
+| **Cloud & Deployment** | Vercel Serverless (`api/index.js` + `vercel.json`), Static Frontend edge caching |
+| **Tenancy & Security** | Cryptographically isolated multi-tenant workspaces, zero client-side secrets, SOC-2 audit logs |
 
 ---
 
-## 📁 Project Directory Structure
+## 📁 Directory Structure
 
 ```text
-Helios/
-├── PROJECT_SPEC.md              # Complete architecture & design specifications
-├── README.md                    # Project documentation & contribution guidelines
-└── frontend/                    # Web Application root
-    ├── index.html               # Public landing page with live interactive demo
-    ├── css/
-    │   ├── global.css           # Design tokens, CSS variables, typography, reset
-    │   ├── layout.css           # App sidebar, topbar, navigation shell, responsive layout
-    │   ├── components.css       # Buttons, cards, badges, pills, modals, form inputs, toasts
-    │   └── pages.css            # Page-specific views (Chat stream, Docs grid, Audit table)
-    ├── js/
-    │   ├── app.js               # Global application bootstrapper & session controller
-    │   ├── auth.js              # Authentication state, role checking, session management
-    │   ├── api.js               # Mock backend API layer & HTTP abstractions
-    │   ├── ui.js                # Shell rendering (Sidebar, Topbar, Breadcrumbs, Toasts)
-    │   ├── policy.js            # AI reasoning engine, multi-LLM dispatcher, citation parser
-    │   └── documents.js         # Document management and filtering helpers
-    ├── mock/
-    │   ├── users.js             # Mock user accounts with distinct roles and departments
-    │   ├── documents.js         # Mock corporate policy documents with full text excerpts
-    │   └── conversations.js     # Seed conversations and policy query scenarios
-    └── pages/
-        ├── login.html           # Authentication portal with one-click quick switchers
-        ├── dashboard.html       # Primary corporate overview & recent policy updates
-        ├── policy-chat.html     # Real-time policy question interface & AI configuration
-        ├── conversations.html   # Historical conversations & thread manager
-        ├── documents.html       # Central policy repository & document browser
-        ├── upload-document.html # HR document intake & metadata tagging interface
-        ├── audit-logs.html      # Enterprise Governance, SOC-2 logs & policy drift monitor
-        └── profile.html         # User profile, role verification & session settings
+HELIOS/
+├── api/
+│   ├── app.js               # Core Express REST API, Multi-tenant DB, OCR parser, Risk engine
+│   └── index.js             # Vercel Serverless Function entry point
+├── frontend/                # Production web application
+│   ├── css/
+│   │   ├── global.css       # Dark-first design tokens, Bloomberg terminal palette, typography
+│   │   ├── layout.css       # Command sidebar, sticky header, mobile nav bar
+│   │   ├── components.css   # Buttons, cards, metric tiles, badges, upload zones, command palette
+│   │   └── pages.css        # Landing hero, animated pipeline, compare engine, chat stream
+│   ├── js/
+│   │   └── ui.js            # Global navigation shell, Command Palette (Ctrl+K), workspace switcher
+│   ├── pages/
+│   │   ├── approvals.html   # Statutory licenses, registrations & renewals
+│   │   ├── audit-logs.html  # SOC-2 verifiable audit trail & CSV export
+│   │   ├── calendar.html    # Unified compliance calendar (Timeline & Table)
+│   │   ├── compare.html     # Document Comparison Engine vs statutory rules
+│   │   ├── dashboard.html   # Main Legal & Compliance Command Center
+│   │   ├── documents.html   # Document Vault, drag & drop upload & in-doc AI chat
+│   │   ├── impact.html      # Company-specific regulatory impact engine
+│   │   ├── onboarding.html  # 3-step company onboarding wizard
+│   │   ├── policy-analyzer.html # Internal policy health auditor (0-100 score)
+│   │   ├── policy-chat.html # Ask HELIOS AI legal assistant with citations
+│   │   ├── policy-watch.html# Parliament & legislative radar (Proposed vs Effective)
+│   │   ├── regulations.html # Official gazette feed & What's Changed diffs
+│   │   ├── risk.html        # 8-vector explainable risk engine
+│   │   └── tax-center.html  # GST & direct tax compliance calendar
+│   └── index.html           # Public landing page with animated pipeline visualization
+├── server.js                # Local development & Node.js production server
+├── vercel.json              # Vercel deployment routing & build specifications
+├── package.json             # NPM dependencies & build scripts
+└── README.md                # Comprehensive documentation
 ```
 
 ---
 
 ## ⚡ How to Run Locally
 
-Because HELIOS is built purely on native web standards, **no `npm install` or compilation step is needed**. You can run it instantly using any static file server:
-
-### Option 1: VS Code Live Server (Recommended)
-1. Install the **Live Server** extension in Visual Studio Code.
-2. Right-click [`frontend/index.html`](frontend/index.html) (or any file in `frontend/`) and select **"Open with Live Server"**.
-3. Your browser will automatically open `http://127.0.0.1:5500/frontend/index.html`.
-
-### Option 2: Node `npx serve`
+### 1. Clone & Install Dependencies
 ```bash
-# Run directly from the project root
-npx serve frontend -p 3000
+git clone https://github.com/princenikki2007-lang/Helios-TheCorporateAgent.git
+cd Helios-TheCorporateAgent
+npm install
 ```
+
+### 2. Run Local Server
+```bash
+npm start
+# or
+node server.js
+```
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Option 3: Python 3 Built-in Server
-```bash
-# Navigate to the frontend folder
-cd frontend
-python -m http.server 8000
-```
-Open [http://localhost:8000](http://localhost:8000) in your browser.
+---
+
+## 🚀 Vercel Deployment
+
+HELIOS is architected for zero-configuration deployment to Vercel:
+
+1. **Verify build:**
+   ```bash
+   npm run build
+   ```
+2. **Deploy via Vercel CLI:**
+   ```bash
+   npx vercel
+   ```
+   Or connect your GitHub repository directly in the [Vercel Dashboard](https://vercel.com).
+3. **Environment Variables (Optional):**
+   - `GEMINI_API_KEY` or `AI_API_KEY`: Server-side API key for live Gemini generative models.
+   - `PORT`: Defaults to `3000` for local server.
 
 ---
 
-## 👥 Demo User Credentials & RBAC
+## 🏢 Multi-Tenant Workspaces & Demo Mode
 
-You can test different role permissions using the pre-configured accounts (use any password or click the quick-login chips on the login page):
+HELIOS includes an active Demo Workspace preloaded with corporate data:
+- **Company Name:** Zephyr Technologies Private Limited
+- **CIN:** `U72900KA2022PTC158941`
+- **PAN:** `AABCZ9821K`
+- **GSTIN:** `29AABCZ9821K1ZX`
+- **Jurisdiction:** Bengaluru, Karnataka
+- **Industry:** Software & SaaS Technology
+- **Turnover:** ₹5 Cr - ₹25 Cr (Triggers E-Invoicing Rule 48(4) mandate)
 
-| Role | Email | Permissions / View Access |
-| :--- | :--- | :--- |
-| **Employee** | `alex.chen@acme.corp` | Ask Policy Chat, View Approved Documents, View Own Conversations |
-| **HR Manager** | `sarah.jenkins@acme.corp` | Everything in Employee + Upload/Manage Policies, Access Governance & Audit Logs |
-| **Company Admin** | `marcus.vance@acme.corp` | Full System Access (All Policies, All User Queries, SOC-2 Reports, Admin Controls) |
-
----
-
-## 🤖 AI Engine & Live LLM Setup
-
-HELIOS works seamlessly **out of the box** using its built-in corporate intelligence engine with zero configuration.
-
-To connect live generative models:
-1. Navigate to **Ask Helios** (`policy-chat.html`).
-2. Click the **AI Engine** badge at the top right (e.g. `● Helios Neural AI`).
-3. Select your provider (**Google Gemini**, **OpenAI**, or **Groq**) and paste your API key.
-4. Click **Save & Connect**.
-5. *Note:* Keys are stored purely in your local browser storage and never sent to third-party tracking servers. If an API call fails or key quota is exceeded, HELIOS automatically falls back to the embedded neural engine.
-
----
-
-## 🔄 Conflict-Free Contribution Workflow (No Merge Conflicts)
-
-To maintain a clean git history and prevent merge conflicts when collaborating across teams, follow this standardized branching and integration workflow:
-
-### 1. Always Start with an Up-to-Date `main` Branch
-Before starting work on any feature or bug fix:
-```bash
-git checkout main
-git pull origin main
-```
-
-### 2. Create an Isolated Feature Branch
-Use semantic branch naming conventions:
-* `feat/<feature-name>` for new capabilities (e.g., `feat/analytics-chart`)
-* `fix/<bug-name>` for bug fixes (e.g., `fix/citation-modal-overflow`)
-* `docs/<topic>` for documentation changes (e.g., `docs/api-specs`)
-
-```bash
-git checkout -b feat/add-export-pdf
-```
-
-### 3. Modular File Architecture Rules
-To avoid colliding on the same files:
-* **Don't cram all logic into existing JS files.** Create dedicated modules in `frontend/js/` (e.g., `js/analytics.js`, `js/export.js`) and expose them on the `window.Helios*` namespace.
-* **Keep Mock Datasets Pure:** Avoid mutating the default array structures in `frontend/mock/*.js`. If adding mock items, append unique IDs (e.g., `doc_099`, `conv_099`).
-* **Use Component Styles:** Put page-specific CSS into `pages.css` or scoped sections rather than overwriting global base tokens in `global.css`.
-
-### 4. Sync Regularly via Rebase (Prevent Conflict Commits)
-Before committing or creating a Pull Request, rebase your changes on top of the latest `main`:
-```bash
-# Fetch latest updates from remote
-git fetch origin
-
-# Rebase your local branch onto the latest main
-git rebase origin/main
-```
-> 💡 *Why Rebase?* Rebasing replays your commits cleanly on top of `main`, producing a linear, conflict-free commit history without unnecessary "Merge branch 'main'" clutter.
-
-### 5. Follow Semantic Conventional Commits
-Write atomic, structured commit messages:
-```bash
-git add frontend/js/export.js frontend/pages/documents.html
-git commit -m "feat(documents): add PDF export capability to document drawer" -m "- Created exportToPdf helper in export.js`n- Added export action button to document preview drawer"
-```
-
-Common prefixes:
-- `feat:` A new user-facing feature
-- `fix:` A bug fix
-- `refactor:` Code change that neither fixes a bug nor adds a feature
-- `style:` Formatting, whitespace, or CSS styling tweaks
-- `docs:` Documentation additions or modifications
-- `chore:` Maintenance tasks, git configuration, assets update
-
-### 6. Push and Open a Pull Request
-```bash
-git push -u origin feat/add-export-pdf
-```
-On GitHub, open a Pull Request targeting `main`. Ensure fast-forward or squash merging for clean history.
-
----
-
-## 📐 Coding Standards
-
-- **Formatting:** 2 spaces indentation, UTF-8 encoding, LF or CRLF standard line endings.
-- **Module Pattern:** Encapsulate JavaScript modules using IIFEs (Immediately Invoked Function Expressions) or ES modules to avoid global variable contamination:
-  ```javascript
-  const HeliosFeature = (function() {
-    'use strict';
-    // private methods
-    function init() { ... }
-
-    // public API
-    return { init };
-  })();
-  window.HeliosFeature = HeliosFeature;
-  ```
-- **XSS Prevention:** Always sanitize dynamic text before injecting into `innerHTML` using `HeliosPolicy.escapeHtml()` or native `textContent`.
-- **Zero Secrets Policy:** Never commit plain API keys or tokens into repository files.
-
----
-
-## 📄 License
-This project is open-source under the [MIT License](LICENSE).
+To create a live tenant workspace:
+- Click **"Create Company Workspace"** from the landing page or navigate to `pages/onboarding.html`.
+- Toggle between Demo and Live data at any time via the topbar mode switcher.

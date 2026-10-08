@@ -3,779 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ask Helios — HELIOS Policy Assistant</title>
-  <meta name="description" content="Ask Helios — get clear answers from your company's approved policies and documents.">
+  <title>Ask HELIOS — Legal &amp; Compliance AI Assistant</title>
+  <meta name="description" content="AI-powered corporate compliance intelligence assistant grounded in verified government notifications and uploaded company documents.">
   <link rel="stylesheet" href="../css/global.css">
-  <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/pages.css">
-  <style>
-    .app-content {
-      padding: var(--space-6);
-      display: flex;
-      flex-direction: column;
-      height: calc(100vh - var(--header-height));
-      overflow: hidden;
-    }
-
-    .chat-layout-card {
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      flex: 1;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* Top bar of chat */
-    .chat-header-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-4) var(--space-6);
-      border-bottom: 1px solid var(--border-subtle);
-      background: var(--bg-surface);
-    }
-
-    /* Message stream area */
-    .chat-messages-area {
-      flex: 1;
-      overflow-y: auto;
-      padding: var(--space-6);
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-5);
-      scroll-behavior: smooth;
-    }
-
-    /* Single Message */
-    .chat-message {
-      display: flex;
-      gap: var(--space-3);
-      max-width: 840px;
-      animation: fadeInMsg 220ms ease-out;
-    }
-
-    @keyframes fadeInMsg {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .chat-message.user {
-      margin-left: auto;
-      flex-direction: row-reverse;
-    }
-
-    .chat-message.ai {
-      margin-right: auto;
-    }
-
-    .msg-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .msg-avatar.user-avatar {
-      background: var(--color-primary);
-      color: #fff;
-    }
-
-    .msg-avatar.ai-avatar {
-      background: linear-gradient(135deg, #F59E0B, #D97706);
-      color: #fff;
-      box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
-    }
-
-    .msg-body-wrapper {
-      display: flex;
-      flex-direction: column;
-      max-width: 100%;
-    }
-
-    .msg-bubble {
-      padding: var(--space-4) var(--space-5);
-      font-size: var(--font-size-sm);
-      line-height: var(--line-height-relaxed);
-      border-radius: var(--radius-lg);
-    }
-
-    .chat-message.user .msg-bubble {
-      background: var(--color-primary);
-      color: #FFFFFF;
-      border-bottom-right-radius: var(--radius-xs);
-    }
-
-    .chat-message.ai .msg-bubble {
-      background: var(--bg-surface-secondary);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      border-top-left-radius: var(--radius-xs);
-    }
-
-    .msg-meta {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .chat-message.user .msg-meta {
-      text-align: right;
-    }
-
-    /* Compact Source Citation Pill / Anchor Tag */
-    .sources-pill-container {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      margin-top: var(--space-3);
-      padding-top: var(--space-2);
-      border-top: 1px solid rgba(0, 0, 0, 0.07);
-    }
-
-    .source-pill-label {
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-right: 2px;
-    }
-
-    .source-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px 3px 8px;
-      background: #FFFFFF;
-      border: 1px solid var(--border-light);
-      border-radius: 9999px;
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: all 150ms ease;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-      cursor: pointer;
-    }
-
-    .source-pill:hover {
-      background: var(--color-brand-subtle);
-      border-color: var(--color-brand);
-      color: var(--color-brand-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 2px 5px rgba(217, 119, 6, 0.15);
-    }
-
-    .source-pill-icon {
-      display: inline-flex;
-      align-items: center;
-      color: var(--color-brand);
-    }
-
-    .source-pill-doc {
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .source-pill:hover .source-pill-doc {
-      color: var(--color-brand-dark);
-    }
-
-    .source-pill-sec {
-      color: var(--text-muted);
-      font-size: 0.68rem;
-    }
-
-    .source-pill-arrow {
-      color: var(--color-brand);
-      font-weight: 700;
-      font-size: 0.75rem;
-      margin-left: 2px;
-    }
-
-    /* Typing indicator */
-    .typing-bubble {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: var(--space-3) var(--space-5);
-      background: var(--bg-surface-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      border-top-left-radius: var(--radius-xs);
-    }
-
-    .typing-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      animation: typingBounce 1.2s infinite ease-in-out;
-    }
-
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes typingBounce {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-6px); }
-    }
-
-    /* Empty state */
-    .empty-chat-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: var(--space-12) var(--space-6);
-      margin: auto;
-      max-width: 680px;
-    }
-
-    /* Input area */
-    .chat-input-wrapper {
-      padding: var(--space-4) var(--space-6);
-      border-top: 1px solid var(--border-subtle);
-      background: var(--bg-surface);
-    }
-
-    .chat-input-form {
-      display: flex;
-      gap: var(--space-3);
-      align-items: flex-end;
-    }
-
-    .chat-textarea {
-      flex: 1;
-      resize: none;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-light);
-      padding: 0.75rem 1rem;
-      font-family: inherit;
-      font-size: var(--font-size-sm);
-      line-height: 1.5;
-      min-height: 48px;
-      max-height: 140px;
-      background: var(--bg-page);
-      transition: border-color 150ms, box-shadow 150ms;
-    }
-
-    .chat-textarea:focus {
-      outline: none;
-      border-color: var(--color-brand);
-      box-shadow: 0 0 0 3px var(--color-brand-glow);
-      background: #FFFFFF;
-    }
-  </style>
 </head>
-<body data-page-title="Ask Helios" data-breadcrumb="Ask Helios">
+<body data-page="policy-chat" data-breadcrumb="Ask HELIOS (Legal AI)">
 
   <div class="app-layout">
-    <aside class="app-sidebar" id="app-sidebar" aria-label="Main Sidebar"></aside>
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation"></aside>
 
     <div class="app-main">
       <header class="app-header" id="app-header"></header>
 
-      <main class="app-content">
-        <div class="chat-layout-card">
+      <main class="app-content" style="display: flex; flex-direction: column; height: calc(100vh - 64px);">
 
-          <!-- Chat Header Bar -->
-          <div class="chat-header-bar">
+        <!-- Page Hero -->
+        <div class="page-hero" style="margin-bottom: var(--space-4);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-2);">
             <div>
-              <div style="font-size: var(--font-size-base); font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: var(--space-2);">
-                <span>Ask Helios</span>
-                <span class="badge badge-brand" id="llm-status-badge" style="font-size: 0.65rem; cursor: pointer;" onclick="openLlmConfigModal()">● Helios AI</span>
+              <div style="font-size: var(--font-size-2xs); font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px;">
+                GROUNDED STATUTORY REASONING
               </div>
-              <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-top: 2px;">
-                Answers generated strictly from approved company policies and guidelines.
-              </div>
+              <h1 class="page-hero-title" style="font-size: var(--font-size-xl);">Ask HELIOS — Legal &amp; Compliance Assistant</h1>
             </div>
+
             <div style="display: flex; align-items: center; gap: var(--space-2);">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="openLlmConfigModal()" title="Configure Live LLM / API Key">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                AI Model
-              </button>
-              <button type="button" class="btn btn-secondary btn-sm" id="btn-new-chat" onclick="startNewChat()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                New Chat
-              </button>
+              <span class="badge badge-success">● Neural Compliance Core</span>
+              <span class="pill-trust-1">Level 1 Priority Grounded</span>
             </div>
           </div>
+        </div>
 
-          <!-- Messages Area -->
-          <div class="chat-messages-area" id="chat-messages-area">
-            
-            <!-- Empty state shown when no messages -->
-            <div class="empty-chat-state" id="chat-empty-state">
-              <div class="brand-icon-wrapper" style="width: 56px; height: 56px; margin-bottom: var(--space-4);">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
-                  <circle cx="12" cy="12" r="4.5" fill="currentColor" fill-opacity="0.95"/>
-                  <path d="M12 2V5M12 19V22M2 12H5M19 12H22M4.93 4.93L7.05 7.05M16.95 16.95L19.07 19.07M4.93 19.07L7.05 16.95M16.95 7.05L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+        <!-- Mandatory Responsible AI Disclaimer Bar -->
+        <div class="legal-disclaimer-box" style="margin-top: 0; margin-bottom: var(--space-4);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>
+            <strong>STATUTORY NOTICE:</strong> HELIOS provides compliance intelligence and informational analysis based on public gazette orders and company files. It does not replace advice from a qualified legal, tax, or compliance professional.
+          </span>
+        </div>
+
+        <!-- Suggestion Prompt Chips -->
+        <div style="display: flex; gap: var(--space-2); overflow-x: auto; padding-bottom: var(--space-2); margin-bottom: var(--space-3); flex-shrink: 0;">
+          <button class="btn btn-secondary btn-sm" onclick="sendPrompt('What compliance tasks are due this month?')">
+            📅 What compliance tasks are due this month?
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="sendPrompt('Does this new GST change affect us?')">
+            🧾 Does this new GST change affect us?
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="sendPrompt('Which company documents expire soon?')">
+            ⌛ Which company documents expire soon?
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="sendPrompt('Compare our HR policy with current requirements')">
+            👥 Compare our HR policy with current rules
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="sendPrompt('Explain the MeitY DPDP Rules 2026 impact')">
+            🔒 Explain the DPDP Rules 2026 impact
+          </button>
+        </div>
+
+        <!-- Chat Stream Window -->
+        <div class="card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+          
+          <div id="chat-messages" class="chat-stream-box" style="flex: 1; padding: var(--space-6);">
+            <!-- Seed Welcome Message from Helios -->
+            <div class="chat-bubble chat-bubble-ai">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2);">
+                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                  <div style="width: 20px; height: 20px; background: var(--color-brand); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #000;">☀️</div>
+                  <strong style="color: #FFF; font-size: var(--font-size-xs);">HELIOS Legal Intelligence</strong>
+                </div>
+                <span class="badge badge-brand">AI Verified Analysis</span>
               </div>
-              <h3 style="font-size: var(--font-size-lg); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2);">What can Helios help you with today?</h3>
-              <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: var(--space-6); line-height: var(--line-height-relaxed);">
-                Ask anything about your company's policies, leave rules, remote work guidelines, healthcare benefits, or corporate conduct.
+              <p style="font-size: var(--font-size-xs); color: #E2E8F0; line-height: 1.6;">
+                Welcome to the HELIOS Compliance Command Center. I have indexed your company workspace (<strong>Zephyr Technologies Private Limited</strong>, CIN: <code>U72900KA2022PTC158941</code>) and verified it against Central Government Gazettes, CBIC notifications, and Department of Labour mandates. How can I assist with your corporate compliance today?
               </p>
-              
-              <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center;">
-                <button type="button" class="prompt-chip" onclick="submitQuickQuestion('How many leaves can I carry forward?')">
-                  How many leaves can I carry forward?
-                </button>
-                <button type="button" class="prompt-chip" onclick="submitQuickQuestion('What is the work-from-home policy?')">
-                  What is the WFH policy & stipend?
-                </button>
-                <button type="button" class="prompt-chip" onclick="submitQuickQuestion('What benefits am I eligible for?')">
-                  What health benefits am I eligible for?
-                </button>
-                <button type="button" class="prompt-chip" onclick="submitQuickQuestion('What are the probation rules?')">
-                  What are the probation rules & timelines?
-                </button>
-                <button type="button" class="prompt-chip" onclick="submitQuickQuestion('What is the daily meal per-diem for business travel?')">
-                  What is the travel meal per-diem?
-                </button>
-              </div>
             </div>
-
           </div>
 
-          <!-- Input Area -->
-          <div class="chat-input-wrapper">
-            <form class="chat-input-form" id="chat-input-form" onsubmit="handleChatSubmit(event)">
-              <textarea
-                id="chat-question-input"
-                class="chat-textarea"
-                placeholder="Ask Helios anything about company policies, leave rules, benefits..."
-                rows="1"
-                aria-label="Ask Helios a policy question"
-              ></textarea>
-              <button type="submit" class="btn btn-primary" id="btn-chat-send" style="padding: 0.75rem 1.25rem; height: 48px;" aria-label="Send question">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-              </button>
-            </form>
-            <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: var(--space-2); text-align: center;">
-              Helios answers are grounded strictly in your company's approved documents. Always consult HR for formal exceptions.
-            </div>
+          <!-- Chat Input Bar -->
+          <div style="padding: var(--space-3) var(--space-4); background-color: var(--bg-surface-secondary); border-top: 1px solid var(--border-subtle); display: flex; gap: var(--space-2); align-items: center;">
+            <input type="text" id="chat-user-input" class="form-input" placeholder="Ask anything regarding company documents, tax obligations, or gazette notices..." onkeydown="if(event.key==='Enter')handleSend()" />
+            <button class="btn btn-primary btn-sm" id="btn-send-chat" onclick="handleSend()">
+              Send ↵
+            </button>
           </div>
 
         </div>
+
       </main>
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="../mock/users.js"></script>
-  <script src="../mock/conversations.js"></script>
-  <script src="../mock/documents.js"></script>
-  <script src="../js/auth.js"></script>
-  <script src="../js/api.js"></script>
-  <script src="../js/policy.js"></script>
-  <script src="../js/ui.js?v=2"></script>
-  <script src="../js/app.js"></script>
+  <script src="../js/ui.js"></script>
   <script>
-    let currentConversationId = null;
-    let isGenerating = false;
-
-    // DOM references
-    const messagesArea = document.getElementById('chat-messages-area');
-    const emptyState = document.getElementById('chat-empty-state');
-    const questionInput = document.getElementById('chat-question-input');
-    const sendBtn = document.getElementById('btn-chat-send');
-
-    /**
-     * Format current time
-     */
-    function formatTime(date = new Date()) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    async function handleSend() {
+      const input = document.getElementById('chat-user-input');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      sendPrompt(text);
     }
 
-    /**
-     * Auto-resize textarea
-     */
-    questionInput.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = Math.min(this.scrollHeight, 140) + 'px';
-    });
+    async function sendPrompt(query) {
+      const chatBox = document.getElementById('chat-messages');
+      const btn = document.getElementById('btn-send-chat');
 
-    /**
-     * Keydown handler: Enter sends, Shift+Enter new line
-     */
-    questionInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        document.getElementById('chat-input-form').dispatchEvent(new Event('submit', { cancelable: true }));
-      }
-    });
+      // Append user bubble
+      const userBubble = document.createElement('div');
+      userBubble.className = 'chat-bubble chat-bubble-user';
+      userBubble.textContent = query;
+      chatBox.appendChild(userBubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
 
-    /**
-     * Scroll to bottom of message list
-     */
-    function scrollToBottom() {
-      messagesArea.scrollTop = messagesArea.scrollHeight;
-    }
-
-    /**
-     * Hide empty state
-     */
-    function hideEmptyState() {
-      if (emptyState) emptyState.style.display = 'none';
-    }
-
-    /**
-     * Append user message to UI
-     */
-    function appendUserMessage(text, time = formatTime()) {
-      hideEmptyState();
-      const user = HeliosAuth.getCurrentUser();
-      const avatarText = user ? user.avatar : 'U';
-
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'chat-message user';
-      msgDiv.innerHTML = `
-        <div class="msg-avatar user-avatar" title="${user ? user.name : 'User'}">${avatarText}</div>
-        <div class="msg-body-wrapper">
-          <div class="msg-bubble">${HeliosPolicy.escapeHtml(text)}</div>
-          <div class="msg-meta">${time}</div>
+      // Loading bubble
+      const aiBubble = document.createElement('div');
+      aiBubble.className = 'chat-bubble chat-bubble-ai';
+      aiBubble.innerHTML = `
+        <div style="display: flex; align-items: center; gap: var(--space-2); color: var(--text-muted); font-size: var(--font-size-xs);">
+          <span class="btn-spinner"></span>
+          <span>Synthesizing company filings and Level 1 regulatory gazettes...</span>
         </div>
       `;
-      messagesArea.appendChild(msgDiv);
-      scrollToBottom();
-    }
+      chatBox.appendChild(aiBubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
 
-    /**
-     * Append AI message to UI
-     */
-    function appendAiMessage(answerHtml, sources = [], time = formatTime()) {
-      hideEmptyState();
-      const msgDiv = document.createElement('div');
-      msgDiv.className = 'chat-message ai';
+      try {
+        const res = await fetch('/api/ai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+        const data = await res.json();
 
-      let sourcesHtml = '';
-      if (sources && sources.length > 0) {
-        const pills = sources.map(s => {
-          const secText = s.section ? (s.section.length > 30 ? s.section.substring(0, 30) + '...' : s.section) : '';
-          return `
-            <a href="javascript:void(0)" class="source-pill" onclick='viewSourceCard(${JSON.stringify(s)})' title="${s.document_name} ${s.section ? '· ' + s.section : ''}">
-              <span class="source-pill-icon">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-              </span>
-              <span class="source-pill-doc">${s.document_name}</span>
-              ${secText ? `<span class="source-pill-sec">(${secText})</span>` : ''}
-              <span class="source-pill-arrow">&nearr;</span>
-            </a>
-          `;
-        }).join('');
+        if (data.success) {
+          let citationsHtml = '';
+          if (data.citations && data.citations.length > 0) {
+            citationsHtml = `
+              <div class="citation-pill-row">
+                <span style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; align-self: center;">CITATIONS:</span>
+                ${data.citations.map(c => `
+                  <a href="${c.link || '#'}" target="_blank" rel="noopener" class="citation-pill" title="${c.section}">
+                    📄 ${c.source} · ${c.section} ↗
+                  </a>
+                `).join('')}
+              </div>
+            `;
+          }
 
-        sourcesHtml = `
-          <div class="sources-pill-container">
-            <span class="source-pill-label">Source:</span>
-            ${pills}
-          </div>
-        `;
-      }
-
-      msgDiv.innerHTML = `
-        <div class="msg-avatar ai-avatar" title="Helios AI">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px;">
-            <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
-            <path d="M12 2V5M12 19V22M2 12H5M19 12H22M4.93 4.93L7.05 7.05M16.95 16.95L19.07 19.07M4.93 19.07L7.05 16.95M16.95 7.05L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="msg-body-wrapper">
-          <div class="msg-bubble">
-            <div>${answerHtml}</div>
-            ${sourcesHtml}
-          </div>
-          <div class="msg-meta">Helios &middot; ${time}</div>
-        </div>
-      `;
-      messagesArea.appendChild(msgDiv);
-      scrollToBottom();
-    }
-
-    /**
-     * Show typing indicator
-     */
-    function showTypingIndicator() {
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'chat-message ai';
-      typingDiv.id = 'chat-typing-indicator';
-      typingDiv.innerHTML = `
-        <div class="msg-avatar ai-avatar">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px;">
-            <circle cx="12" cy="12" r="4.5" fill="currentColor"/>
-            <path d="M12 2V5M12 19V22M2 12H5M19 12H22M4.93 4.93L7.05 7.05M16.95 16.95L19.07 19.07M4.93 19.07L7.05 16.95M16.95 7.05L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="msg-body-wrapper">
-          <div class="typing-bubble">
-            <span class="typing-dot"></span>
-            <span class="typing-dot"></span>
-            <span class="typing-dot"></span>
-          </div>
-        </div>
-      `;
-      messagesArea.appendChild(typingDiv);
-      scrollToBottom();
-    }
-
-    /**
-     * Hide typing indicator
-     */
-    function hideTypingIndicator() {
-      const el = document.getElementById('chat-typing-indicator');
-      if (el) el.remove();
-    }
-
-    /**
-     * Open Source Card Modal
-     */
-    function viewSourceCard(source) {
-      HeliosPolicy.openSourceModal(source);
-    }
-    window.viewSourceCard = viewSourceCard;
-
-    /**
-     * Start a fresh conversation
-     */
-    function startNewChat() {
-      currentConversationId = null;
-      messagesArea.innerHTML = '';
-      if (emptyState) {
-        emptyState.style.display = 'flex';
-        messagesArea.appendChild(emptyState);
-      }
-      questionInput.value = '';
-      questionInput.style.height = 'auto';
-      questionInput.focus();
-    }
-
-    /**
-     * Submit question via chips
-     */
-    function submitQuickQuestion(text) {
-      questionInput.value = text;
-      processQuestion(text);
-    }
-    window.submitQuickQuestion = submitQuickQuestion;
-
-    /**
-     * Handle form submit
-     */
-    function handleChatSubmit(e) {
-      e.preventDefault();
-      const question = questionInput.value.trim();
-      if (!question || isGenerating) return;
-      processQuestion(question);
-    }
-
-    /**
-     * Execute full question -> response lifecycle
-     */
-    async function processQuestion(questionText) {
-      isGenerating = true;
-      sendBtn.disabled = true;
-      questionInput.value = '';
-      questionInput.style.height = 'auto';
-
-      if (!currentConversationId) {
-        const newConv = HeliosPolicy.createConversation(questionText);
-        currentConversationId = newConv.id;
-      }
-
-      // 1. Add User Message
-      const userMsg = {
-        id: 'msg_' + Date.now(),
-        sender: 'user',
-        text: questionText,
-        timestamp: formatTime()
-      };
-      appendUserMessage(questionText, userMsg.timestamp);
-      HeliosPolicy.addMessage(currentConversationId, userMsg);
-
-      // 2. Show Typing Indicator
-      showTypingIndicator();
-
-      // 3. Ask Helios Assistant
-      const response = await HeliosPolicy.askQuestion(questionText);
-
-      // 4. Hide Typing Indicator & Add AI Message
-      hideTypingIndicator();
-
-      const aiMsg = {
-        id: 'msg_' + (Date.now() + 1),
-        sender: 'ai',
-        text: response.answer,
-        sources: response.sources,
-        timestamp: formatTime()
-      };
-
-      appendAiMessage(response.answer, response.sources, aiMsg.timestamp);
-      HeliosPolicy.addMessage(currentConversationId, aiMsg);
-
-      isGenerating = false;
-      sendBtn.disabled = false;
-      questionInput.focus();
-    }
-
-    /**
-     * Load existing conversation by ID
-     */
-    function loadConversation(convId) {
-      const conv = HeliosPolicy.getConversation(convId);
-      if (!conv || !conv.messages || conv.messages.length === 0) return;
-
-      currentConversationId = conv.id;
-      messagesArea.innerHTML = '';
-
-      conv.messages.forEach(msg => {
-        if (msg.sender === 'user') {
-          appendUserMessage(msg.text, msg.timestamp);
-        } else {
-          appendAiMessage(msg.text, msg.sources, msg.timestamp);
-        }
-      });
-    }
-
-    /**
-     * AI Configuration Modal Handling
-     */
-    function updateLlmStatusBadge() {
-      const badge = document.getElementById('llm-status-badge');
-      if (!badge) return;
-      const config = HeliosPolicy.getLlmConfig();
-      if (config && config.apiKey && config.apiKey.trim()) {
-        const provName = config.provider === 'gemini' ? 'Gemini Live' : (config.provider === 'openai' ? 'GPT-4o Live' : 'Groq Live');
-        badge.textContent = `● ${provName}`;
-        badge.className = 'badge badge-success';
-        badge.title = `Connected to live ${config.provider.toUpperCase()} LLM`;
-      } else {
-        badge.textContent = '● Helios Neural AI';
-        badge.className = 'badge badge-brand';
-        badge.title = 'Click to connect live Gemini / OpenAI API key';
-      }
-    }
-
-    function openLlmConfigModal() {
-      let modal = document.getElementById('llm-config-modal');
-      if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'llm-config-modal';
-        modal.className = 'modal-backdrop';
-        document.body.appendChild(modal);
-      }
-
-      const config = HeliosPolicy.getLlmConfig();
-
-      modal.innerHTML = `
-        <div class="modal" style="max-width: 500px; width: 90%; animation: modalPop 180ms ease-out;" role="dialog">
-          <div class="modal-header">
-            <div style="display: flex; align-items: center; gap: var(--space-2);">
-              <span style="font-size: 1.25rem;">🤖</span>
-              <div class="modal-title">AI Engine &amp; LLM Settings</div>
-            </div>
-            <button type="button" class="btn btn-ghost btn-sm" onclick="closeLlmConfigModal()">&times;</button>
-          </div>
-          <div class="modal-body" style="padding: var(--space-5);">
-            <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-bottom: var(--space-4);">
-              Connect a real live LLM (Google Gemini, OpenAI, or Groq) to generate dynamic policy answers grounded in corporate documents.
-            </p>
-            <div class="form-group">
-              <label class="form-label" for="llm-provider-select">AI Provider</label>
-              <select id="llm-provider-select" class="form-select" onchange="handleProviderChange()">
-                <option value="gemini" ${config.provider === 'gemini' ? 'selected' : ''}>Google Gemini (Recommended — Gemini 1.5 Flash)</option>
-                <option value="openai" ${config.provider === 'openai' ? 'selected' : ''}>OpenAI (GPT-4o-mini / GPT-4)</option>
-                <option value="groq" ${config.provider === 'groq' ? 'selected' : ''}>Groq (Llama 3.1 8B Instant)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="llm-api-key-input">API Key</label>
-              <input type="password" id="llm-api-key-input" class="form-input" placeholder="Paste your API key here (e.g. AIzaSy... or sk-...)" value="${config.apiKey || ''}" />
-              <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
-                Keys are stored locally in your browser session and never sent anywhere except directly to the AI provider.
+          aiBubble.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2);">
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <div style="width: 20px; height: 20px; background: var(--color-brand); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: #000;">☀️</div>
+                <strong style="color: #FFF; font-size: var(--font-size-xs);">HELIOS Response</strong>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <span class="pill-trust-1">${data.sourceTrustLevel}</span>
+                <span class="badge badge-success">${data.confidence} Confidence</span>
               </div>
             </div>
-            <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 0.72rem; color: var(--text-secondary);">
-              <strong>Automatic Fail-Safe:</strong> If no key is entered or if the API is unreachable, Helios seamlessly falls back to the embedded neural policy engine without interruption.
+
+            <div style="font-size: var(--font-size-xs); color: #E2E8F0; line-height: 1.6; white-space: pre-wrap;">
+${data.answer}
             </div>
-          </div>
-          <div class="modal-footer" style="display: flex; justify-content: space-between;">
-            <button type="button" class="btn btn-ghost btn-sm" style="color: var(--color-danger);" onclick="clearLlmApiKey()">Clear Key</button>
-            <div style="display: flex; gap: var(--space-2);">
-              <button type="button" class="btn btn-secondary" onclick="closeLlmConfigModal()">Cancel</button>
-              <button type="button" class="btn btn-primary" onclick="saveLlmSettings()">Save &amp; Connect</button>
+
+            ${citationsHtml}
+
+            <div style="margin-top: var(--space-3); padding-top: var(--space-2); border-top: 1px solid var(--border-subtle); font-size: 0.65rem; color: var(--text-muted); font-style: italic;">
+              ${data.disclaimer}
             </div>
-          </div>
-        </div>
-      `;
-
-      modal.classList.add('active');
-    }
-
-    function closeLlmConfigModal() {
-      const modal = document.getElementById('llm-config-modal');
-      if (modal) modal.classList.remove('active');
-    }
-
-    function saveLlmSettings() {
-      const provider = document.getElementById('llm-provider-select').value;
-      const apiKey = document.getElementById('llm-api-key-input').value.trim();
-      
-      let model = 'gemini-1.5-flash';
-      if (provider === 'openai') model = 'gpt-4o-mini';
-      if (provider === 'groq') model = 'llama-3.1-8b-instant';
-
-      HeliosPolicy.saveLlmConfig({ provider, apiKey, model });
-      closeLlmConfigModal();
-      updateLlmStatusBadge();
-
-      if (apiKey) {
-        HeliosUI.showToast(`Connected to Live ${provider.toUpperCase()} LLM!`, 'success');
-      } else {
-        HeliosUI.showToast('Using Helios Internal Neural Policy Engine', 'info');
+          `;
+          chatBox.scrollTop = chatBox.scrollHeight;
+        }
+      } catch (err) {
+        aiBubble.innerHTML = `<span style="color: #EF4444;">Error connecting to legal reasoning engine.</span>`;
       }
     }
-
-    function clearLlmApiKey() {
-      document.getElementById('llm-api-key-input').value = '';
-      saveLlmSettings();
-    }
-
-    window.openLlmConfigModal = openLlmConfigModal;
-    window.closeLlmConfigModal = closeLlmConfigModal;
-    window.saveLlmSettings = saveLlmSettings;
-    window.clearLlmApiKey = clearLlmApiKey;
-
-    /**
-     * Page initialization
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-      updateLlmStatusBadge();
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const convId = urlParams.get('id');
-      const queryParam = urlParams.get('q');
-
-      if (convId) {
-        loadConversation(convId);
-      } else if (queryParam) {
-        processQuestion(decodeURIComponent(queryParam));
-      }
-    });
   </script>
 </body>
 </html>

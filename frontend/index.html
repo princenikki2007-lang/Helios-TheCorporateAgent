@@ -3,361 +3,271 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HELIOS — The Ultimate Corporate Agent | Sign In</title>
-  <meta name="description" content="HELIOS is an AI-powered corporate intelligence platform and policy assistant. Sign in to access your corporate knowledge base.">
+  <title>HELIOS — Your Company's Legal &amp; Compliance Intelligence Layer</title>
+  <meta name="description" content="HELIOS monitors documents, statutory regulations, approvals, tax obligations and corporate policy changes from one intelligent legal command center.">
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
-  <style>
-    /* Login page specific styles */
-    .auth-welcome { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: var(--space-6); }
-    .auth-brand-mark { width: 52px; height: 52px; margin-bottom: var(--space-4); }
-    .auth-title { font-size: var(--font-size-xl); font-weight: 800; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 2px; }
-    .auth-tagline { font-size: var(--font-size-xs); font-weight: 600; color: var(--color-brand); text-transform: uppercase; letter-spacing: 0.08em; }
-    .auth-desc { font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: var(--space-2); max-width: 320px; line-height: var(--line-height-relaxed); }
-
-    /* Password input wrapper for show/hide toggle */
-    .password-input-wrapper { position: relative; }
-    .password-input-wrapper .form-input { padding-right: 2.75rem; }
-    .password-toggle-btn {
-      position: absolute;
-      right: 0.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0.3rem;
-      color: var(--text-muted);
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 150ms;
-    }
-    .password-toggle-btn:hover { color: var(--text-primary); }
-
-    /* Error message */
-    .login-error-msg {
-      display: none;
-      padding: 0.625rem var(--space-3);
-      border-radius: var(--radius-md);
-      background-color: var(--color-danger-subtle);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      color: #991B1B;
-      font-size: var(--font-size-xs);
-      font-weight: 500;
-      margin-bottom: var(--space-4);
-      align-items: center;
-      gap: var(--space-2);
-    }
-    .login-error-msg.visible { display: flex; }
-
-    /* Input error state */
-    .form-input.input-error {
-      border-color: var(--color-danger);
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
-    }
-
-    /* Loading spinner */
-    .btn-spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.35);
-      border-top-color: #FFFFFF;
-      border-radius: 50%;
-      animation: btnSpin 0.65s linear infinite;
-    }
-    @keyframes btnSpin { to { transform: rotate(360deg); } }
-
-    /* Demo credentials hint */
-    .demo-credentials {
-      margin-top: var(--space-4);
-      padding: var(--space-3);
-      background-color: var(--bg-surface-secondary);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-    }
-    .demo-credentials summary {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-weight: 600;
-      user-select: none;
-    }
-    .demo-credentials summary:hover { color: var(--text-secondary); }
-    .demo-cred-table {
-      margin-top: var(--space-2);
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .demo-cred-table td {
-      padding: 4px 0;
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-    }
-    .demo-cred-table td:first-child { font-weight: 600; width: 100px; }
-    .demo-cred-link {
-      color: var(--color-brand);
-      cursor: pointer;
-      font-weight: 600;
-      text-decoration: underline;
-      text-decoration-style: dotted;
-    }
-    .demo-cred-link:hover { color: var(--color-brand-dark); }
-  </style>
 </head>
-<body>
-  <div class="auth-page-wrapper">
-    <div class="auth-card">
+<body class="landing-body">
 
-      <!-- Brand Header -->
-      <div class="auth-welcome">
-        <div class="brand-icon-wrapper auth-brand-mark" aria-label="HELIOS Logo">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 28px; height: 28px;">
-            <circle cx="12" cy="12" r="4.5" fill="currentColor" fill-opacity="0.95"/>
-            <path d="M12 2V5M12 19V22M2 12H5M19 12H22M4.93 4.93L7.05 7.05M16.95 16.95L19.07 19.07M4.93 19.07L7.05 16.95M16.95 7.05L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <h1 class="auth-title">Welcome to HELIOS</h1>
-        <div class="auth-tagline">The Ultimate Corporate Agent</div>
-        <p class="auth-desc">Your intelligent assistant for company policies and corporate knowledge.</p>
+  <!-- Top Navigation -->
+  <header class="landing-nav">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <div style="width: 34px; height: 34px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+        </svg>
       </div>
-
-      <!-- Error Message -->
-      <div class="login-error-msg" id="login-error" role="alert">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
-        <span id="login-error-text">Invalid credentials.</span>
-      </div>
-
-      <!-- Login Form -->
-      <form id="login-form" novalidate>
-        <div class="form-group">
-          <label class="form-label" for="login-email">Corporate Email</label>
-          <input
-            type="email"
-            id="login-email"
-            class="form-input"
-            placeholder="name@company.com"
-            autocomplete="email"
-            required
-            aria-required="true"
-          />
-        </div>
-
-        <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <label class="form-label" for="login-password">Password</label>
-            <a href="javascript:void(0)" id="forgot-password-link" style="font-size: var(--font-size-xs); color: var(--color-brand); font-weight: 500;">Forgot password?</a>
-          </div>
-          <div class="password-input-wrapper">
-            <input
-              type="password"
-              id="login-password"
-              class="form-input"
-              placeholder="Enter your password"
-              autocomplete="current-password"
-              required
-              aria-required="true"
-            />
-            <button type="button" class="password-toggle-btn" id="toggle-password" aria-label="Show password" title="Show password">
-              <svg id="icon-eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-              <svg id="icon-eye-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path><line x1="1" y1="1" x2="23" y2="23"></line><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"></path></svg>
-            </button>
-          </div>
-        </div>
-
-        <div style="display: flex; align-items: center; margin-bottom: var(--space-5);">
-          <label style="display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-xs); color: var(--text-secondary); cursor: pointer;">
-            <input type="checkbox" id="remember-me" checked />
-            Remember my session
-          </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="btn-login-submit">
-          Sign In to Helios
-        </button>
-      </form>
-
-      <!-- Demo Credentials -->
-      <details class="demo-credentials" id="demo-credentials">
-        <summary>Demo Credentials (click to reveal)</summary>
-        <table class="demo-cred-table">
-          <tr>
-            <td>Employee</td>
-            <td><span class="demo-cred-link" onclick="fillCredentials('alex.rivera@company.com')">alex.rivera@company.com</span></td>
-          </tr>
-          <tr>
-            <td>HR Manager</td>
-            <td><span class="demo-cred-link" onclick="fillCredentials('sarah.jenkins@company.com')">sarah.jenkins@company.com</span></td>
-          </tr>
-          <tr>
-            <td>Admin</td>
-            <td><span class="demo-cred-link" onclick="fillCredentials('marcus.vance@company.com')">marcus.vance@company.com</span></td>
-          </tr>
-          <tr>
-            <td>Password</td>
-            <td style="font-family: var(--font-family-mono); color: var(--text-primary);">password123</td>
-          </tr>
-        </table>
-      </details>
-
-      <div style="margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid var(--border-subtle); text-align: center;">
-        <span style="font-size: 0.75rem; color: var(--text-muted);">Secure enterprise authentication powered by Helios Core</span>
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-size: var(--font-size-base); font-weight: 800; letter-spacing: 0.04em; color: #FFF; line-height: 1.1;">HELIOS</span>
+        <span style="font-size: 0.65rem; font-weight: 600; color: var(--color-brand); text-transform: uppercase; letter-spacing: 0.08em;">Compliance Intelligence</span>
       </div>
     </div>
-  </div>
 
-  <script src="mock/users.js"></script>
-  <script src="js/auth.js"></script>
-  <script>
-    // If already logged in, go to dashboard
-    if (HeliosAuth.redirectIfAuthenticated()) {
-      // stop — redirect in progress
-    }
+    <nav style="display: flex; align-items: center; gap: var(--space-6);">
+      <a href="#why-helios" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Why HELIOS</a>
+      <a href="#command-center" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Command Center</a>
+      <a href="#regulatory-monitoring" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Regulatory Intel</a>
+      <a href="#security" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Security</a>
+      <a href="#faq" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">FAQ</a>
+    </nav>
 
-    // DOM references
-    const loginForm = document.getElementById('login-form');
-    const emailInput = document.getElementById('login-email');
-    const passwordInput = document.getElementById('login-password');
-    const submitBtn = document.getElementById('btn-login-submit');
-    const errorBox = document.getElementById('login-error');
-    const errorText = document.getElementById('login-error-text');
-    const toggleBtn = document.getElementById('toggle-password');
-    const iconShow = document.getElementById('icon-eye-show');
-    const iconHide = document.getElementById('icon-eye-hide');
-    const forgotLink = document.getElementById('forgot-password-link');
+    <div style="display: flex; align-items: center; gap: var(--space-3);">
+      <a href="pages/dashboard.html" class="btn btn-secondary btn-sm">Explore HELIOS</a>
+      <a href="pages/onboarding.html" class="btn btn-primary btn-sm">Create Workspace</a>
+    </div>
+  </header>
 
-    /**
-     * Show/hide password toggle
-     */
-    toggleBtn.addEventListener('click', () => {
-      const isPassword = passwordInput.type === 'password';
-      passwordInput.type = isPassword ? 'text' : 'password';
-      iconShow.style.display = isPassword ? 'none' : 'block';
-      iconHide.style.display = isPassword ? 'block' : 'none';
-      toggleBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
-      toggleBtn.setAttribute('title', isPassword ? 'Hide password' : 'Show password');
-    });
+  <!-- Hero Section -->
+  <section class="landing-hero">
+    <div class="landing-hero-badge">
+      <span style="width: 6px; height: 6px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+      <span>SOC-2 Audited · Official Gazette Grounded · Multi-Tenant Architecture</span>
+    </div>
 
-    /**
-     * Show error
-     */
-    function showError(message) {
-      errorText.textContent = message;
-      errorBox.classList.add('visible');
-    }
+    <h1 class="landing-hero-title">
+      Your Company's Legal &amp; Compliance<br>
+      Intelligence Layer
+    </h1>
 
-    /**
-     * Hide error
-     */
-    function hideError() {
-      errorBox.classList.remove('visible');
-      emailInput.classList.remove('input-error');
-      passwordInput.classList.remove('input-error');
-    }
+    <p class="landing-hero-subtitle">
+      Monitor corporate documents, statutory regulations, government approvals, tax obligations and policy amendments from one intelligent, citation-backed command center.
+    </p>
 
-    /**
-     * Set loading state
-     */
-    function setLoading(loading) {
-      if (loading) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="btn-spinner"></span> Signing in...';
-        emailInput.disabled = true;
-        passwordInput.disabled = true;
-      } else {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign In to Helios';
-        emailInput.disabled = false;
-        passwordInput.disabled = false;
-      }
-    }
+    <div class="landing-cta-group">
+      <a href="pages/onboarding.html" class="btn btn-primary btn-lg">
+        Create Company Workspace
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </a>
+      <a href="pages/dashboard.html" class="btn btn-secondary btn-lg">
+        Explore Demo Command Center
+      </a>
+    </div>
 
-    /**
-     * Fill credentials from demo table
-     */
-    function fillCredentials(email) {
-      emailInput.value = email;
-      passwordInput.value = 'password123';
-      hideError();
-      emailInput.focus();
-    }
-    window.fillCredentials = fillCredentials;
+    <!-- Animated Intelligence Pipeline Flow -->
+    <div class="pipeline-visual-wrapper">
+      <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-4); text-align: left;">
+        CONTINUOUS COMPLIANCE PIPELINE ARCHITECTURE
+      </div>
+      <div class="pipeline-steps">
+        <div class="pipeline-step-box">
+          <div class="step-icon">🏢</div>
+          <div class="step-name">Company</div>
+          <div class="step-desc">Entity Profile &amp; Rules</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step-box">
+          <div class="step-icon">📂</div>
+          <div class="step-name">Documents</div>
+          <div class="step-desc">Vault Ingestion &amp; OCR</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step-box">
+          <div class="step-icon">⚡</div>
+          <div class="step-name">AI Analysis</div>
+          <div class="step-desc">Entity &amp; Clause Extraction</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step-box">
+          <div class="step-icon">📜</div>
+          <div class="step-name">Regulations</div>
+          <div class="step-desc">Level 1 Gazette Grounding</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step-box">
+          <div class="step-icon">⚠️</div>
+          <div class="step-name">Risk Detection</div>
+          <div class="step-desc">Explainable Score 0-100</div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step-box">
+          <div class="step-icon">✅</div>
+          <div class="step-name">Actions</div>
+          <div class="step-desc">Filings &amp; Renewals</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    /**
-     * Clear input error on typing
-     */
-    emailInput.addEventListener('input', () => {
-      hideError();
-    });
-    passwordInput.addEventListener('input', () => {
-      hideError();
-    });
+  <!-- Section 1: Why HELIOS -->
+  <section class="landing-section" id="why-helios">
+    <div class="section-tag">01 · PROBLEM &amp; SOLUTION</div>
+    <h2 class="section-title">Zero Ambiguity in Corporate Compliance</h2>
+    <p class="section-subtitle">
+      Companies incur heavy penalties and operational halts not from malicious intent, but from unnoticed statutory amendments, forgotten renewal dates, and unaligned internal policies.
+    </p>
 
-    /**
-     * Forgot password link
-     */
-    forgotLink.addEventListener('click', () => {
-      showError('Password reset will be available once the backend is connected. For now, use demo credentials below.');
-    });
+    <div class="feature-grid-3">
+      <div class="card">
+        <div style="font-size: 1.5rem; margin-bottom: var(--space-3); color: var(--color-brand);">🛡️</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Zero Hallucination Grounding</h3>
+        <p style="font-size: var(--font-size-xs);">Every answer cites exact government gazette numbers, MCA circulars, or uploaded document page numbers. We prioritize Level 1 official sources over secondary commentary.</p>
+      </div>
 
-    /**
-     * Form submission
-     */
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideError();
+      <div class="card">
+        <div style="font-size: 1.5rem; margin-bottom: var(--space-3); color: var(--color-accent-cyan);">⚡</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Company Impact Engine</h3>
+        <p style="font-size: var(--font-size-xs);">Don't drown in hundreds of irrelevant regulatory notices. HELIOS evaluates your state, industry, headcount, and turnover to notify you only when rules actually affect you.</p>
+      </div>
 
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
+      <div class="card">
+        <div style="font-size: 1.5rem; margin-bottom: var(--space-3); color: var(--color-success);">⚖️</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Document Comparison Engine</h3>
+        <p style="font-size: var(--font-size-xs);">Upload your internal HR policy, privacy policy, or trade license and click 'Compare Against Current Rules' to view an itemized Green/Yellow/Red compliance checklist.</p>
+      </div>
+    </div>
+  </section>
 
-      // Client-side validation
-      if (!email) {
-        showError('Please enter your corporate email address.');
-        emailInput.classList.add('input-error');
-        emailInput.focus();
-        return;
-      }
+  <!-- Section 2: Compliance Command Center -->
+  <section class="landing-section" id="command-center">
+    <div class="section-tag">02 · ARCHITECTURE</div>
+    <h2 class="section-title">Command Center Modules</h2>
+    <p class="section-subtitle">
+      A Bloomberg-dense information layer built specifically for founders, CFOs, HR heads, and legal compliance officers.
+    </p>
 
-      if (!password) {
-        showError('Please enter your password.');
-        passwordInput.classList.add('input-error');
-        passwordInput.focus();
-        return;
-      }
+    <div class="feature-grid-3">
+      <div class="card">
+        <div class="badge badge-brand" style="margin-bottom: var(--space-3);">CORE MODULE</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Document Vault &amp; OCR Extraction</h3>
+        <p style="font-size: var(--font-size-xs); margin-bottom: var(--space-3);">Secure ingestion of PDF, DOCX, XLSX, and scanned certificates with automated detection of CIN, PAN, GSTIN, and expiration dates.</p>
+        <a href="pages/documents.html" class="btn btn-secondary btn-sm">Explore Vault →</a>
+      </div>
 
-      // Begin login
-      setLoading(true);
+      <div class="card">
+        <div class="badge badge-info" style="margin-bottom: var(--space-3);">INTELLIGENCE</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Regulatory Circulars &amp; Rule Changes</h3>
+        <p style="font-size: var(--font-size-xs); margin-bottom: var(--space-3);">Live monitoring of Central Govt, MCA, CBIC, CBDT, and Labour Ministry notifications with old vs new requirement diffs.</p>
+        <a href="pages/regulations.html" class="btn btn-secondary btn-sm">View Notifications →</a>
+      </div>
 
-      // Simulate network delay for realistic UX
-      await new Promise(resolve => setTimeout(resolve, 900 + Math.random() * 400));
+      <div class="card">
+        <div class="badge badge-warning" style="margin-bottom: var(--space-3);">STATUTORY</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Tax &amp; GST Center</h3>
+        <p style="font-size: var(--font-size-xs); margin-bottom: var(--space-3);">Filing calendars, E-invoicing threshold alerts, Form GSTR-1/3B deadlines, and transparent integration status indicators.</p>
+        <a href="pages/tax-center.html" class="btn btn-secondary btn-sm">Open Tax Center →</a>
+      </div>
 
-      const result = HeliosAuth.login(email, password);
+      <div class="card">
+        <div class="badge badge-success" style="margin-bottom: var(--space-3);">ANALYTICS</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Company Risk Engine (0-100)</h3>
+        <p style="font-size: var(--font-size-xs); margin-bottom: var(--space-3);">An explainable multi-dimensional risk score analyzing Tax, Corporate, HR, Data Privacy, and Municipal licenses with actionable drivers.</p>
+        <a href="pages/risk.html" class="btn btn-secondary btn-sm">View Risk Breakdown →</a>
+      </div>
 
-      if (result.success) {
-        // Brief pause to show success before redirect
-        submitBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Welcome, ' + result.user.name.split(' ')[0] + '!';
-        submitBtn.style.backgroundColor = 'var(--color-success)';
-        submitBtn.style.borderColor = 'var(--color-success)';
+      <div class="card">
+        <div class="badge badge-brand" style="margin-bottom: var(--space-3);">LEGAL AI</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Ask HELIOS Assistant</h3>
+        <p style="font-size: var(--font-size-xs); margin-bottom: var(--space-3);">Converse naturally with your corporate documents and verified statutory databases with clickable source citations.</p>
+        <a href="pages/policy-chat.html" class="btn btn-secondary btn-sm">Start Querying →</a>
+      </div>
 
-        setTimeout(() => {
-          window.location.href = 'pages/dashboard.html';
-        }, 600);
-      } else {
-        setLoading(false);
-        showError(result.error);
-        if (result.error.toLowerCase().includes('email')) {
-          emailInput.classList.add('input-error');
-          emailInput.focus();
-        } else {
-          passwordInput.classList.add('input-error');
-          passwordInput.focus();
-        }
-      }
-    });
-  </script>
+      <div class="card">
+        <div class="badge badge-info" style="margin-bottom: var(--space-3);">GOVERNANCE</div>
+        <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Immutable Audit Trail &amp; CSV Export</h3>
+        <p style="font-size: var(--font-size-xs); margin-bottom: var(--space-3);">SOC-2 verifiable audit logs recording every document upload, policy comparison, risk alert, and role permission change.</p>
+        <a href="pages/audit-logs.html" class="btn btn-secondary btn-sm">Inspect Audit Logs →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Security & Responsible AI -->
+  <section class="landing-section" id="security">
+    <div class="section-tag">03 · TRUST &amp; COMPLIANCE</div>
+    <h2 class="section-title">Enterprise Security &amp; Legal Responsibility</h2>
+    <p class="section-subtitle">
+      Corporate documents contain confidential trade secrets, salary records, and tax filings. We treat tenant data with zero compromise.
+    </p>
+
+    <div class="card" style="padding: var(--space-8); margin-bottom: var(--space-6);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6);">
+        <div>
+          <h4 style="color: var(--color-brand); font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Multi-Tenant Data Isolation</h4>
+          <p style="font-size: var(--font-size-xs);">Each company workspace is cryptographically isolated. No cross-tenant document leakage or vector database pollution is mathematically possible.</p>
+        </div>
+        <div>
+          <h4 style="color: var(--color-accent-cyan); font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Server-Side Secret Management</h4>
+          <p style="font-size: var(--font-size-xs);">Zero client-side API keys. All LLM and cloud storage calls pass through our secured serverless gateway with strict rate limiting and token hashing.</p>
+        </div>
+        <div>
+          <h4 style="color: var(--color-success); font-size: var(--font-size-sm); margin-bottom: var(--space-2);">Responsible Legal AI Standard</h4>
+          <p style="font-size: var(--font-size-xs);">HELIOS never presents AI analysis as binding legal advice. Disclaimers, confidence ratings, and source verification badges are mandated on every output.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: FAQ -->
+  <section class="landing-section" id="faq">
+    <div class="section-tag">04 · QUESTIONS &amp; ANSWERS</div>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-subtitle">Common queries regarding HELIOS regulatory coverage and document handling.</p>
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+      <div class="card">
+        <h4 style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-1);">Does HELIOS provide formal legal advice?</h4>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary);">No. HELIOS is a compliance intelligence and legal decision-support system. It extracts facts, flags discrepancies, and cites official gazette notifications. All high-stakes transactions should be reviewed by your qualified corporate counsel.</p>
+      </div>
+
+      <div class="card">
+        <h4 style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-1);">What file formats does the Document Vault support?</h4>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary);">HELIOS natively ingests PDF, DOCX, XLSX, CSV, PNG, JPG, and scanned certificates up to 25MB per file with automated optical character recognition (OCR).</p>
+      </div>
+
+      <div class="card">
+        <h4 style="font-size: var(--font-size-xs); font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-1);">How does the Company Impact Engine filter regulatory updates?</h4>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary);">When a new official notification is published by MCA, CBIC, or MeitY, HELIOS correlates your entity type, state jurisdiction, turnover bracket, employee headcount, and existing policy clauses to assign an actionable High, Medium, or Low relevance score.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border-subtle); padding: var(--space-12) var(--space-8); text-align: center; font-size: var(--font-size-2xs); color: var(--text-muted); background-color: var(--bg-surface);">
+    <div style="max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-4); align-items: center;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-weight: 800; color: var(--text-primary); font-size: var(--font-size-sm);">HELIOS</span>
+        <span>— Legal &amp; Compliance Intelligence for Companies</span>
+      </div>
+      <p style="max-width: 600px; line-height: 1.6;">
+        Disclaimer: HELIOS is an informational compliance technology platform. It is not a law firm and does not provide legal representation, statutory audit certification, or formal legal advice.
+      </p>
+      <div style="display: flex; gap: var(--space-6);">
+        <a href="pages/onboarding.html">Onboarding</a>
+        <a href="pages/dashboard.html">Dashboard</a>
+        <a href="pages/documents.html">Document Vault</a>
+        <a href="pages/regulations.html">Regulatory Intel</a>
+        <a href="pages/policy-chat.html">AI Assistant</a>
+      </div>
+      <div>&copy; 2026 HELIOS Intelligence Technologies. All rights reserved.</div>
+    </div>
+  </footer>
+
 </body>
 </html>
