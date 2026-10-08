@@ -114,7 +114,28 @@ npm start
 node server.js
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+### 3. Run Acceptance Test Suite
+```bash
+node test_acceptance.js
+```
+Runs the automated 21-step acceptance suite verifying all REST API endpoints, document OCR parsing, risk calculation, and compliance intelligence.
+
+---
+
+## 🔑 Environment Configuration
+
+Copy `.env.example` to configure server-side production settings:
+```bash
+cp .env.example .env
+```
+
+| Variable | Description |
+| :--- | :--- |
+| `PORT` | Local server port (Default: `3000`) |
+| `GEMINI_API_KEY` | Server-side Google Gemini API key for live AI reasoning (Optional, falls back to internal statutory knowledge base) |
+| `DATABASE_URL` | Production PostgreSQL / Supabase connection URI |
+| `AUTH_SECRET` | Cryptographic secret for signing sessions and JWT tokens |
+| `STORAGE_BUCKET` | Cloud object storage bucket for corporate files |
 
 ---
 
@@ -131,9 +152,8 @@ HELIOS is architected for zero-configuration deployment to Vercel:
    npx vercel
    ```
    Or connect your GitHub repository directly in the [Vercel Dashboard](https://vercel.com).
-3. **Environment Variables (Optional):**
-   - `GEMINI_API_KEY` or `AI_API_KEY`: Server-side API key for live Gemini generative models.
-   - `PORT`: Defaults to `3000` for local server.
+3. **Environment Variables:**
+   - Configure `GEMINI_API_KEY`, `AUTH_SECRET`, and `DATABASE_URL` under Project Settings in Vercel.
 
 ---
 

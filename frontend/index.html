@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HELIOS — Your Company's Legal &amp; Compliance Intelligence Layer</title>
-  <meta name="description" content="HELIOS monitors documents, statutory regulations, approvals, tax obligations and corporate policy changes from one intelligent legal command center.">
+  <meta name="description" content="Monitor corporate documents, statutory regulations, approvals, tax obligations and policy amendments from one intelligent, citation-backed command center.">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
@@ -31,10 +31,14 @@
       </div>
     </div>
 
-    <nav style="display: flex; align-items: center; gap: var(--space-6);">
+    <nav style="display: flex; align-items: center; gap: var(--space-6);" class="desktop-only-nav">
       <a href="#why-helios" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Why HELIOS</a>
       <a href="#command-center" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Command Center</a>
-      <a href="#regulatory-monitoring" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Regulatory Intel</a>
+      <a href="#ai-doc-intel" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Doc Intel</a>
+      <a href="#regulatory-monitoring" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Regulatory Radar</a>
+      <a href="#tax-compliance" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Tax &amp; GST</a>
+      <a href="#policy-impact" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Policy Audit</a>
+      <a href="#risk-engine" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Risk Score</a>
       <a href="#security" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">Security</a>
       <a href="#faq" style="color: var(--text-secondary); font-size: var(--font-size-xs); font-weight: 500;">FAQ</a>
     </nav>
@@ -49,7 +53,7 @@
   <section class="landing-hero">
     <div class="landing-hero-badge">
       <span style="width: 6px; height: 6px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
-      <span>SOC-2 Audited · Official Gazette Grounded · Multi-Tenant Architecture</span>
+      <span>SOC-2 Audited · Level 1 Gazette Grounded · Multi-Tenant Isolation</span>
     </div>
 
     <h1 class="landing-hero-title">
@@ -148,7 +152,7 @@
   <!-- Section 2: Compliance Command Center -->
   <section class="landing-section" id="command-center">
     <div class="section-tag">02 · ARCHITECTURE</div>
-    <h2 class="section-title">Command Center Modules</h2>
+    <h2 class="section-title">Compliance Command Center Modules</h2>
     <p class="section-subtitle">
       A Bloomberg-dense information layer built specifically for founders, CFOs, HR heads, and legal compliance officers.
     </p>
@@ -198,9 +202,231 @@
     </div>
   </section>
 
-  <!-- Section 3: Security & Responsible AI -->
+  <!-- Section 3: AI Document Intelligence -->
+  <section class="landing-section" id="ai-doc-intel">
+    <div class="section-tag">03 · OPTICAL EXTRACTION &amp; OCR</div>
+    <h2 class="section-title">AI Document Intelligence Pipeline</h2>
+    <p class="section-subtitle">
+      Instantly convert static PDF certificates, tax filings, and employment contracts into structured, actionable compliance telemetry.
+    </p>
+
+    <div class="card card-elevated" style="padding: var(--space-6);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6); align-items: center;">
+        <div>
+          <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--color-brand); font-weight: 700; margin-bottom: var(--space-2);">
+            LIVE OCR PARSING SIMULATION
+          </div>
+          <h3 style="font-size: var(--font-size-md); color: #FFF; margin-bottom: var(--space-3);">
+            Form GST REG-06 Certificate Extraction
+          </h3>
+          <p style="font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-4);">
+            Upon file ingestion, HELIOS runs automated boundary detection, tabular segmentation, and entity matching against the Central Goods and Services Tax Rules.
+          </p>
+          <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+            <span class="badge badge-success">✓ Verified for Analysis</span>
+            <span class="badge badge-brand">AI Confidence: 98%</span>
+            <span class="badge badge-info">Level 1 Gazette Matched</span>
+          </div>
+        </div>
+
+        <div style="background: var(--bg-surface-secondary); border-radius: var(--radius-sm); padding: var(--space-4); border: 1px solid var(--border-subtle); font-family: var(--font-family-mono); font-size: 0.75rem;">
+          <div style="color: var(--color-brand); font-weight: 700; margin-bottom: var(--space-3); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-2);">
+            // Extracted Entity Schema
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; color: var(--text-primary);">
+            <div><span style="color: var(--text-muted);">GSTIN:</span> 29AABCZ9821K1ZX</div>
+            <div><span style="color: var(--text-muted);">Legal Name:</span> Zephyr Technologies Pvt Ltd</div>
+            <div><span style="color: var(--text-muted);">Jurisdiction:</span> Karnataka Ward 04, Central</div>
+            <div><span style="color: var(--text-muted);">Liability Date:</span> 12/04/2022</div>
+            <div><span style="color: var(--text-muted);">Obligation #1:</span> Monthly GSTR-1 by 11th</div>
+            <div><span style="color: var(--text-muted);">Obligation #2:</span> Monthly GSTR-3B by 20th</div>
+            <div><span style="color: var(--text-muted);">E-Invoice Rule:</span> Rule 48(4) IRN Required</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Regulatory Monitoring & Timeline -->
+  <section class="landing-section" id="regulatory-monitoring">
+    <div class="section-tag">04 · REGULATORY TIMELINE</div>
+    <h2 class="section-title">Official Gazette &amp; Circular Monitoring</h2>
+    <p class="section-subtitle">
+      Continuous statutory radar grounded strictly in Level 1 Ministry notifications from MCA, CBIC, CBDT, and State Gazettes.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+      <div class="card" style="border-left: 4px solid #10B981;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-2);">
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <span class="tag-effective">● CURRENT / EFFECTIVE</span>
+            <span class="pill-trust-1">Level 1 Official Gazette</span>
+          </div>
+          <span style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--text-muted);">Effective: 01 Oct 2026</span>
+        </div>
+        <h4 style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF; margin-bottom: var(--space-1);">
+          CBIC Notification No. 14/2026 — E-Invoicing Threshold Lowered to ₹2 Cr
+        </h4>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-bottom: var(--space-2);">
+          Mandatory IRN generation mandated for all B2B supplies where aggregate turnover exceeds ₹2 Crores in any preceding FY under CGST Rule 48(4).
+        </p>
+        <div style="font-size: 0.7rem; color: var(--color-brand); font-weight: 600;">
+          Company Impact: HIGH · Zephyr Technologies turnover is ₹5 Cr - ₹25 Cr. Immediate ERP webhook configuration required.
+        </div>
+      </div>
+
+      <div class="card" style="border-left: 4px solid #8B5CF6;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-2);">
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <span class="tag-proposed">● NOTIFIED — EFFECTIVE SOON</span>
+            <span class="pill-trust-1">Level 1 MeitY Gazette</span>
+          </div>
+          <span style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--text-muted);">Enforcement: 01 Nov 2026</span>
+        </div>
+        <h4 style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF; margin-bottom: var(--space-1);">
+          Digital Personal Data Protection (DPDP) Rules 2026 (Gazette G.S.R. 182(E))
+        </h4>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-bottom: var(--space-2);">
+          Mandates itemized notice in 22 scheduled languages, 72-hour breach reporting to DPBI, and mandatory consent manager architecture.
+        </p>
+        <div style="font-size: 0.7rem; color: var(--color-accent-cyan); font-weight: 600;">
+          Company Impact: MEDIUM · Internal Privacy Policy scored 78/100 and requires update before Nov 1.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: GST & Tax Compliance -->
+  <section class="landing-section" id="tax-compliance">
+    <div class="section-tag">05 · TAX OBLIGATIONS</div>
+    <h2 class="section-title">GST &amp; Statutory Tax Command</h2>
+    <p class="section-subtitle">
+      Automated filing countdowns for GSTR-1, GSTR-3B, Form 26Q TDS, and corporate advance tax payments with clear integration states.
+    </p>
+
+    <div class="feature-grid-3">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+          <span style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF;">GSTR-1 Outward Supplies</span>
+          <span class="badge badge-danger">3 Days</span>
+        </div>
+        <div style="font-size: 1.5rem; font-family: var(--font-family-mono); font-weight: 800; color: #F87171; margin-bottom: var(--space-1);">11 OCT</div>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary);">Monthly outward supplies reporting. Lock on mismatch with e-way bills active.</p>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+          <span style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF;">GSTR-3B Summary Return</span>
+          <span class="badge badge-warning">12 Days</span>
+        </div>
+        <div style="font-size: 1.5rem; font-family: var(--font-family-mono); font-weight: 800; color: #FBBF24; margin-bottom: var(--space-1);">20 OCT</div>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary);">Tax liability discharge and ITC reconciliation against Form GSTR-2B.</p>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+          <span style="font-size: var(--font-size-xs); font-weight: 700; color: #FFF;">Form 26Q / 24Q TDS</span>
+          <span class="badge badge-info">23 Days</span>
+        </div>
+        <div style="font-size: 1.5rem; font-family: var(--font-family-mono); font-weight: 800; color: #60A5FA; margin-bottom: var(--space-1);">31 OCT</div>
+        <p style="font-size: var(--font-size-xs); color: var(--text-secondary);">Q2 FY 2026-27 quarterly return of tax deducted at source for vendor and salary payments.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Policy Impact Analysis & Company Risk -->
+  <section class="landing-section" id="policy-impact">
+    <div class="section-tag">06 · POLICY HEALTH BENCHMARK</div>
+    <h2 class="section-title">Policy Impact Analysis &amp; Health Score</h2>
+    <p class="section-subtitle">
+      Benchmark your Employee Handbook, Remote Work Guidelines, and Privacy Terms against current statutory codes.
+    </p>
+
+    <div class="card card-elevated" style="padding: var(--space-6);">
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-6); align-items: center;">
+        <div style="text-align: center; border-right: 1px solid var(--border-subtle); padding-right: var(--space-6);">
+          <div style="font-size: 0.7rem; font-family: var(--font-family-mono); color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+            POLICY HEALTH SCORE
+          </div>
+          <div style="font-size: 3.5rem; font-family: var(--font-family-mono); font-weight: 900; color: #FBBF24; margin: var(--space-2) 0;">
+            78<span style="font-size: 1rem; color: var(--text-muted);">/100</span>
+          </div>
+          <span class="badge badge-warning">Review Recommended</span>
+          <p style="font-size: var(--font-size-2xs); color: var(--text-muted); margin-top: var(--space-3);">
+            Evaluated against POSH Act 2013, Maternity Act 2017 &amp; DPDP Rules 2026.
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+          <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-xs); border-left: 3px solid #10B981;">
+            <div style="display: flex; justify-content: space-between; font-size: var(--font-size-xs); font-weight: 700; color: #10B981;">
+              <span>✓ Maternity &amp; Parental Leave (Strong)</span>
+              <span>26 Weeks</span>
+            </div>
+            <div style="font-size: var(--font-size-2xs); color: var(--text-secondary); margin-top: 2px;">
+              Fully matches statutory guidelines under Maternity Benefit (Amendment) Act 2017.
+            </div>
+          </div>
+
+          <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-xs); border-left: 3px solid #F59E0B;">
+            <div style="display: flex; justify-content: space-between; font-size: var(--font-size-xs); font-weight: 700; color: #F59E0B;">
+              <span>⚠ POSH Internal Complaints Committee (Needs Review)</span>
+              <span>External Member Expired</span>
+            </div>
+            <div style="font-size: var(--font-size-2xs); color: var(--text-secondary); margin-top: 2px;">
+              Nomination tenure of external NGO member expired. Reconstitution required under Section 4.
+            </div>
+          </div>
+
+          <div style="padding: var(--space-3); background: var(--bg-surface-secondary); border-radius: var(--radius-xs); border-left: 3px solid #EF4444;">
+            <div style="display: flex; justify-content: space-between; font-size: var(--font-size-xs); font-weight: 700; color: #EF4444;">
+              <span>❌ Employee Data Retention &amp; Incident Protocol (Conflict)</span>
+              <span>Missing 72h SLA</span>
+            </div>
+            <div style="font-size: var(--font-size-2xs); color: var(--text-secondary); margin-top: 2px;">
+              Does not specify 72-hour Data Protection Board of India notification mandated by DPDP Rules.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Company Risk Intelligence -->
+  <section class="landing-section" id="risk-engine">
+    <div class="section-tag">07 · RISK HEURISTICS</div>
+    <h2 class="section-title">Explainable Company Risk Engine</h2>
+    <p class="section-subtitle">
+      Zero arbitrary numbers. Every risk point is grounded in verified filing dates, license expiries, and regulatory thresholds.
+    </p>
+
+    <div class="dashboard-grid-stats">
+      <div class="metric-tile">
+        <div class="metric-label"><span>Overall Compliance Risk</span><span class="badge badge-success">Low</span></div>
+        <div class="metric-value" style="color: #34D399;">28 <span style="font-size: 0.9rem; color: var(--text-muted);">/ 100</span></div>
+        <div class="metric-sub"><span>8 Categories Evaluated</span></div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label"><span>Tax &amp; GST Risk</span><span class="badge badge-success">08/100</span></div>
+        <div class="metric-value">Low</div>
+        <div class="metric-sub"><span>Returns filed on time</span></div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label"><span>Statutory Licenses</span><span class="badge badge-danger">65/100</span></div>
+        <div class="metric-value" style="color: #F87171;">Action Due</div>
+        <div class="metric-sub"><span>Shop license expires in 43d</span></div>
+      </div>
+      <div class="metric-tile">
+        <div class="metric-label"><span>Data Privacy (DPDP)</span><span class="badge badge-warning">48/100</span></div>
+        <div class="metric-value" style="color: #FBBF24;">Review</div>
+        <div class="metric-sub"><span>Nov 1 enforcement window</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Security & Responsible AI -->
   <section class="landing-section" id="security">
-    <div class="section-tag">03 · TRUST &amp; COMPLIANCE</div>
+    <div class="section-tag">08 · TRUST &amp; COMPLIANCE</div>
     <h2 class="section-title">Enterprise Security &amp; Legal Responsibility</h2>
     <p class="section-subtitle">
       Corporate documents contain confidential trade secrets, salary records, and tax filings. We treat tenant data with zero compromise.
@@ -224,9 +450,9 @@
     </div>
   </section>
 
-  <!-- Section 4: FAQ -->
+  <!-- Section 9: FAQ -->
   <section class="landing-section" id="faq">
-    <div class="section-tag">04 · QUESTIONS &amp; ANSWERS</div>
+    <div class="section-tag">09 · QUESTIONS &amp; ANSWERS</div>
     <h2 class="section-title">Frequently Asked Questions</h2>
     <p class="section-subtitle">Common queries regarding HELIOS regulatory coverage and document handling.</p>
 
@@ -258,12 +484,13 @@
       <p style="max-width: 600px; line-height: 1.6;">
         Disclaimer: HELIOS is an informational compliance technology platform. It is not a law firm and does not provide legal representation, statutory audit certification, or formal legal advice.
       </p>
-      <div style="display: flex; gap: var(--space-6);">
+      <div style="display: flex; gap: var(--space-6); flex-wrap: wrap; justify-content: center;">
         <a href="pages/onboarding.html">Onboarding</a>
         <a href="pages/dashboard.html">Dashboard</a>
         <a href="pages/documents.html">Document Vault</a>
         <a href="pages/regulations.html">Regulatory Intel</a>
         <a href="pages/policy-chat.html">AI Assistant</a>
+        <a href="pages/audit-logs.html">Audit Logs</a>
       </div>
       <div>&copy; 2026 HELIOS Intelligence Technologies. All rights reserved.</div>
     </div>

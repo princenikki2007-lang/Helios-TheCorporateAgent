@@ -298,24 +298,29 @@
       formData.append('category', document.getElementById('upload-category').value);
       formData.append('title', document.getElementById('upload-title').value);
 
-      try {
-        const res = await fetch('/api/documents/upload', {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
-        if (data.success) {
-          toggleUploadModal();
-          stagedVaultFile = null;
-          loadDocuments();
-          HeliosUI.showToast("Document indexed and analyzed successfully!", "success");
+      toggleUploadModal();
+      HeliosUI.showProcessingModal("Ingesting & Analyzing Document...", async () => {
+        try {
+          const res = await fetch('/api/documents/upload', {
+            method: 'POST',
+            body: formData
+          });
+          const data = await res.json();
+          if (data.success) {
+            stagedVaultFile = null;
+            document.getElementById('vault-file-name').textContent = "Click to browse or drop file here";
+            loadDocuments();
+            HeliosUI.showToast("Document indexed and analyzed successfully!", "success");
+          } else {
+            HeliosUI.showToast(data.error || "Upload failed.", "danger");
+          }
+        } catch (err) {
+          HeliosUI.showToast("Error communicating with document vault.", "danger");
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Upload & Analyze";
         }
-      } catch (err) {
-        alert("Error uploading document.");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Upload & Analyze";
-      }
+      });
     }
 
     function openDocDrawer(docId) {
