@@ -1,15 +1,18 @@
 /**
  * HELIOS — Comprehensive End-to-End Acceptance Test Suite
- * Validates all 21 core SaaS API modules and acceptance criteria.
+ * Validates all 22 core SaaS API modules and acceptance criteria.
  */
 
 const http = require('http');
+const app = require('./api/app');
+
+let activePort = 3000;
 
 function request(method, path, body = null, isMultipart = false) {
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'localhost',
-      port: 3000,
+      hostname: '127.0.0.1',
+      port: activePort,
       path: path,
       method: method,
       headers: {
@@ -48,16 +51,18 @@ function request(method, path, body = null, isMultipart = false) {
 }
 
 async function runTests() {
-  console.log('================================================================');
-  console.log('☀️ RUNNING HELIOS ACCEPTANCE TEST SUITE (21 CHECKS)');
-  console.log('================================================================');
+  const server = app.listen(0, async () => {
+    activePort = server.address().port;
+    console.log('================================================================');
+    console.log('☀️ RUNNING HELIOS ACCEPTANCE TEST SUITE (22 CHECKS)');
+    console.log('================================================================');
 
-  let passed = 0;
-  let failed = 0;
+    let passed = 0;
+    let failed = 0;
 
-  async function check(name, fn) {
-    try {
-      await fn();
+    async function check(name, fn) {
+      try {
+        await fn();
       console.log(`  [PASS] ${name}`);
       passed++;
     } catch (e) {
@@ -139,6 +144,19 @@ async function runTests() {
     });
     if (res.status !== 200 || !res.data.success) throw new Error('HR Upload failed');
     hrDocId = res.data.document.id;
+  });
+
+  // 6b. RBAC Security: Block unauthorized upload for read-only roles
+  await check('RBAC Security: Block Viewer / Employee Document Upload', async () => {
+    const res = await request('POST', '/api/documents/upload', {
+      workspaceId: newWsId,
+      filename: "Unauthorized_File.pdf",
+      title: "Unauthorized Document",
+      category: "Corporate",
+      textSnippet: "Unauthorized attempt",
+      userRole: "viewer"
+    });
+    if (res.status !== 403) throw new Error(`Expected status 403 Forbidden for Viewer role, got ${res.status}`);
   });
 
   // 7. Document Vault listing
@@ -260,11 +278,15 @@ async function runTests() {
     if (res.status !== 200 || !res.data.results.length) throw new Error('Search failed for GST');
   });
 
-  console.log('================================================================');
-  console.log(`RESULTS: ${passed} PASSED, ${failed} FAILED`);
-  console.log('================================================================');
+    console.log('================================================================');
+    console.log(`RESULTS: ${passed} PASSED, ${failed} FAILED`);
+    console.log('================================================================');
 
-  if (failed > 0) process.exit(1);
+    server.close(() => {
+      if (failed > 0) process.exit(1);
+      else process.exit(0);
+    });
+  });
 }
 
 runTests();

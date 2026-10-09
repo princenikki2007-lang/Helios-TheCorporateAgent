@@ -13,8 +13,13 @@ const HeliosAPI = (function() {
    */
   async function request(endpoint, options = {}) {
     const url = `${BASE_URL}${endpoint}`;
+    const activeRole = (window.HeliosUI && typeof window.HeliosUI.getActiveRole === 'function') 
+      ? window.HeliosUI.getActiveRole() 
+      : (localStorage.getItem('helios_active_role') || 'Founder');
+
     const defaultHeaders = {
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      'x-user-role': activeRole
     };
 
     if (!(options.body instanceof FormData)) {

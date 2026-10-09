@@ -460,10 +460,21 @@ const HeliosUI = (function() {
       const menu = document.getElementById('role-dropdown-menu');
       if (menu) menu.style.display = 'none';
       showToast(`Role updated to ${roleId}`, 'success');
+      window.dispatchEvent(new CustomEvent('helios:role-changed', { detail: { role: roleId } }));
+      if (typeof window.updateUploadPermissions === 'function') {
+        try { window.updateUploadPermissions(); } catch (e) {}
+      }
     },
 
     getActiveRole() {
       return activeRole;
+    },
+
+    canUpload(role = null) {
+      const currentRole = role || activeRole || localStorage.getItem('helios_active_role') || 'Founder';
+      const r = currentRole.toString().toLowerCase().trim();
+      const readOnly = ['viewer', 'employee', 'visitor', 'guest', 'read-only', 'read_only'];
+      return !readOnly.includes(r);
     },
 
     openCommandPalette() {

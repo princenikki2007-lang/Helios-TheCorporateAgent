@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "test": "node test_acceptance.js",
     "build": "node -e \"console.log('Build verified successfully for HELIOS production SaaS'); process.exit(0);\""
   },
   "keywords": [

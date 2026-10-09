@@ -1030,6 +1030,16 @@ app.get('/api/documents/:id', (req, res) => {
 
 // Document Upload with Real Metadata Extraction
 app.post('/api/documents/upload', upload.single('file'), (req, res) => {
+  // RBAC Permission Check (Section 5: Only HR & Admins can upload)
+  const roleHeader = (req.headers['x-user-role'] || req.body.userRole || req.body.role || '').toLowerCase();
+  const restrictedRoles = ['viewer', 'employee', 'visitor', 'guest', 'read-only'];
+  if (roleHeader && restrictedRoles.includes(roleHeader)) {
+    return res.status(403).json({
+      success: false,
+      error: "Access Denied: Document upload is restricted to HR Managers and Company Administrators."
+    });
+  }
+
   const wsId = req.body.workspaceId || DB.activeWorkspaceId;
   const category = req.body.category || "Corporate";
   const customTitle = req.body.title;
@@ -1162,6 +1172,16 @@ app.post('/api/documents/upload', upload.single('file'), (req, res) => {
 
 // Delete document
 app.delete('/api/documents/:id', (req, res) => {
+  // RBAC Permission Check
+  const roleHeader = (req.headers['x-user-role'] || req.body.userRole || req.body.role || '').toLowerCase();
+  const restrictedRoles = ['viewer', 'employee', 'visitor', 'guest', 'read-only'];
+  if (roleHeader && restrictedRoles.includes(roleHeader)) {
+    return res.status(403).json({
+      success: false,
+      error: "Access Denied: Deleting documents is restricted to HR Managers and Company Administrators."
+    });
+  }
+
   const index = DB.documents.findIndex(d => d.id === req.params.id);
   if (index === -1) {
     return res.status(404).json({ success: false, error: "Document not found." });

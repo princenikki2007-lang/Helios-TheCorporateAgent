@@ -34,12 +34,12 @@
             </p>
           </div>
 
-          <div style="display: flex; gap: var(--space-2);">
-            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('camera-file-input').click()">
+          <div id="upload-actions-container" style="display: flex; gap: var(--space-2); align-items: center;">
+            <button class="btn btn-secondary btn-sm" onclick="triggerCameraUpload()">
               📷 Scan with camera
             </button>
             <input type="file" id="camera-file-input" accept="image/*" capture="environment" style="display: none;" onchange="handleFileSelect(event)" />
-            <button class="btn btn-primary btn-sm" onclick="document.getElementById('main-file-input').click()">
+            <button class="btn btn-primary btn-sm" onclick="triggerUpload()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
               Upload document
             </button>
@@ -47,9 +47,9 @@
           </div>
         </div>
 
-        <!-- LARGE FRIENDLY UPLOAD AREA -->
-        <div class="card" style="margin-bottom: var(--space-6); padding: var(--space-6);">
-          <div class="friendly-dropzone" id="drop-area" onclick="document.getElementById('main-file-input').click()">
+        <!-- UPLOAD DROP AREA CONTAINER -->
+        <div id="upload-drop-card" class="card" style="margin-bottom: var(--space-6); padding: var(--space-6);">
+          <div class="friendly-dropzone" id="drop-area" onclick="triggerUpload()">
             <div class="friendly-dropzone-icon">📄</div>
             <div class="friendly-dropzone-title">Drop your files here</div>
             <div class="friendly-dropzone-sub">or <span style="color: var(--color-brand); font-weight: 600; text-decoration: underline;">choose files</span> from your computer</div>
@@ -172,16 +172,116 @@
     </div>
   </div>
 
-  <script src="../js/ui.js"></script>
+  <script src="../js/ui.js?v=6"></script>
   <script>
     let allDocuments = [];
     let activeCategory = 'All';
     let selectedDoc = null;
 
+    function triggerUpload() {
+      if (window.HeliosUI && typeof window.HeliosUI.canUpload === 'function' && !window.HeliosUI.canUpload()) {
+        HeliosUI.showToast("Permission Denied: Uploads are restricted to Administrators and HR Managers.", "warning", 4000);
+        return;
+      }
+      const role = (localStorage.getItem('helios_active_role') || 'Founder').toString().toLowerCase().trim();
+      const isReadOnly = ['viewer', 'employee', 'visitor', 'guest', 'read-only', 'read_only'].includes(role);
+      if (isReadOnly) {
+        if (window.HeliosUI) HeliosUI.showToast("Permission Denied: Uploads are restricted to Administrators and HR Managers.", "warning", 4000);
+        return;
+      }
+      const input = document.getElementById('main-file-input');
+      if (input) input.click();
+    }
+
+    function triggerCameraUpload() {
+      if (window.HeliosUI && typeof window.HeliosUI.canUpload === 'function' && !window.HeliosUI.canUpload()) {
+        HeliosUI.showToast("Permission Denied: Camera scan is restricted to Administrators and HR Managers.", "warning", 4000);
+        return;
+      }
+      const role = (localStorage.getItem('helios_active_role') || 'Founder').toString().toLowerCase().trim();
+      const isReadOnly = ['viewer', 'employee', 'visitor', 'guest', 'read-only', 'read_only'].includes(role);
+      if (isReadOnly) {
+        if (window.HeliosUI) HeliosUI.showToast("Permission Denied: Camera scan is restricted to Administrators and HR Managers.", "warning", 4000);
+        return;
+      }
+      const input = document.getElementById('camera-file-input');
+      if (input) input.click();
+    }
+
+    function updateUploadPermissions() {
+      const canUpload = window.HeliosUI ? window.HeliosUI.canUpload() : (!['viewer', 'employee', 'visitor', 'guest', 'read-only', 'read_only'].includes((localStorage.getItem('helios_active_role') || 'Founder').toLowerCase().trim()));
+      const actionsContainer = document.getElementById('upload-actions-container');
+      const dropCard = document.getElementById('upload-drop-card');
+      const currentRole = window.HeliosUI ? window.HeliosUI.getActiveRole() : (localStorage.getItem('helios_active_role') || 'Founder');
+
+      if (actionsContainer) {
+        if (canUpload) {
+          actionsContainer.innerHTML = `
+            <button class="btn btn-secondary btn-sm" onclick="triggerCameraUpload()">
+              📷 Scan with camera
+            </button>
+            <input type="file" id="camera-file-input" accept="image/*" capture="environment" style="display: none;" onchange="handleFileSelect(event)" />
+            <button class="btn btn-primary btn-sm" onclick="triggerUpload()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload document
+            </button>
+            <input type="file" id="main-file-input" style="display: none;" onchange="handleFileSelect(event)" accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,.txt" />
+          `;
+        } else {
+          actionsContainer.innerHTML = `
+            <span class="badge badge-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 4px;" title="Document uploads are restricted to HR & Admins">
+              🔒 Read-Only (${currentRole})
+            </span>
+          `;
+        }
+      }
+
+      if (dropCard) {
+        if (canUpload) {
+          dropCard.innerHTML = `
+            <div class="friendly-dropzone" id="drop-area" onclick="triggerUpload()">
+              <div class="friendly-dropzone-icon">📄</div>
+              <div class="friendly-dropzone-title">Drop your files here</div>
+              <div class="friendly-dropzone-sub">or <span style="color: var(--color-brand); font-weight: 600; text-decoration: underline;">choose files</span> from your computer</div>
+              <div class="format-badges">
+                <span class="format-pill">PDF</span>
+                <span class="format-pill">DOCX</span>
+                <span class="format-pill">JPG</span>
+                <span class="format-pill">PNG</span>
+              </div>
+              <div style="margin-top: var(--space-3); font-size: 0.75rem; color: var(--text-muted);">
+                Supports registrations, certificates, contracts, and HR policies (Up to 25MB)
+              </div>
+            </div>
+          `;
+          setupDragDrop();
+        } else {
+          dropCard.innerHTML = `
+            <div style="padding: var(--space-6); text-align: center; background: var(--bg-surface-secondary); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+              <div style="font-size: 1.75rem; margin-bottom: var(--space-2);">🔒</div>
+              <div style="font-weight: 600; font-size: var(--font-size-sm); color: var(--text-primary); margin-bottom: var(--space-1);">
+                Document Uploads Restricted
+              </div>
+              <div style="font-size: var(--font-size-xs); color: var(--text-muted); max-width: 480px; margin: 0 auto; line-height: 1.5;">
+                You are viewing the repository as <strong>${currentRole}</strong> (Read-Only). Document uploads and modifications are restricted to Company Administrators and HR Managers.
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    window.updateUploadPermissions = updateUploadPermissions;
+
     document.addEventListener('DOMContentLoaded', () => {
       HeliosUI.init();
+      updateUploadPermissions();
       loadDocuments();
-      setupDragDrop();
+
+      window.addEventListener('helios:role-changed', () => {
+        updateUploadPermissions();
+        renderDocumentList();
+      });
     });
 
     async function loadDocuments() {
@@ -295,22 +395,44 @@
     }
 
     function handleFileSelect(e) {
+      if (window.HeliosUI && typeof window.HeliosUI.canUpload === 'function' && !window.HeliosUI.canUpload()) {
+        if (e && e.target) e.target.value = '';
+        HeliosUI.showToast("Permission Denied: Uploads are restricted to Administrators and HR Managers.", "warning", 4000);
+        return;
+      }
+      const role = (localStorage.getItem('helios_active_role') || 'Founder').toString().toLowerCase().trim();
+      const isReadOnly = ['viewer', 'employee', 'visitor', 'guest', 'read-only', 'read_only'].includes(role);
+      if (isReadOnly) {
+        if (e && e.target) e.target.value = '';
+        if (window.HeliosUI) HeliosUI.showToast("Permission Denied: Uploads are restricted to Administrators and HR Managers.", "warning", 4000);
+        return;
+      }
       if (e.target.files && e.target.files[0]) {
         uploadFile(e.target.files[0]);
       }
     }
 
     async function uploadFile(file) {
+      if (window.HeliosUI && !window.HeliosUI.canUpload()) {
+        HeliosUI.showToast("Permission Denied: Document upload is restricted to HR Managers and Administrators.", "warning", 4000);
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', file);
       formData.append('category', 'Corporate');
       formData.append('title', file.name.replace(/\.[^/.]+$/, ""));
+
+      const activeRole = window.HeliosUI ? window.HeliosUI.getActiveRole() : 'Founder';
 
       // Friendly non-jargon stepped upload progress
       HeliosUI.showProcessingModal("I'm checking this document...", async () => {
         try {
           const res = await fetch('/api/documents/upload', {
             method: 'POST',
+            headers: {
+              'x-user-role': activeRole
+            },
             body: formData
           });
           const data = await res.json();

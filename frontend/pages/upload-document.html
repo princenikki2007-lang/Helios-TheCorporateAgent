@@ -265,6 +265,36 @@
     const styleEl = document.createElement('style');
     styleEl.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
     document.head.appendChild(styleEl);
+
+    // RBAC access check on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      function checkUploadAccess() {
+        if (window.HeliosUI && typeof window.HeliosUI.canUpload === 'function' && !window.HeliosUI.canUpload()) {
+          const mainContent = document.querySelector('.app-content');
+          const role = window.HeliosUI.getActiveRole();
+          if (mainContent) {
+            mainContent.innerHTML = `
+              <div class="card" style="max-width: 580px; margin: 40px auto; text-align: center; padding: var(--space-8);">
+                <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🔒</div>
+                <h2 style="margin-bottom: var(--space-2);">Document Upload Restricted</h2>
+                <p style="color: var(--text-muted); font-size: var(--font-size-sm); margin-bottom: var(--space-6); line-height: 1.6;">
+                  You are currently accessing HELIOS as <strong>${role}</strong> (Read-Only). Document uploads and management are strictly restricted to Company Administrators and HR Managers.
+                </p>
+                <div style="display: flex; gap: var(--space-3); justify-content: center;">
+                  <a href="documents.html" class="btn btn-primary">Go to Documents Vault</a>
+                  <a href="dashboard.html" class="btn btn-secondary">Return to Dashboard</a>
+                </div>
+              </div>
+            `;
+          }
+        }
+      }
+      setTimeout(checkUploadAccess, 50);
+
+      window.addEventListener('helios:role-changed', () => {
+        window.location.reload();
+      });
+    });
   </script>
 </body>
 </html>
