@@ -1,0 +1,126 @@
+[
+  {
+    "id": "doc_1793789431326",
+    "title": "demo terms of use",
+    "filename": "demo_terms_of_use.txt",
+    "fileSize": "2.4 KB",
+    "uploadDate": "2026-11-04",
+    "fileType": "txt",
+    "pageCount": 1,
+    "wordCount": 361,
+    "category": "Uploaded Document",
+    "extractedText": "SAMPLE TERMS OF USE DEMO DOCUMENT — NOT A LEGAL AGREEMENT\n\nEffective Date: [Insert Date] Website / Service: [Demo Product Name]\nOperator: [Demo Company Name]\n\n1.  PURPOSE These Terms of Use are provided solely as sample content for\n    demonstration and testing. They are not intended to create a binding\n    agreement.\n\n2.  ACCEPTANCE In a real service, users may be required to review and\n    accept applicable terms before using the service. This demo text\n    does not establish an actual acceptance process.\n\n3.  PERMITTED USE Users of a real service may be required to use it\n    lawfully, respect the rights of others, and avoid disrupting or\n    attempting to gain unauthorized access to the service.\n\n4.  ACCOUNTS AND SECURITY Where accounts are provided, users may be\n    responsible for keeping their login credentials confidential and for\n    activity carried out through their accounts.\n\n5.  INTELLECTUAL PROPERTY Unless otherwise stated, a real service’s\n    software, branding, design, and original content may be protected by\n    intellectual-property laws. This sample grants no license or\n    ownership rights.\n\n6.  PRIVACY A real service should explain what personal information it\n    collects, how it uses and shares that information, how long it\n    retains it, and what choices or rights users may have. Refer to the\n    service’s actual privacy notice for those details.\n\n7.  AVAILABILITY AND CHANGES A real service may be updated, suspended,\n    or discontinued. Any applicable notice and user rights should be\n    described in the final agreement.\n\n8.  DISCLAIMERS This sample is provided “as is” for demonstration\n    purposes. It is not a statement about any actual product, company,\n    or service.\n\n9.  LIMITATION OF LIABILITY Any limitation of liability in a real\n    agreement must be drafted to comply with applicable law and should\n    be reviewed by qualified legal counsel.\n\n10. GOVERNING LAW [Insert the applicable jurisdiction after obtaining\n    appropriate legal advice.]\n\n11. CONTACT Demo Company Name: [Insert Company Name] Contact Email:\n    [Insert Contact Email] Address: [Insert Business Address]\n\nIMPORTANT NOTICE This file is fictional sample text for UI demos,\nsoftware testing, or layout previews. It is not legal advice, does not\ncreate a contract, and should not be used as a real Terms of Use\ndocument without review and customization by a qualified lawyer.",
+    "clauseAnalysis": {
+      "summary": "Identified 4 key operational and legal clauses covering obligations, terms, and risk boundaries.",
+      "clauses": [
+        {
+          "category": "Contract Term & Renewal",
+          "title": "Contract Term & Automatic Renewal",
+          "reference": "Term & Renewal",
+          "originalClause": "TERMS OF USE DEMO DOCUMENT — NOT A LEGAL AGREEMENT",
+          "explanation": "Stipulates binding terms regarding contract term & automatic renewal between the parties.",
+          "potentialConcern": "Check for automatic renewal provisions and advance opt-out notice windows.",
+          "suggestedAction": "Set automated reminder 60-90 days prior to contract expiration."
+        },
+        {
+          "category": "Penalties & Liability",
+          "title": "Limitation of Liability & Indemnity",
+          "reference": "Liability Section",
+          "originalClause": "LIMITATION OF LIABILITY Any limitation of liability in a real agreement must be drafted to comply with applicable law and should be reviewed by qualified legal counsel.",
+          "explanation": "Stipulates binding terms regarding limitation of liability & indemnity between the parties.",
+          "potentialConcern": "Confirm liability is capped at reasonable contract fees with mutual waivers.",
+          "suggestedAction": "Negotiate aggregate monetary cap to prevent catastrophic uncapped exposure."
+        },
+        {
+          "category": "Confidentiality & IP",
+          "title": "Confidentiality & Intellectual Property",
+          "reference": "Confidentiality Clause",
+          "originalClause": "confidential and for activity carried out through their accounts.",
+          "explanation": "Stipulates binding terms regarding confidentiality & intellectual property between the parties.",
+          "potentialConcern": "Ensure confidentiality duration aligns with trade secret commercial lifespan.",
+          "suggestedAction": "Implement data compartmentalization and strict role-based access controls."
+        },
+        {
+          "category": "Obligations & Deadlines",
+          "title": "Governing Law & Dispute Resolution",
+          "reference": "Governing Law",
+          "originalClause": "GOVERNING LAW [Insert the applicable jurisdiction after obtaining appropriate legal advice.]",
+          "explanation": "Stipulates binding terms regarding governing law & dispute resolution between the parties.",
+          "potentialConcern": "Examine forum convenience, dispute costs, and whether arbitration is mandatory.",
+          "suggestedAction": "Verify jurisdiction aligns with company headquarters or mutual neutral seat."
+        }
+      ],
+      "analyzedAt": "2026-11-04T12:37:18.456Z",
+      "truncated": false,
+      "truncationMessage": null
+    },
+    "checklist": {
+      "overallAssessment": "Document review checklist generated across 6 essential risk and compliance dimensions.",
+      "items": [
+        {
+          "id": "chk_pay_1",
+          "category": "Payment Terms",
+          "title": "Payment Terms, Invoicing & Taxes",
+          "status": "Needs Review",
+          "details": "Specific billing timelines and payment mechanisms are ambiguous or not explicitly stated.",
+          "reference": "Payment & Financials",
+          "excerpt": "Refer to document payment clauses.",
+          "reviewed": false
+        },
+        {
+          "id": "chk_term_2",
+          "category": "Contract Duration & Renewal",
+          "title": "Contract Term, Expiration & Auto-Renewal",
+          "status": "Found",
+          "details": "Active contract term and expiration/renewal conditions are articulated.",
+          "reference": "Term & Duration",
+          "excerpt": "TERMS OF USE DEMO DOCUMENT — NOT A LEGAL AGREEMENT",
+          "reviewed": false
+        },
+        {
+          "id": "chk_term_3",
+          "category": "Termination Conditions",
+          "title": "Termination for Convenience & Cause",
+          "status": "Needs Review",
+          "details": "Unilateral termination rights or cure notice periods require further clarification.",
+          "reference": "Termination Provisions",
+          "excerpt": "Refer to termination clause.",
+          "reviewed": false
+        },
+        {
+          "id": "chk_liab_4",
+          "category": "Penalties & Liability",
+          "title": "Limitation of Liability & Indemnification",
+          "status": "Found",
+          "details": "Liability caps and mutual indemnification boundaries are stipulated.",
+          "reference": "Liability & Indemnity",
+          "excerpt": "LIMITATION OF LIABILITY Any limitation of liability in a real agreement must be drafted to comply with applicable law and should be reviewed by qualified legal counsel.",
+          "reviewed": false
+        },
+        {
+          "id": "chk_oblg_5",
+          "category": "Obligations & Deadlines",
+          "title": "Core Obligations & Time-Bound Deliverables",
+          "status": "Found",
+          "details": "Operational deliverables, duties of care, and compliance milestones are defined.",
+          "reference": "Obligations & Covenants",
+          "excerpt": "must be drafted to comply with applicable law and should be reviewed by qualified legal counsel.",
+          "reviewed": false
+        },
+        {
+          "id": "chk_gov_6",
+          "category": "Missing / Ambiguous Information",
+          "title": "Governing Law & Legal Jurisdiction",
+          "status": "Found",
+          "details": "Governing statutory jurisdiction and legal dispute forum are explicitly identified.",
+          "reference": "Governing Law",
+          "excerpt": "GOVERNING LAW [Insert the applicable jurisdiction after obtaining appropriate legal advice.]",
+          "reviewed": false
+        }
+      ],
+      "generatedAt": "2026-11-04T12:37:18.479Z",
+      "truncated": false,
+      "truncationMessage": null
+    }
+  }
+]

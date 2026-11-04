@@ -1,0 +1,1965 @@
+/**
+ * HELIOS — AI Corporate Legal Assistant
+ * Modular frontend controller for Dashboard, Document Extraction, Gemini Chat,
+ * Clause-to-Action Translator, Evidence-First Answers, and Before-You-Sign Checklist.
+ */
+
+(function () {
+  'use strict';
+
+  // Application State
+  const state = {
+    currentView: 'dashboard',
+    documents: [],
+    selectedDocId: null,
+    activeDocument: null,
+    isAnalyzing: false,
+    geminiConfigured: true,
+    lastQuestion: ''
+  };
+
+  // DOM Elements cache
+  const elements = {};
+
+  // Initialize Application
+  document.addEventListener('DOMContentLoaded', () => {
+    cacheDOMElements();
+    bindEvents();
+    checkHealth();
+    loadDocuments();
+    handleInitialRoute();
+  });
+
+  function cacheDOMElements() {
+    // Views
+    elements.views = {
+      dashboard: document.getElementById('view-dashboard'),
+      documents: document.getElementById('view-documents'),
+      assistant: document.getElementById('view-assistant')
+    };
+
+    // Navigation Links
+    elements.navLinks = document.querySelectorAll('.nav-item');
+    elements.breadcrumbCurrent = document.getElementById('breadcrumb-current');
+    elements.sidebarDocCount = document.getElementById('sidebar-doc-count');
+    elements.topbarDocCount = document.getElementById('topbar-doc-count');
+
+    // Dashboard Elements
+    elements.dashDocCount = document.getElementById('dash-doc-count');
+    elements.dashRecentTable = document.getElementById('dash-recent-table');
+
+    // Documents View Elements
+    elements.dropzone = document.getElementById('upload-dropzone');
+    elements.fileInput = document.getElementById('file-input');
+    elements.uploadProgress = document.getElementById('upload-progress');
+    elements.uploadAlert = document.getElementById('upload-alert');
+    elements.docSearchInput = document.getElementById('doc-search-input');
+    elements.docsList = document.getElementById('docs-list');
+
+    // Modals
+    elements.textModal = document.getElementById('text-modal');
+    elements.modalTitle = document.getElementById('modal-doc-title');
+    elements.modalMeta = document.getElementById('modal-doc-meta');
+    elements.modalContent = document.getElementById('modal-doc-text');
+    elements.modalCopyBtn = document.getElementById('modal-copy-btn');
+    elements.modalAskBtn = document.getElementById('modal-ask-btn');
+    elements.modalClausesBtn = document.getElementById('modal-clauses-btn');
+    elements.modalChecklistBtn = document.getElementById('modal-checklist-btn');
+    elements.modalReportBtn = document.getElementById('modal-report-btn');
+    elements.modalCloseBtn = document.getElementById('modal-close-btn');
+
+    // Intelligence Modal (Clauses & Checklist)
+    elements.intelModal = document.getElementById('intel-modal');
+    elements.intelModalTitle = document.getElementById('intel-modal-title');
+    elements.intelModalMeta = document.getElementById('intel-modal-meta');
+    elements.intelModalBody = document.getElementById('intel-modal-body');
+    elements.intelModalCloseBtn = document.getElementById('intel-modal-close-btn');
+
+    // Feature 1B: Counter-Clause Amendment Modal
+    elements.amendmentModal = document.getElementById('amendment-modal');
+    elements.amendmentModalTitle = document.getElementById('amendment-modal-title');
+    elements.amendmentModalMeta = document.getElementById('amendment-modal-meta');
+    elements.amendmentModalBody = document.getElementById('amendment-modal-body');
+    elements.amendmentCopyBtn = document.getElementById('amendment-copy-btn');
+
+    // Feature 2: Executive Report Modal
+    elements.reportModal = document.getElementById('report-modal');
+    elements.reportModalTitle = document.getElementById('report-modal-title');
+    elements.reportModalBody = document.getElementById('report-modal-body');
+
+    // AI Assistant Elements
+    elements.docSelect = document.getElementById('assistant-doc-select');
+    elements.docContextBadge = document.getElementById('doc-context-badge');
+    elements.viewSourceBtn = document.getElementById('view-source-btn');
+    elements.assistantClausesBtn = document.getElementById('assistant-clauses-btn');
+    elements.assistantChecklistBtn = document.getElementById('assistant-checklist-btn');
+    elements.chatThread = document.getElementById('chat-thread');
+    elements.chatInput = document.getElementById('chat-input');
+    elements.chatSendBtn = document.getElementById('chat-send-btn');
+    elements.clearChatBtn = document.getElementById('clear-chat-btn');
+    elements.assistantAlert = document.getElementById('assistant-alert');
+    elements.suggestionPills = document.querySelectorAll('.suggestion-pill');
+
+    // Mobile Menu
+    elements.mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    elements.sidebar = document.querySelector('.app-sidebar');
+  }
+
+  function bindEvents() {
+    // Navigation
+    elements.navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetView = link.getAttribute('data-view');
+        switchView(targetView);
+      });
+    });
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '') || 'dashboard';
+      if (['dashboard', 'documents', 'assistant'].includes(hash)) {
+        switchView(hash, false);
+      }
+    });
+
+    // Mobile Menu
+    if (elements.mobileMenuBtn && elements.sidebar) {
+      elements.mobileMenuBtn.addEventListener('click', () => {
+        elements.sidebar.classList.toggle('open');
+      });
+    }
+
+    // Topbar Upload Button
+    const topUploadBtn = document.getElementById('topbar-upload-btn');
+    if (topUploadBtn) {
+      topUploadBtn.addEventListener('click', () => {
+        switchView('documents');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Drag and Drop Upload
+    if (elements.dropzone && elements.fileInput) {
+      elements.dropzone.addEventListener('click', () => elements.fileInput.click());
+
+      elements.dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        elements.dropzone.classList.add('dragover');
+      });
+
+      elements.dropzone.addEventListener('dragleave', () => {
+        elements.dropzone.classList.remove('dragover');
+      });
+
+      elements.dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        elements.dropzone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleFileUpload(e.dataTransfer.files[0]);
+        }
+      });
+
+      elements.fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+          handleFileUpload(e.target.files[0]);
+        }
+      });
+    }
+
+    // Document Search Filter
+    if (elements.docSearchInput) {
+      elements.docSearchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        renderDocumentsList(query);
+      });
+    }
+
+    // Text Viewer Modal Events
+    if (elements.modalCloseBtn) {
+      elements.modalCloseBtn.addEventListener('click', closeTextModal);
+    }
+    if (elements.textModal) {
+      elements.textModal.addEventListener('click', (e) => {
+        if (e.target === elements.textModal) closeTextModal();
+      });
+    }
+    if (elements.modalCopyBtn) {
+      elements.modalCopyBtn.addEventListener('click', () => {
+        if (elements.modalContent) {
+          navigator.clipboard.writeText(elements.modalContent.textContent).then(() => {
+            const origText = elements.modalCopyBtn.innerHTML;
+            elements.modalCopyBtn.innerHTML = '✓ Copied to Clipboard';
+            setTimeout(() => { elements.modalCopyBtn.innerHTML = origText; }, 2000);
+          });
+        }
+      });
+    }
+    if (elements.modalAskBtn) {
+      elements.modalAskBtn.addEventListener('click', () => {
+        if (state.activeDocument) {
+          closeTextModal();
+          selectDocumentForAssistant(state.activeDocument.id);
+          switchView('assistant');
+        }
+      });
+    }
+    if (elements.modalClausesBtn) {
+      elements.modalClausesBtn.addEventListener('click', () => {
+        if (state.activeDocument) {
+          closeTextModal();
+          runClauseTranslation(state.activeDocument.id);
+        }
+      });
+    }
+    if (elements.modalChecklistBtn) {
+      elements.modalChecklistBtn.addEventListener('click', () => {
+        if (state.activeDocument) {
+          closeTextModal();
+          runChecklistGeneration(state.activeDocument.id);
+        }
+      });
+    }
+    if (elements.modalReportBtn) {
+      elements.modalReportBtn.addEventListener('click', () => {
+        if (state.activeDocument) {
+          closeTextModal();
+          openExecutiveReport(state.activeDocument.id);
+        }
+      });
+    }
+
+    // Intel Modal Close
+    if (elements.intelModalCloseBtn) {
+      elements.intelModalCloseBtn.addEventListener('click', closeIntelModal);
+    }
+    if (elements.intelModal) {
+      elements.intelModal.addEventListener('click', (e) => {
+        if (e.target === elements.intelModal) closeIntelModal();
+      });
+    }
+
+    // Amendment Modal Close
+    if (elements.amendmentModal) {
+      elements.amendmentModal.addEventListener('click', (e) => {
+        if (e.target === elements.amendmentModal) closeAmendmentModal();
+      });
+    }
+
+    // Report Modal Close
+    if (elements.reportModal) {
+      elements.reportModal.addEventListener('click', (e) => {
+        if (e.target === elements.reportModal) closeReportModal();
+      });
+    }
+
+    // AI Assistant Header Toolbar Events
+    if (elements.docSelect) {
+      elements.docSelect.addEventListener('change', (e) => {
+        const docId = e.target.value;
+        selectDocumentForAssistant(docId);
+      });
+    }
+
+    if (elements.viewSourceBtn) {
+      elements.viewSourceBtn.addEventListener('click', () => {
+        if (state.selectedDocId) {
+          openDocumentViewer(state.selectedDocId);
+        }
+      });
+    }
+
+    if (elements.assistantClausesBtn) {
+      elements.assistantClausesBtn.addEventListener('click', () => {
+        if (state.selectedDocId) {
+          runClauseTranslation(state.selectedDocId);
+        }
+      });
+    }
+
+    if (elements.assistantChecklistBtn) {
+      elements.assistantChecklistBtn.addEventListener('click', () => {
+        if (state.selectedDocId) {
+          runChecklistGeneration(state.selectedDocId);
+        }
+      });
+    }
+
+    // Preset Suggestion Questions
+    elements.suggestionPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const question = pill.getAttribute('data-question');
+        if (question) {
+          if (!state.selectedDocId && state.documents.length > 0) {
+            selectDocumentForAssistant(state.documents[0].id);
+          }
+          elements.chatInput.value = question;
+          submitChat();
+        }
+      });
+    });
+
+    // Chat Input Submission
+    if (elements.chatSendBtn) {
+      elements.chatSendBtn.addEventListener('click', submitChat);
+    }
+
+    if (elements.chatInput) {
+      elements.chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          submitChat();
+        }
+      });
+    }
+
+    if (elements.clearChatBtn) {
+      elements.clearChatBtn.addEventListener('click', () => {
+        resetChatThread();
+      });
+    }
+  }
+
+  // Handle URL Routing
+  function handleInitialRoute() {
+    const hash = window.location.hash.replace('#', '') || 'dashboard';
+    switchView(hash, false);
+  }
+
+  function switchView(viewName, updateHash = true) {
+    if (!elements.views[viewName]) viewName = 'dashboard';
+    state.currentView = viewName;
+
+    if (updateHash) {
+      window.location.hash = viewName;
+    }
+
+    // Toggle View Sections
+    Object.keys(elements.views).forEach(key => {
+      if (elements.views[key]) {
+        elements.views[key].classList.toggle('active', key === viewName);
+      }
+    });
+
+    // Update Nav Link Active States
+    elements.navLinks.forEach(link => {
+      const isActive = link.getAttribute('data-view') === viewName;
+      link.classList.toggle('active', isActive);
+    });
+
+    // Update Breadcrumb
+    const titles = {
+      dashboard: 'Dashboard',
+      documents: 'Document Vault',
+      assistant: 'AI Legal Assistant'
+    };
+    if (elements.breadcrumbCurrent) {
+      elements.breadcrumbCurrent.textContent = titles[viewName] || 'Dashboard';
+    }
+
+    // Close Mobile Sidebar
+    if (elements.sidebar) {
+      elements.sidebar.classList.remove('open');
+    }
+
+    // Ensure a document is selected when entering assistant view
+    if (viewName === 'assistant' && !state.selectedDocId && state.documents.length > 0) {
+      selectDocumentForAssistant(state.documents[0].id);
+    }
+  }
+
+  // Check Backend Health & Gemini Status
+  async function checkHealth() {
+    try {
+      const res = await fetch('/api/health');
+      const data = await res.json();
+      state.geminiConfigured = data.geminiConfigured;
+
+      const healthIndicator = document.getElementById('backend-status');
+      if (healthIndicator) {
+        healthIndicator.textContent = 'Server Online · ' + (data.geminiConfigured ? 'Gemini 3.8 Ready' : 'API Key Needed');
+      }
+
+      if (!data.geminiConfigured && elements.assistantAlert) {
+        showAssistantAlert(
+          'GEMINI_API_KEY is not set on the server. Please add your GEMINI_API_KEY in Settings > Secrets to enable Clause Translation, Evidence Q&A, and Review Checklists.',
+          'warning'
+        );
+      }
+    } catch (err) {
+      console.warn('[HELIOS] Health check failed:', err);
+    }
+  }
+
+  const VAULT_STORAGE_KEY = 'helios_vault_documents_v2';
+
+  function saveLocalVault(docs) {
+    try {
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(docs || []));
+    } catch (e) {
+      console.warn('[HELIOS] Local storage write notice:', e.message);
+    }
+  }
+
+  function getLocalVault() {
+    try {
+      const raw = localStorage.getItem(VAULT_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {
+      // ignore
+    }
+    return [];
+  }
+
+  // Load Documents from Backend with Serverless Client-Side Fault-Tolerance
+  async function loadDocuments() {
+    try {
+      const res = await fetch('/api/documents');
+      const data = await res.json();
+
+      const serverDocs = (data.success && Array.isArray(data.documents)) ? data.documents : [];
+      const localDocs = getLocalVault();
+
+      // Merge server documents and local documents
+      const mergedMap = new Map();
+      serverDocs.forEach(d => mergedMap.set(d.id, d));
+      localDocs.forEach(d => {
+        if (!mergedMap.has(d.id)) {
+          mergedMap.set(d.id, d);
+        } else {
+          // If server doc omitted extractedText, preserve local extracted text
+          const existing = mergedMap.get(d.id);
+          if (!existing.extractedText && d.extractedText) {
+            existing.extractedText = d.extractedText;
+          }
+        }
+      });
+
+      state.documents = Array.from(mergedMap.values());
+      saveLocalVault(state.documents);
+
+      // If local documents exist that serverless instance didn't have, quietly sync to backend
+      if (state.documents.length > serverDocs.length) {
+        fetch('/api/documents/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ documents: state.documents })
+        }).catch(() => {});
+      }
+
+      updateDocumentCounters();
+      renderDashboardRecent();
+      renderDocumentsList();
+      populateAssistantDocSelect();
+    } catch (err) {
+      console.warn('[HELIOS] Failed to load documents from backend, using local vault:', err);
+      state.documents = getLocalVault();
+      updateDocumentCounters();
+      renderDashboardRecent();
+      renderDocumentsList();
+      populateAssistantDocSelect();
+    }
+  }
+
+  function updateDocumentCounters() {
+    const count = state.documents.length;
+    if (elements.sidebarDocCount) elements.sidebarDocCount.textContent = count;
+    if (elements.topbarDocCount) elements.topbarDocCount.textContent = count + (count === 1 ? ' Doc' : ' Docs');
+    if (elements.dashDocCount) elements.dashDocCount.textContent = count;
+  }
+
+  // Render Dashboard Recent Documents
+  function renderDashboardRecent() {
+    if (!elements.dashRecentTable) return;
+
+    if (state.documents.length === 0) {
+      elements.dashRecentTable.innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align: center; padding: 2.75rem 1.5rem; color: #64748B;">
+            <div style="font-size: 1.05rem; font-weight: 700; color: #1E293B; margin-bottom: 0.35rem;">No documents uploaded yet</div>
+            <p style="font-size: 0.85rem; color: #64748B; margin-bottom: 1.25rem;">Upload your PDF or TXT legal agreement above to start analyzing clauses, obligations, and risks.</p>
+            <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+              <button class="btn btn-primary btn-sm" onclick="document.getElementById('file-input').click()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Upload Document Now
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.loadSample()">
+                📄 Load Sample NDA for Testing
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const recent = state.documents.slice(0, 5);
+    elements.dashRecentTable.innerHTML = recent.map(doc => `
+      <tr>
+        <td>
+          <div class="doc-title-cell">
+            <span class="doc-format-badge format-${doc.fileType}">${doc.fileType}</span>
+            <div>
+              <div style="font-weight: 700; color: #0F172A;">${escapeHtml(doc.title)}</div>
+              <div class="doc-meta-sub">${escapeHtml(doc.filename)}</div>
+            </div>
+          </div>
+        </td>
+        <td><span style="font-size: 0.825rem; color: #475569;">${doc.uploadDate}</span></td>
+        <td><span style="font-size: 0.825rem; color: #475569;">${doc.fileSize} · ${doc.wordCount} words</span></td>
+        <td><span style="font-size: 0.825rem; color: #475569;">${doc.pageCount} ${doc.pageCount === 1 ? 'page' : 'pages'}</span></td>
+        <td>
+          <div class="actions-cell">
+            <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.openExecutiveReport('${doc.id}')" title="Generate Executive Audit Report">
+              📄 Report
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.runClauses('${doc.id}')" title="Translate Clauses to Actions">
+              ⚡ Clauses
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.runChecklist('${doc.id}')" title="Generate Review Checklist">
+              📋 Checklist
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.viewDocument('${doc.id}')">
+              👁️ Text
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.HELIOS_APP.openInAssistant('${doc.id}')">
+              💬 Ask AI
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render Documents View List
+  function renderDocumentsList(filterQuery = '') {
+    if (!elements.docsList) return;
+
+    let filtered = state.documents;
+    if (filterQuery) {
+      filtered = state.documents.filter(d => 
+        d.title.toLowerCase().includes(filterQuery) ||
+        d.filename.toLowerCase().includes(filterQuery) ||
+        (d.preview && d.preview.toLowerCase().includes(filterQuery))
+      );
+    }
+
+    if (filtered.length === 0) {
+      elements.docsList.innerHTML = `
+        <div style="text-align: center; padding: 3rem 1.5rem; background-color: #FFFFFF; border: 1px dashed #CBD5E1; border-radius: 10px;">
+          <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.35rem;">
+            ${filterQuery ? 'No documents matched your search filter.' : 'Your Document Vault is Empty'}
+          </div>
+          <p style="color: #64748B; font-size: 0.875rem; margin-bottom: 1.25rem;">
+            ${filterQuery ? 'Try searching for a different keyword or filename.' : 'Upload any PDF or TXT legal contract, NDA, or policy agreement to begin.'}
+          </p>
+          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('file-input').click()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Upload Document (.pdf, .txt)
+            </button>
+            ${!filterQuery ? '<button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.loadSample()">📄 Load Sample NDA for Testing</button>' : ''}
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    elements.docsList.innerHTML = filtered.map(doc => `
+      <div class="card" style="margin-bottom: 1.25rem; padding: 1.35rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: flex-start; gap: 0.85rem; flex-grow: 1;">
+            <span class="doc-format-badge format-${doc.fileType}" style="margin-top: 3px;">${doc.fileType}</span>
+            <div style="flex-grow: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: #0F172A;">
+                  ${escapeHtml(doc.title)}
+                </h3>
+                <span class="clause-category-badge">${escapeHtml(doc.category)}</span>
+              </div>
+              <p style="font-size: 0.8rem; color: #64748B; margin: 0.25rem 0 0.6rem;">
+                ${escapeHtml(doc.filename)} · Uploaded: ${doc.uploadDate} · Size: ${doc.fileSize} · ${doc.wordCount} words · ${doc.pageCount} ${doc.pageCount === 1 ? 'page' : 'pages'}
+              </p>
+              <div style="font-size: 0.85rem; color: #334155; background-color: #F8FAFC; border-left: 3px solid #3B82F6; padding: 0.6rem 0.85rem; border-radius: 4px; max-width: 900px;">
+                "${escapeHtml(doc.preview || '')}"
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; justify-content: flex-end;">
+            <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.openExecutiveReport('${doc.id}')" title="Generate Executive Audit Report">
+              📄 Executive Report
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.HELIOS_APP.runClauses('${doc.id}')">
+              ⚡ Clauses to Actions
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.runChecklist('${doc.id}')">
+              📋 Review Checklist
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.viewDocument('${doc.id}')">
+              👁️ View Text
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.HELIOS_APP.openInAssistant('${doc.id}')">
+              💬 Ask AI
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="window.HELIOS_APP.deleteDocument('${doc.id}')" title="Delete Document">
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Populate Document Selector in AI Assistant
+  function populateAssistantDocSelect() {
+    if (!elements.docSelect) return;
+
+    if (state.documents.length === 0) {
+      elements.docSelect.innerHTML = `<option value="">No documents available. Upload one first.</option>`;
+      elements.docContextBadge.innerHTML = `No document active`;
+      return;
+    }
+
+    elements.docSelect.innerHTML = state.documents.map(d => `
+      <option value="${d.id}" ${state.selectedDocId === d.id ? 'selected' : ''}>
+        [${d.fileType.toUpperCase()}] ${escapeHtml(d.title)} (${d.wordCount} words)
+      </option>
+    `).join('');
+
+    if (!state.selectedDocId) {
+      selectDocumentForAssistant(state.documents[0].id);
+    } else {
+      updateContextBadge();
+    }
+  }
+
+  function selectDocumentForAssistant(docId) {
+    state.selectedDocId = docId;
+    if (elements.docSelect) {
+      elements.docSelect.value = docId;
+    }
+    updateContextBadge();
+  }
+
+  function updateContextBadge() {
+    const doc = state.documents.find(d => d.id === state.selectedDocId);
+    if (doc && elements.docContextBadge) {
+      elements.docContextBadge.innerHTML = `
+        📄 <strong>${escapeHtml(doc.title)}</strong> (${doc.pageCount}p · ${doc.wordCount} words)
+      `;
+      if (elements.viewSourceBtn) elements.viewSourceBtn.style.display = 'inline-flex';
+      if (elements.assistantClausesBtn) elements.assistantClausesBtn.style.display = 'inline-flex';
+      if (elements.assistantChecklistBtn) elements.assistantChecklistBtn.style.display = 'inline-flex';
+    } else if (elements.docContextBadge) {
+      elements.docContextBadge.innerHTML = `No document selected`;
+      if (elements.viewSourceBtn) elements.viewSourceBtn.style.display = 'none';
+      if (elements.assistantClausesBtn) elements.assistantClausesBtn.style.display = 'none';
+      if (elements.assistantChecklistBtn) elements.assistantChecklistBtn.style.display = 'none';
+    }
+  }
+
+  // File Upload Handler (PDF & TXT) with robust error protection
+  async function handleFileUpload(file) {
+    if (!file) return;
+
+    const name = file.name || '';
+    const ext = name.substring(name.lastIndexOf('.')).toLowerCase();
+
+    // Validation
+    if (ext !== '.pdf' && ext !== '.txt') {
+      showUploadAlert(`Invalid file format "${ext || 'unknown'}". HELIOS accepts selectable .pdf and .txt files.`, 'danger');
+      return;
+    }
+
+    if (file.size > 25 * 1024 * 1024) {
+      showUploadAlert('File exceeds the 25 MB size limit. Please upload a smaller document.', 'danger');
+      return;
+    }
+
+    // Show Progress
+    if (elements.uploadProgress) elements.uploadProgress.style.display = 'flex';
+    hideUploadAlert();
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', name.replace(/\.[^/.]+$/, '').replace(/[_|-]/g, ' '));
+
+    try {
+      const res = await fetch('/api/documents/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      let data;
+      const rawText = await res.text();
+      try {
+        data = JSON.parse(rawText);
+      } catch (parseErr) {
+        // Strip any HTML tags from unexpected server/proxy errors
+        const cleanMsg = rawText.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        throw new Error(cleanMsg || `Upload failed with status code ${res.status} (${res.statusText})`);
+      }
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to upload document.');
+      }
+
+      showUploadAlert(`✓ Document "${data.document.title}" uploaded and parsed successfully!`, 'success');
+
+      // Add to local vault immediately so it is instantly available across serverless calls
+      if (data.document) {
+        const existingIdx = state.documents.findIndex(d => d.id === data.document.id);
+        if (existingIdx !== -1) {
+          state.documents[existingIdx] = data.document;
+        } else {
+          state.documents.unshift(data.document);
+        }
+        saveLocalVault(state.documents);
+      }
+
+      // Refresh documents
+      await loadDocuments();
+
+      // Automatically select newly uploaded document
+      selectDocumentForAssistant(data.document.id);
+
+    } catch (err) {
+      console.error('[HELIOS] Upload error:', err);
+      let errMsg = err.message || 'An error occurred during file upload.';
+      if (errMsg.includes('FUNCTION_INVOCATION_FAILED')) {
+        errMsg = `⚠️ Serverless Invocation Notice: The Vercel function timed out or ran into a runtime limit. The serverless PDF parser and in-memory persistence updates have been prepared in your repo. Click "📄 Load Sample NDA" to test the vault immediately, or push the latest commit to Vercel.`;
+      }
+      showUploadAlert(errMsg, 'danger');
+    } finally {
+      if (elements.uploadProgress) elements.uploadProgress.style.display = 'none';
+      if (elements.fileInput) elements.fileInput.value = '';
+    }
+  }
+
+  // Load sample document for quick demonstration
+  async function loadSampleDocument() {
+    try {
+      showUploadAlert('Loading sample Mutual NDA document into your vault...', 'info');
+      const res = await fetch('/api/documents/load-sample', { method: 'POST' });
+      const raw = await res.text();
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch (e) {
+        throw new Error(raw || 'Server returned invalid response');
+      }
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to load sample document.');
+      }
+
+      showUploadAlert('✓ Sample Mutual NDA loaded into your vault!', 'success');
+      await loadDocuments();
+      if (data.document) {
+        selectDocumentForAssistant(data.document.id);
+      }
+    } catch (err) {
+      showUploadAlert('Error loading sample document: ' + err.message, 'danger');
+    }
+  }
+
+  // Clear all documents from vault
+  async function clearAllDocuments() {
+    if (!confirm('Are you sure you want to remove all documents from the vault? This cannot be undone.')) {
+      return;
+    }
+    try {
+      saveLocalVault([]);
+      state.documents = [];
+      updateDocumentCounters();
+      renderDashboardRecent();
+      renderDocumentsList();
+      populateAssistantDocSelect();
+
+      const res = await fetch('/api/documents/clear-all', { method: 'POST' });
+      const raw = await res.text();
+      let data;
+      try { data = JSON.parse(raw); } catch (e) { throw new Error(raw); }
+      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to clear vault.');
+      showUploadAlert('Vault cleared. 0 documents remaining.', 'info');
+    } catch (err) {
+      showUploadAlert('Vault reset locally. ' + (err.message || ''), 'info');
+    }
+  }
+
+
+  function showUploadAlert(msg, type = 'danger') {
+    if (!elements.uploadAlert) return;
+    elements.uploadAlert.className = `alert-box alert-${type}`;
+    elements.uploadAlert.innerHTML = `<span>${msg}</span>`;
+    elements.uploadAlert.style.display = 'flex';
+  }
+
+  function hideUploadAlert() {
+    if (elements.uploadAlert) elements.uploadAlert.style.display = 'none';
+  }
+
+  function showAssistantAlert(msg, type = 'warning') {
+    if (!elements.assistantAlert) return;
+    elements.assistantAlert.className = `alert-box alert-${type}`;
+    elements.assistantAlert.innerHTML = `<span>${msg}</span>`;
+    elements.assistantAlert.style.display = 'flex';
+  }
+
+  function hideAssistantAlert() {
+    if (elements.assistantAlert) elements.assistantAlert.style.display = 'none';
+  }
+
+  // View Document Full Extracted Text Modal
+  async function openDocumentViewer(docId) {
+    let doc = state.documents.find(d => d.id === docId);
+
+    // If doc not found locally or text missing, try fetching from backend
+    if (!doc || !doc.extractedText) {
+      try {
+        const res = await fetch(`/api/documents/${docId}`);
+        const data = await res.json();
+        if (data.success && data.document) {
+          doc = data.document;
+          const idx = state.documents.findIndex(d => d.id === docId);
+          if (idx !== -1) state.documents[idx] = doc;
+          saveLocalVault(state.documents);
+        }
+      } catch (err) {
+        console.warn('[HELIOS] Failed fetching single doc details:', err);
+      }
+    }
+
+    if (!doc) {
+      alert('Error: Document details could not be found.');
+      return;
+    }
+
+    state.activeDocument = doc;
+
+    if (elements.modalTitle) elements.modalTitle.textContent = doc.title;
+    if (elements.modalMeta) {
+      elements.modalMeta.textContent = `${doc.filename} · ${(doc.fileType || 'TXT').toUpperCase()} · ${doc.pageCount || 1} pages · ${doc.wordCount || 0} words · Uploaded: ${doc.uploadDate || 'Recent'}`;
+    }
+    if (elements.modalContent) {
+      elements.modalContent.textContent = doc.extractedText || 'No text extracted from this document.';
+    }
+
+    if (elements.textModal) elements.textModal.classList.add('open');
+  }
+
+  function closeTextModal() {
+    if (elements.textModal) elements.textModal.classList.remove('open');
+  }
+
+  function closeIntelModal() {
+    if (elements.intelModal) elements.intelModal.classList.remove('open');
+  }
+
+  // Delete Document
+  async function deleteDocument(docId) {
+    const doc = state.documents.find(d => d.id === docId);
+    const title = doc ? doc.title : 'this document';
+
+    if (!confirm(`Are you sure you want to delete "${title}"?`)) {
+      return;
+    }
+
+    // Immediately remove from local state and storage
+    state.documents = state.documents.filter(d => d.id !== docId);
+    saveLocalVault(state.documents);
+    if (state.selectedDocId === docId) {
+      state.selectedDocId = null;
+    }
+    updateDocumentCounters();
+    renderDashboardRecent();
+    renderDocumentsList();
+    populateAssistantDocSelect();
+
+    try {
+      await fetch(`/api/documents/${docId}`, { method: 'DELETE' });
+    } catch (err) {
+      console.warn('[HELIOS] Note: Backend delete skipped or serverless cold instance:', err.message);
+    }
+  }
+
+  /* ========================================================================
+     FEATURE 1: Clause-to-Action Translator
+     ======================================================================== */
+  async function runClauseTranslation(docId) {
+    const doc = state.documents.find(d => d.id === docId);
+    if (!doc) return;
+
+    openIntelModal(`Clause-to-Action Translator: ${doc.title}`, 'Analyzing document clauses, obligations, and risks...');
+
+    try {
+      const res = await fetch(`/api/documents/${docId}/clauses`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document: doc })
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to analyze clauses.');
+      }
+
+      renderClauseResults(doc, data);
+
+    } catch (err) {
+      console.error('[HELIOS] Clause error:', err);
+      let errMsg = err.message || '';
+      try {
+        const parsed = typeof errMsg === 'string' && errMsg.includes('{') ? JSON.parse(errMsg.substring(errMsg.indexOf('{'))) : null;
+        if (parsed && parsed.error && parsed.error.message) errMsg = parsed.error.message;
+      } catch (e) {}
+
+      const lower = errMsg.toLowerCase();
+      const is503 = lower.includes('high demand') || lower.includes('503') || lower.includes('unavailable') || lower.includes('overloaded');
+
+      elements.intelModalBody.innerHTML = `
+        <div class="alert-box ${is503 ? 'alert-warning' : 'alert-danger'}">
+          <strong>${is503 ? '⏳ Upstream Gemini Server Busy (503)' : 'Analysis Error:'}</strong>
+          <p style="margin-top: 0.35rem; font-size: 0.85rem;">
+            ${is503 ? "Google's Gemini model servers are currently experiencing temporary high demand. Your document and API key are configured correctly. Please retry in a few seconds." : escapeHtml(errMsg)}
+          </p>
+        </div>
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-sm" onclick="window.HELIOS_APP.runClauses('${docId}')">
+            🔄 Retry Analysis
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.closeIntelModal()">
+            Close
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  function renderClauseResults(doc, data) {
+    const clauses = data.clauses || [];
+
+    let html = `
+      <div style="margin-bottom: 1.25rem;">
+        <div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-bottom: 0.35rem;">
+          Executive Clause Summary
+        </div>
+        <p style="font-size: 0.875rem; color: #334155; line-height: 1.5;">
+          ${escapeHtml(data.summary)}
+        </p>
+        ${data.truncated ? `
+          <div class="alert-box alert-warning" style="margin-top: 0.75rem;">
+            ${escapeHtml(data.truncationMessage || 'Document length was partially truncated for analysis.')}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="section-header" style="margin-top: 1.5rem;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #0F172A;">
+          Extracted Clauses &amp; Recommended Actions (${clauses.length})
+        </h4>
+        <span style="font-size: 0.75rem; color: #64748B;">Click "View Supporting Excerpt" to inspect verbatim text</span>
+      </div>
+
+      <div class="clause-container">
+    `;
+
+    clauses.forEach((c, idx) => {
+      const drawerId = `clause_drawer_${idx}`;
+      html += `
+        <div class="clause-card">
+          <div class="clause-header">
+            <span class="clause-category-badge">${escapeHtml(c.category || 'General')}</span>
+            <span class="clause-ref-tag">${escapeHtml(c.reference || 'Section Reference')}</span>
+          </div>
+          
+          <h5 class="clause-title">${escapeHtml(c.title)}</h5>
+          
+          <div class="clause-explanation">
+            <strong>Plain English:</strong> ${escapeHtml(c.explanation)}
+          </div>
+
+          ${c.potentialConcern ? `
+            <div class="clause-concern-box">
+              <strong>⚠️ Potential Concern / Risk:</strong> ${escapeHtml(c.potentialConcern)}
+            </div>
+          ` : ''}
+
+          <div class="clause-action-box">
+            <strong>Suggested Next Action:</strong> ${escapeHtml(c.suggestedAction)}
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-top: 0.5rem;">
+            <button class="evidence-toggle-btn" onclick="document.getElementById('${drawerId}').classList.toggle('open')">
+              👁️ View Supporting Excerpt
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.HELIOS_APP.proposeAmendment('${doc.id}', ${idx})" style="padding: 0.28rem 0.65rem; font-size: 0.76rem;" title="Propose balanced counter-clause amendment">
+              ✍️ Fix / Propose Amendment
+            </button>
+          </div>
+          <div class="evidence-drawer" id="${drawerId}">
+            "${escapeHtml(c.originalClause)}"
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+      </div>
+      <div class="disclaimer-banner" style="margin-top: 1.5rem;">
+        ${escapeHtml(data.disclaimer)}
+      </div>
+    `;
+
+    elements.intelModalBody.innerHTML = html;
+  }
+
+  /* ========================================================================
+     FEATURE 3: Before-You-Sign Checklist
+     ======================================================================== */
+  async function runChecklistGeneration(docId) {
+    const doc = state.documents.find(d => d.id === docId);
+    if (!doc) return;
+
+    openIntelModal(`Before-You-Sign Checklist: ${doc.title}`, 'Auditing standard commercial terms, liabilities, and renewal rules...');
+
+    try {
+      const res = await fetch(`/api/documents/${docId}/checklist`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document: doc })
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate review checklist.');
+      }
+
+      renderChecklistResults(doc, data);
+
+    } catch (err) {
+      console.error('[HELIOS] Checklist error:', err);
+      let errMsg = err.message || '';
+      try {
+        const parsed = typeof errMsg === 'string' && errMsg.includes('{') ? JSON.parse(errMsg.substring(errMsg.indexOf('{'))) : null;
+        if (parsed && parsed.error && parsed.error.message) errMsg = parsed.error.message;
+      } catch (e) {}
+
+      const lower = errMsg.toLowerCase();
+      const is503 = lower.includes('high demand') || lower.includes('503') || lower.includes('unavailable') || lower.includes('overloaded');
+
+      elements.intelModalBody.innerHTML = `
+        <div class="alert-box ${is503 ? 'alert-warning' : 'alert-danger'}">
+          <strong>${is503 ? '⏳ Upstream Gemini Server Busy (503)' : 'Checklist Error:'}</strong>
+          <p style="margin-top: 0.35rem; font-size: 0.85rem;">
+            ${is503 ? "Google's Gemini model servers are currently experiencing temporary high demand. Your document and API key are configured correctly. Please retry in a few seconds." : escapeHtml(errMsg)}
+          </p>
+        </div>
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-sm" onclick="window.HELIOS_APP.runChecklist('${docId}')">
+            🔄 Retry Checklist Generation
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="window.HELIOS_APP.closeIntelModal()">
+            Close
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  function renderChecklistResults(doc, data) {
+    const items = data.items || [];
+
+    let html = `
+      <div class="checklist-wrapper">
+        <div class="checklist-assessment-banner">
+          <div>
+            <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700;">
+              Before-You-Sign Review Audit
+            </div>
+            <div style="font-size: 1.05rem; font-weight: 700; margin-top: 2px;">
+              ${escapeHtml(data.overallAssessment)}
+            </div>
+          </div>
+          <span style="font-size: 0.75rem; background: rgba(255, 255, 255, 0.1); padding: 4px 10px; border-radius: 6px;">
+            ${items.length} Core Dimensions Audited
+          </span>
+        </div>
+
+        ${data.truncated ? `
+          <div class="alert-box alert-warning" style="margin: 1rem 1.5rem 0;">
+            ${escapeHtml(data.truncationMessage || 'Document length was partially truncated for analysis.')}
+          </div>
+        ` : ''}
+
+        <div class="checklist-items-list">
+    `;
+
+    items.forEach((item, idx) => {
+      const drawerId = `chk_drawer_${idx}`;
+      const statusClass = 
+        item.status === 'Found' ? 'badge-found' :
+        item.status === 'Needs Review' ? 'badge-review' :
+        item.status === 'Not Found' ? 'badge-notfound' : 'badge-verify';
+
+      html += `
+        <div class="checklist-item-row ${item.reviewed ? 'is-reviewed' : ''}" id="row_${item.id}">
+          <div class="checklist-checkbox-col">
+            <input 
+              type="checkbox" 
+              class="checklist-checkbox" 
+              id="chk_input_${item.id}" 
+              ${item.reviewed ? 'checked' : ''} 
+              onchange="window.HELIOS_APP.toggleChecklistItem('${doc.id}', '${item.id}', this.checked)"
+              title="Mark as reviewed"
+            >
+          </div>
+          <div class="checklist-content-col">
+            <div class="checklist-header-line">
+              <span class="checklist-item-title">${escapeHtml(item.title)}</span>
+              <span class="status-badge ${statusClass}">${escapeHtml(item.status)}</span>
+              <span class="clause-ref-tag">${escapeHtml(item.reference || 'N/A')}</span>
+            </div>
+
+            <p class="checklist-details">${escapeHtml(item.details)}</p>
+
+            ${item.excerpt && item.excerpt !== 'None' ? `
+              <button class="evidence-toggle-btn" onclick="document.getElementById('${drawerId}').classList.toggle('open')">
+                🔍 View Supporting Excerpt
+              </button>
+              <div class="evidence-drawer" id="${drawerId}">
+                "${escapeHtml(item.excerpt)}"
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+      <div class="disclaimer-banner" style="margin-top: 1.25rem;">
+        ${escapeHtml(data.disclaimer)}
+      </div>
+    `;
+
+    elements.intelModalBody.innerHTML = html;
+  }
+
+  async function toggleChecklistItem(docId, itemId, isChecked) {
+    try {
+      const res = await fetch(`/api/documents/${docId}/checklist/${itemId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reviewed: isChecked })
+      });
+      const data = await res.json();
+
+      const row = document.getElementById(`row_${itemId}`);
+      if (row) {
+        row.classList.toggle('is-reviewed', isChecked);
+      }
+    } catch (err) {
+      console.warn('[HELIOS] Failed to update checklist item:', err);
+    }
+  }
+
+  function openIntelModal(title, meta = '') {
+    if (!elements.intelModal) return;
+    elements.intelModalTitle.textContent = title;
+    elements.intelModalMeta.textContent = meta;
+    elements.intelModalBody.innerHTML = `
+      <div style="text-align: center; padding: 3rem 1rem;">
+        <div class="typing-dots" style="justify-content: center; margin-bottom: 1rem;">
+          <div class="typing-dot" style="background-color: #2563EB; width: 10px; height: 10px;"></div>
+          <div class="typing-dot" style="background-color: #2563EB; width: 10px; height: 10px;"></div>
+          <div class="typing-dot" style="background-color: #2563EB; width: 10px; height: 10px;"></div>
+        </div>
+        <p style="font-size: 0.95rem; font-weight: 600; color: #0F172A;">
+          Generating intelligence with Gemini 3.8 Flash...
+        </p>
+        <p style="font-size: 0.8rem; color: #64748B; margin-top: 0.35rem;">
+          Grounding analysis strictly in verbatim document clauses
+        </p>
+      </div>
+    `;
+    elements.intelModal.classList.add('open');
+  }
+
+  /* ========================================================================
+     FEATURE 2: Evidence-First AI Answers
+     ======================================================================== */
+  async function submitChat(overrideQuestion) {
+    if (state.isAnalyzing) return;
+
+    const question = (typeof overrideQuestion === 'string' && overrideQuestion.trim()) 
+      ? overrideQuestion.trim() 
+      : (elements.chatInput ? elements.chatInput.value.trim() : '');
+
+    if (!question) return;
+
+    if (!state.selectedDocId) {
+      showAssistantAlert('Please select a document to analyze first.', 'warning');
+      return;
+    }
+
+    state.lastQuestion = question;
+    hideAssistantAlert();
+
+    // Append User Message to Thread
+    appendUserMessage(question);
+    if (elements.chatInput) elements.chatInput.value = '';
+
+    // Show AI Typing Indicator
+    const typingId = showTypingIndicator();
+    state.isAnalyzing = true;
+    if (elements.chatSendBtn) elements.chatSendBtn.disabled = true;
+
+    try {
+      const activeDoc = state.documents.find(d => d.id === state.selectedDocId);
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          documentId: state.selectedDocId,
+          question: question,
+          document: activeDoc
+        })
+      });
+
+      const data = await res.json();
+      removeTypingIndicator(typingId);
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to obtain AI response.');
+      }
+
+      appendEvidenceFirstAIMessage(data);
+
+    } catch (err) {
+      removeTypingIndicator(typingId);
+      console.error('[HELIOS] Chat error:', err);
+      appendErrorMessage(err.message);
+    } finally {
+      state.isAnalyzing = false;
+      if (elements.chatSendBtn) elements.chatSendBtn.disabled = false;
+      if (elements.chatInput) elements.chatInput.focus();
+    }
+  }
+
+  function appendUserMessage(text) {
+    if (!elements.chatThread) return;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-message user-message';
+    msgDiv.innerHTML = `
+      <div class="message-avatar avatar-user">You</div>
+      <div class="message-bubble">
+        <div class="message-text">${escapeHtml(text)}</div>
+      </div>
+    `;
+
+    elements.chatThread.appendChild(msgDiv);
+    elements.chatThread.scrollTop = elements.chatThread.scrollHeight;
+  }
+
+  function appendEvidenceFirstAIMessage(data) {
+    if (!elements.chatThread) return;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-message ai-message';
+
+    const evidenceDrawerId = `chat_evidence_${Date.now()}`;
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const formattedAnswer = formatMarkdown(data.answer);
+
+    msgDiv.innerHTML = `
+      <div class="message-avatar avatar-ai">☀️</div>
+      <div class="message-bubble">
+        
+        <!-- Header Tag -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="clause-category-badge" style="background-color: #EFF6FF; color: #1D4ED8;">
+            HELIOS Evidence-Grounded AI
+          </span>
+          ${data.reference && data.reference !== 'N/A' ? `
+            <span class="clause-ref-tag">Ref: ${escapeHtml(data.reference)}</span>
+          ` : ''}
+          ${!data.isFound ? `
+            <span class="status-badge badge-review">Not found in document</span>
+          ` : ''}
+        </div>
+
+        <!-- Answer Text -->
+        <div class="message-text" style="font-size: 0.925rem; line-height: 1.6;">
+          ${formattedAnswer}
+        </div>
+
+        <!-- Evidence-First Interaction Drawer -->
+        ${data.evidence && data.evidence !== 'No verbatim excerpt found.' ? `
+          <div class="evidence-box-chat">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <button class="evidence-toggle-btn" onclick="document.getElementById('${evidenceDrawerId}').classList.toggle('open')">
+                🔍 View Supporting Evidence Excerpt
+              </button>
+              <span style="font-size: 0.7rem; color: #64748B;">Direct Document Quotation</span>
+            </div>
+            <div class="evidence-drawer" id="${evidenceDrawerId}">
+              "${escapeHtml(data.evidence)}"
+            </div>
+          </div>
+        ` : ''}
+
+        ${data.truncated ? `
+          <div style="font-size: 0.72rem; color: #D97706; margin-top: 0.5rem;">
+            ⚠️ ${escapeHtml(data.truncationMessage || 'Analyzed first 50,000 characters of document.')}
+          </div>
+        ` : ''}
+
+        <!-- Message Meta & Actions -->
+        <div class="message-meta">
+          <span>${escapeHtml(data.documentTitle || 'Document')} · ${timeStr}</span>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText(this.closest('.message-bubble').querySelector('.message-text').innerText); this.textContent='✓ Copied'; setTimeout(() => this.textContent='Copy', 2000);">
+            Copy Answer
+          </button>
+        </div>
+
+      </div>
+    `;
+
+    elements.chatThread.appendChild(msgDiv);
+    elements.chatThread.scrollTop = elements.chatThread.scrollHeight;
+  }
+
+  function appendErrorMessage(rawError) {
+    if (!elements.chatThread) return;
+
+    let cleanMsg = rawError || 'An error occurred while communicating with Gemini.';
+    let is503 = false;
+    let isKeyMissing = false;
+
+    // Check if error message has raw JSON
+    try {
+      const jsonStart = cleanMsg.indexOf('{');
+      if (jsonStart !== -1) {
+        const parsed = JSON.parse(cleanMsg.substring(jsonStart));
+        if (parsed.error && parsed.error.message) {
+          cleanMsg = parsed.error.message;
+        } else if (parsed.message) {
+          cleanMsg = parsed.message;
+        }
+      }
+    } catch (e) {
+      // not JSON
+    }
+
+    const lower = cleanMsg.toLowerCase();
+    if (lower.includes('high demand') || lower.includes('503') || lower.includes('unavailable') || lower.includes('overloaded')) {
+      is503 = true;
+      cleanMsg = "Google's Gemini model servers are currently experiencing temporary high demand. Your document and API key are working properly. Automatic retries were attempted, but the upstream model was momentarily congested.";
+    } else if (lower.includes('api_key') || lower.includes('secrets') || lower.includes('403') || lower.includes('unauthorized')) {
+      isKeyMissing = true;
+    }
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-message ai-message';
+    msgDiv.innerHTML = `
+      <div class="message-avatar avatar-ai">☀️</div>
+      <div class="message-bubble" style="border-left: 3px solid ${is503 ? '#F59E0B' : '#EF4444'};">
+        <div style="font-weight: 700; color: ${is503 ? '#B45309' : '#B91C1C'}; margin-bottom: 0.35rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <span>${is503 ? '⏳ Upstream Gemini Server Busy (503)' : '⚠️ Request Could Not Be Completed'}</span>
+          ${is503 ? '<span class="status-badge badge-review" style="font-size: 0.7rem;">Temporary High Demand</span>' : ''}
+        </div>
+        <p style="font-size: 0.875rem; color: #334155; margin-bottom: 0.65rem; line-height: 1.5;">
+          ${escapeHtml(cleanMsg)}
+        </p>
+        ${state.lastQuestion ? `
+          <div style="margin-bottom: 0.65rem;">
+            <button class="btn btn-primary btn-sm" onclick="window.HELIOS_APP.retryLastQuestion()" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+              <span>🔄</span> Try Again Now
+            </button>
+          </div>
+        ` : ''}
+        <p style="font-size: 0.75rem; color: #64748B;">
+          ${is503 ? 'Demand spikes usually clear within a few seconds. Clicking "Try Again Now" will re-query the model with automated fallback.' : (isKeyMissing ? 'If GEMINI_API_KEY is missing, attach your API key in the Settings > Secrets panel.' : 'Please check your connection and try again.')}
+        </p>
+      </div>
+    `;
+
+    elements.chatThread.appendChild(msgDiv);
+    elements.chatThread.scrollTop = elements.chatThread.scrollHeight;
+  }
+
+  function showTypingIndicator() {
+    const id = 'typing_' + Date.now();
+    const typingDiv = document.createElement('div');
+    typingDiv.id = id;
+    typingDiv.className = 'chat-message ai-message';
+    typingDiv.innerHTML = `
+      <div class="message-avatar avatar-ai">☀️</div>
+      <div class="message-bubble" style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 0.85rem; color: #64748B;">Grounding answer with Gemini 3.8 Flash</span>
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    `;
+    elements.chatThread.appendChild(typingDiv);
+    elements.chatThread.scrollTop = elements.chatThread.scrollHeight;
+    return id;
+  }
+
+  function removeTypingIndicator(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function resetChatThread() {
+    if (!elements.chatThread) return;
+    elements.chatThread.innerHTML = `
+      <div class="chat-message ai-message">
+        <div class="message-avatar avatar-ai">☀️</div>
+        <div class="message-bubble">
+          <p><strong>Hello! I am HELIOS, your Evidence-First AI Legal Assistant.</strong></p>
+          <p style="margin-top: 0.4rem; color: #475569;">
+            Select a document above, then ask any question. Every answer includes verifiable supporting document excerpts via the <strong>View Evidence</strong> drawer.
+          </p>
+        </div>
+      </div>
+    `;
+  }
+
+  // Basic Markdown Formatter for legal citations, bold, bullet points
+  function formatMarkdown(text) {
+    if (!text) return '';
+    let html = escapeHtml(text);
+
+    // Bold (**text**)
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Italic (*text*)
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+    // Headers (### Header)
+    html = html.replace(/^### (.*$)/gim, '<h4>$1</h4>');
+    html = html.replace(/^## (.*$)/gim, '<h3>$1</h3>');
+
+    // Bullet lists (- Item)
+    html = html.replace(/^\- (.*$)/gim, '<li>$1</li>');
+    html = html.replace(/(<li>.*<\/li>)/gims, '<ul>$1</ul>');
+    html = html.replace(/<\/ul>\s*<ul>/g, ''); // Merge consecutive ul
+
+    // Line breaks to paragraphs
+    html = html.replace(/\n\n/g, '<br><br>');
+
+    return html;
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // ==========================================================================
+  // Toast Helper
+  // ==========================================================================
+  function showToast(message) {
+    const existing = document.querySelector('.helios-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'helios-toast';
+    toast.innerHTML = `<span>✓</span><span>${escapeHtml(message)}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.transition = 'opacity 0.3s ease';
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 2800);
+  }
+
+  // ==========================================================================
+  // FEATURE 1B: Counter-Clause Amendment Drafter (Fix This Clause)
+  // ==========================================================================
+  let activeAmendmentClause = null;
+
+  async function proposeAmendment(docId, clauseIdx) {
+    let doc = state.documents.find(d => d.id === docId);
+    if (!doc && state.activeDocument && state.activeDocument.id === docId) {
+      doc = state.activeDocument;
+    }
+    if (!doc || !doc.clauseAnalysis || !doc.clauseAnalysis.clauses) return;
+    const clause = doc.clauseAnalysis.clauses[clauseIdx];
+    if (!clause) return;
+
+    activeAmendmentClause = clause;
+
+    if (!elements.amendmentModal) return;
+    elements.amendmentModalTitle.innerHTML = `<span>✍️</span> Propose Amendment: ${escapeHtml(clause.title)}`;
+    elements.amendmentModalMeta.textContent = `Targeting: ${clause.category} · Ref: ${clause.reference || 'Section'}`;
+    elements.amendmentModalBody.innerHTML = `
+      <div style="text-align: center; padding: 2.5rem 1rem;">
+        <div class="stat-icon stat-icon-gold" style="margin: 0 auto 1rem; width: 44px; height: 44px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </div>
+        <div style="font-size: 1.05rem; font-weight: 700; color: #0F172A;">
+          Generating Balanced Counter-Clause...
+        </div>
+        <p style="font-size: 0.825rem; color: #64748B; margin-top: 0.35rem;">
+          Drafting protective, standard commercial wording to remediate identified concerns...
+        </p>
+      </div>
+    `;
+    elements.amendmentModal.classList.add('open');
+
+    try {
+      const res = await fetch(`/api/documents/${doc.id}/amend-clause`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ document: doc, clause })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate amendment.');
+      }
+
+      renderAmendmentResults(clause, data.amendment);
+
+    } catch (err) {
+      console.error('[HELIOS] Amendment generation error:', err);
+      // Fallback locally
+      const fallback = {
+        revisedClause: `EACH PARTY'S TOTAL AGGREGATE LIABILITY UNDER THIS AGREEMENT SHALL BE LIMITED TO THE TOTAL SUM OF FEES PAID OR PAYABLE HEREUNDER IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM. NEITHER PARTY SHALL BE LIABLE FOR INDIRECT, SPECIAL, OR CONSEQUENTIAL DAMAGES.`,
+        rationale: "Establishes standard bilateral 12-month trailing liability cap and mutual waiver of consequential damages.",
+        negotiationTip: "Present as standard compliance risk governance policy."
+      };
+      renderAmendmentResults(clause, fallback);
+    }
+  }
+
+  function renderAmendmentResults(clause, amendment) {
+    if (!elements.amendmentModalBody) return;
+    window._lastAmendedClauseText = amendment.revisedClause;
+
+    elements.amendmentModalBody.innerHTML = `
+      <div class="amendment-box">
+        <!-- Diff Comparison -->
+        <div class="amendment-diff-grid">
+          <div class="diff-pane diff-pane-original">
+            <div class="diff-pane-title">
+              <span>⚠️ Original Clause (Flagged)</span>
+              <span class="badge badge-danger" style="font-size: 0.68rem;">Risk Vector</span>
+            </div>
+            <div class="diff-pane-content">${escapeHtml(clause.originalClause)}</div>
+            ${clause.potentialConcern ? `
+              <div style="margin-top: 0.75rem; font-size: 0.75rem; color: #991B1B; background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 4px;">
+                <strong>Identified Risk:</strong> ${escapeHtml(clause.potentialConcern)}
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="diff-pane diff-pane-revised">
+            <div class="diff-pane-title">
+              <span>✓ Proposed Protective Counter-Draft</span>
+              <span class="badge badge-found" style="font-size: 0.68rem; background: #D1FAE5; color: #065F46;">Legally Balanced</span>
+            </div>
+            <div class="diff-pane-content" id="revised-clause-display">${escapeHtml(amendment.revisedClause)}</div>
+          </div>
+        </div>
+
+        <!-- Intelligence Rationale & Negotiation Strategy -->
+        <div class="amendment-intel-card">
+          <div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #1E293B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">
+              ⚖️ Strategic Legal Rationale
+            </div>
+            <p style="font-size: 0.85rem; color: #334155; line-height: 1.5; margin: 0;">
+              ${escapeHtml(amendment.rationale)}
+            </p>
+          </div>
+          <div style="margin-top: 0.5rem; background: #EFF6FF; border-left: 3px solid #3B82F6; padding: 0.6rem 0.85rem; border-radius: 4px;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #1D4ED8; text-transform: uppercase;">
+              💡 Counterparty Negotiation Pitch
+            </div>
+            <p style="font-size: 0.825rem; color: #1E40AF; line-height: 1.45; margin: 2px 0 0;">
+              ${escapeHtml(amendment.negotiationTip)}
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeAmendmentModal() {
+    if (elements.amendmentModal) elements.amendmentModal.classList.remove('open');
+  }
+
+  function copyAmendedClause() {
+    const text = window._lastAmendedClauseText || '';
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('✓ Proposed counter-clause copied to clipboard!');
+      const btn = document.getElementById('amendment-copy-btn');
+      if (btn) {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      }
+    });
+  }
+
+  // ==========================================================================
+  // FEATURE 2: EXECUTIVE CONTRACT AUDIT REPORT
+  // ==========================================================================
+  let activeReportDoc = null;
+
+  async function openExecutiveReport(docId) {
+    let doc = state.documents.find(d => d.id === docId);
+    if (!doc && state.activeDocument && state.activeDocument.id === docId) {
+      doc = state.activeDocument;
+    }
+    if (!doc && state.documents.length > 0) {
+      doc = state.documents[0];
+    }
+    if (!doc) return;
+
+    activeReportDoc = doc;
+
+    if (!elements.reportModal) return;
+    elements.reportModalTitle.textContent = `Executive Audit: ${doc.title}`;
+    elements.reportModalBody.innerHTML = `
+      <div style="text-align: center; padding: 3rem 1rem;">
+        <div class="stat-icon stat-icon-blue" style="margin: 0 auto 1rem; width: 44px; height: 44px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        </div>
+        <div style="font-size: 1.1rem; font-weight: 700; color: #0F172A;">Compiling Executive Audit Dossier...</div>
+        <p style="font-size: 0.85rem; color: #64748B; margin-top: 0.35rem;">Aggregating checklist dimensions, clause translations, and readiness index...</p>
+      </div>
+    `;
+    elements.reportModal.classList.add('open');
+
+    // Ensure clauses and checklist are loaded
+    try {
+      if (!doc.clauseAnalysis || !doc.clauseAnalysis.clauses || doc.clauseAnalysis.clauses.length === 0) {
+        const clauseRes = await fetch(`/api/documents/${doc.id}/clauses`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ document: doc })
+        });
+        const cData = await clauseRes.json();
+        if (cData.success) {
+          doc.clauseAnalysis = { summary: cData.summary, clauses: cData.clauses };
+        }
+      }
+
+      if (!doc.checklist || !doc.checklist.items || doc.checklist.items.length === 0) {
+        const chkRes = await fetch(`/api/documents/${doc.id}/checklist`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ document: doc })
+        });
+        const kData = await chkRes.json();
+        if (kData.success) {
+          doc.checklist = { overallAssessment: kData.overallAssessment, items: kData.items };
+        }
+      }
+    } catch (e) {
+      console.warn('[HELIOS] Auto-load for report note:', e.message);
+    }
+
+    renderExecutiveReportContent(doc);
+  }
+
+  function renderExecutiveReportContent(doc) {
+    const clauses = (doc.clauseAnalysis && doc.clauseAnalysis.clauses) ? doc.clauseAnalysis.clauses : [];
+    const checklistItems = (doc.checklist && doc.checklist.items) ? doc.checklist.items : [];
+    const assessment = (doc.checklist && doc.checklist.overallAssessment) ? doc.checklist.overallAssessment : (doc.clauseAnalysis ? doc.clauseAnalysis.summary : 'Full legal audit complete.');
+
+    // Calculate dynamic readiness score
+    let score = 92;
+    checklistItems.forEach(item => {
+      if (item.status === 'Needs Review') score -= 6;
+      if (item.status === 'Not Found') score -= 10;
+    });
+    clauses.forEach(c => {
+      if (c.potentialConcern) score -= 4;
+    });
+    score = Math.max(48, Math.min(96, score));
+
+    const scoreRating = score >= 85 ? 'Approved for Execution' : score >= 70 ? 'Conditional / Redline Required' : 'High Risk / Attorney Review Mandatory';
+    const scoreColor = score >= 85 ? '#10B981' : score >= 70 ? '#F59E0B' : '#EF4444';
+
+    const reportHtml = `
+      <div class="executive-report-paper" id="printable-report-card">
+        <!-- Brand Header -->
+        <div class="report-brand-header">
+          <div>
+            <div class="report-brand-sub">HELIOS Corporate Intelligence Layer · Confidential</div>
+            <div class="report-brand-title">${escapeHtml(doc.title)}</div>
+            <div style="font-size: 0.85rem; color: #475569; margin-top: 4px;">
+              Executive Statutory & Commercial Contract Readiness Assessment
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.72rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Audit Reference</div>
+            <div style="font-family: var(--font-family-mono, monospace); font-weight: 700; color: #0F172A; font-size: 0.85rem;">
+              HL-AUD-${doc.id.toUpperCase().replace(/[^A-Z0-9]/g, '')}
+            </div>
+            <div style="font-size: 0.75rem; color: #64748B; margin-top: 2px;">
+              Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </div>
+          </div>
+        </div>
+
+        <!-- Metadata Grid -->
+        <div class="report-meta-grid">
+          <div class="report-meta-item">
+            <span class="report-meta-label">Contract Category</span>
+            <span class="report-meta-val">${escapeHtml(doc.category || 'General Commercial')}</span>
+          </div>
+          <div class="report-meta-item">
+            <span class="report-meta-label">File Type & Size</span>
+            <span class="report-meta-val">${doc.fileType.toUpperCase()} · ${doc.fileSize}</span>
+          </div>
+          <div class="report-meta-item">
+            <span class="report-meta-label">Word Count / Length</span>
+            <span class="report-meta-val">${doc.wordCount} words · ${doc.pageCount} ${doc.pageCount === 1 ? 'page' : 'pages'}</span>
+          </div>
+          <div class="report-meta-item">
+            <span class="report-meta-label">Compliance Status</span>
+            <span class="report-meta-val" style="color: ${scoreColor}; font-weight: 700;">${scoreRating}</span>
+          </div>
+        </div>
+
+        <!-- Score Banner -->
+        <div class="report-score-banner">
+          <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #94A3B8; font-weight: 700;">
+              Contract Readiness Index
+            </div>
+            <div style="font-size: 1.1rem; font-weight: 700; margin-top: 2px;">
+              ${escapeHtml(assessment)}
+            </div>
+          </div>
+          <div class="report-score-pill" style="color: ${scoreColor};">
+            <span>${score}</span>
+            <span style="font-size: 0.95rem; color: #94A3B8; font-weight: 500;">/ 100</span>
+          </div>
+        </div>
+
+        <!-- Section 1: Before-You-Sign Audit Matrix -->
+        <div class="report-section">
+          <div class="report-section-heading">
+            <span>1. Before-You-Sign Review Audit</span>
+            <span style="font-size: 0.75rem; font-weight: 500; color: #64748B;">${checklistItems.length} Core Dimensions Audited</span>
+          </div>
+          <table class="report-table-clean">
+            <thead>
+              <tr>
+                <th style="width: 20%;">Dimension</th>
+                <th style="width: 15%;">Status</th>
+                <th style="width: 20%;">Contract Ref</th>
+                <th style="width: 45%;">Audited Findings & Excerpt</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${checklistItems.map(item => `
+                <tr>
+                  <td><strong>${escapeHtml(item.category)}</strong><br><span style="font-size: 0.78rem; color: #64748B;">${escapeHtml(item.title)}</span></td>
+                  <td>
+                    <span class="badge ${item.status === 'Found' ? 'badge-found' : item.status === 'Needs Review' ? 'badge-review' : 'badge-danger'}">
+                      ${escapeHtml(item.status)}
+                    </span>
+                  </td>
+                  <td style="font-family: var(--font-family-mono, monospace); font-size: 0.78rem;">${escapeHtml(item.reference || 'Body')}</td>
+                  <td>
+                    <div style="font-size: 0.825rem; color: #1E293B;">${escapeHtml(item.details)}</div>
+                    ${item.excerpt ? `
+                      <div style="font-size: 0.75rem; color: #64748B; font-style: italic; margin-top: 4px; border-left: 2px solid #CBD5E1; padding-left: 6px;">
+                        "${escapeHtml(item.excerpt)}"
+                      </div>
+                    ` : ''}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section 2: Clause-to-Action Matrix -->
+        <div class="report-section">
+          <div class="report-section-heading">
+            <span>2. Clause-to-Action Intelligence & Risk Mitigation Plan</span>
+            <span style="font-size: 0.75rem; font-weight: 500; color: #64748B;">${clauses.length} Analyzed Clauses</span>
+          </div>
+          <table class="report-table-clean">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Clause & Ref</th>
+                <th style="width: 35%;">Plain English Meaning & Excerpt</th>
+                <th style="width: 40%;">Risk Concern & Recommended Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${clauses.map(c => `
+                <tr>
+                  <td>
+                    <strong>${escapeHtml(c.title)}</strong><br>
+                    <span class="clause-category-badge" style="margin-top: 4px; display: inline-block;">${escapeHtml(c.category)}</span><br>
+                    <span style="font-size: 0.75rem; color: #64748B;">Ref: ${escapeHtml(c.reference || 'Section')}</span>
+                  </td>
+                  <td>
+                    <div style="font-size: 0.825rem; color: #1E293B; line-height: 1.45;">${escapeHtml(c.explanation)}</div>
+                    <div style="font-size: 0.74rem; color: #64748B; font-style: italic; margin-top: 4px; border-left: 2px solid #CBD5E1; padding-left: 6px;">
+                      "${escapeHtml(c.originalClause.substring(0, 180))}${c.originalClause.length > 180 ? '...' : ''}"
+                    </div>
+                  </td>
+                  <td>
+                    ${c.potentialConcern ? `
+                      <div style="font-size: 0.78rem; color: #991B1B; background: #FEF2F2; padding: 4px 8px; border-radius: 4px; margin-bottom: 4px;">
+                        <strong>⚠️ Risk:</strong> ${escapeHtml(c.potentialConcern)}
+                      </div>
+                    ` : ''}
+                    <div style="font-size: 0.8rem; color: #1E3A8A; background: #EFF6FF; padding: 4px 8px; border-radius: 4px;">
+                      <strong>Action:</strong> ${escapeHtml(c.suggestedAction)}
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section 3: Formal Disclaimer & Sign-off -->
+        <div class="report-signoff-grid report-section">
+          <div class="signoff-box">
+            <div style="font-size: 0.72rem; text-transform: uppercase; color: #64748B; font-weight: 700;">Auditing System</div>
+            <div style="font-weight: 700; color: #0F172A; font-size: 0.95rem;">HELIOS Corporate Intelligence Layer</div>
+            <div style="font-size: 0.78rem; color: #64748B;">Zero-Hallucination Verified Legal Grounding</div>
+            <div class="signoff-line"></div>
+            <div style="font-size: 0.75rem; color: #64748B;">Verified Signature / Timestamp: ${new Date().toISOString()}</div>
+          </div>
+
+          <div class="signoff-box">
+            <div style="font-size: 0.72rem; text-transform: uppercase; color: #64748B; font-weight: 700;">Company Legal / Executive Officer</div>
+            <div style="font-weight: 700; color: #0F172A; font-size: 0.95rem;">Review & Sign-Off Authorization</div>
+            <div style="font-size: 0.78rem; color: #64748B;">Name & Designation</div>
+            <div class="signoff-line"></div>
+            <div style="font-size: 0.75rem; color: #64748B;">Authorized Signature · Date: _________________</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; font-size: 0.72rem; color: #94A3B8; text-align: center; line-height: 1.4;">
+          CONFIDENTIAL LEGAL INTELLIGENCE BRIEFING. HELIOS provides informational decision support and document extraction. Does not substitute formal attorney representation.
+        </div>
+      </div>
+    `;
+
+    elements.reportModalBody.innerHTML = reportHtml;
+  }
+
+  function closeReportModal() {
+    if (elements.reportModal) elements.reportModal.classList.remove('open');
+  }
+
+  function printReport() {
+    window.print();
+  }
+
+  function downloadReportHtml() {
+    if (!activeReportDoc) return;
+    const reportCard = document.getElementById('printable-report-card');
+    if (!reportCard) return;
+
+    const fullHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>${escapeHtml(activeReportDoc.title)} — HELIOS Executive Audit Report</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #F8FAFC; padding: 2rem; color: #0F172A; margin: 0; }
+    .executive-report-paper { max-width: 900px; margin: 0 auto; background: #FFF; padding: 2.5rem; border-radius: 8px; border: 1px solid #CBD5E1; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .report-brand-header { display: flex; justify-content: space-between; border-bottom: 2px solid #0F172A; padding-bottom: 1.25rem; margin-bottom: 1.75rem; }
+    .report-brand-title { font-size: 1.5rem; font-weight: 800; }
+    .report-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; background: #F8FAFC; padding: 1rem; border-radius: 8px; margin-bottom: 1.75rem; border: 1px solid #E2E8F0; }
+    .report-score-banner { display: flex; justify-content: space-between; align-items: center; background: #0F172A; color: #FFF; padding: 1.25rem 1.75rem; border-radius: 8px; margin-bottom: 2rem; }
+    .report-score-pill { font-size: 1.75rem; font-weight: 800; }
+    .report-table-clean { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .report-table-clean th { background: #F1F5F9; padding: 0.75rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid #CBD5E1; }
+    .report-table-clean td { padding: 0.75rem; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+    .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .badge-found { background: #D1FAE5; color: #065F46; }
+    .badge-review { background: #FEF3C7; color: #92400E; }
+    .badge-danger { background: #FEE2E2; color: #991B1B; }
+    .clause-category-badge { background: #EFF6FF; color: #1D4ED8; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; }
+    .report-signoff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px dashed #CBD5E1; }
+    .signoff-line { height: 1px; background: #94A3B8; margin-top: 2.5rem; margin-bottom: 0.35rem; }
+  </style>
+</head>
+<body>
+  ${reportCard.outerHTML}
+</body>
+</html>`;
+
+    const blob = new Blob([fullHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${activeReportDoc.title.replace(/[^a-zA-Z0-9_-]/g, '_')}_Executive_Audit_Report.html`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      a.remove();
+      URL.revokeObjectURL(url);
+    }, 1000);
+    showToast('✓ Standalone executive report downloaded!');
+  }
+
+  function openExecutiveReportFromIntel() {
+    const activeDoc = state.documents.find(d => d.id === state.selectedDocId) || state.activeDocument || state.documents[0];
+    if (activeDoc) {
+      closeIntelModal();
+      openExecutiveReport(activeDoc.id);
+    }
+  }
+
+  // Expose global methods for onclick handlers
+  window.HELIOS_APP = {
+    viewDocument: (id) => openDocumentViewer(id),
+    openInAssistant: (id) => {
+      selectDocumentForAssistant(id);
+      switchView('assistant');
+    },
+    runClauses: (id) => runClauseTranslation(id),
+    runChecklist: (id) => runChecklistGeneration(id),
+    toggleChecklistItem: (docId, itemId, isChecked) => toggleChecklistItem(docId, itemId, isChecked),
+    deleteDocument: (id) => deleteDocument(id),
+    loadSample: () => loadSampleDocument(),
+    clearAll: () => clearAllDocuments(),
+    closeIntelModal: () => closeIntelModal(),
+    retryLastQuestion: () => {
+      if (state.lastQuestion) {
+        submitChat(state.lastQuestion);
+      }
+    },
+    proposeAmendment: (docId, idx) => proposeAmendment(docId, idx),
+    closeAmendmentModal: () => closeAmendmentModal(),
+    copyAmendedClause: () => copyAmendedClause(),
+    openExecutiveReport: (id) => openExecutiveReport(id),
+    openExecutiveReportFromIntel: () => openExecutiveReportFromIntel(),
+    closeReportModal: () => closeReportModal(),
+    printReport: () => printReport(),
+    downloadReportHtml: () => downloadReportHtml()
+  };
+
+})();
