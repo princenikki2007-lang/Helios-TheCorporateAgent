@@ -151,3 +151,5 @@ HELIOS includes an active Demo Workspace preloaded with corporate data:
 To create a live tenant workspace:
 - Click **"Create Company Workspace"** from the landing page or navigate to `pages/onboarding.html`.
 - Toggle between Demo and Live data at any time via the topbar mode switcher.
+
+Vercel Link: https://helioscorporateagent.vercel.app/
